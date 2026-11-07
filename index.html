@@ -145,7 +145,13 @@ if(fl>0){fl-=dt;S.background.setHex(0x5a1020)}else S.background.setHex(0x10243a)
 ui();R.render(S,C)}
 const ice={iceServers:[{urls:"stun:stun.l.google.com:19302"}]};
 const gather=pc=>new Promise(r=>{if(pc.iceGatheringState==="complete")return r();const f=()=>{if(pc.iceGatheringState==="complete"){pc.removeEventListener("icegatheringstatechange",f);r()}};pc.addEventListener("icegatheringstatechange",f);setTimeout(r,5000)});
-const enc=d=>btoa(JSON.stringify({type:d.type,sdp:d.sdp})),dec=s=>JSON.parse(atob(s.trim()));
+const enc=d=>{const L=d.sdp.split(/\r?\n/),g=k=>(L.find(l=>l.startsWith(k))||"").slice(k.length);
+const c=L.filter(l=>l.startsWith("a=candidate:")).map(l=>l.slice(12).split(" ")).filter(a=>a[1]==="1"&&a[2].toLowerCase()==="udp").map(a=>a[4]+" "+a[5]+" "+a[7]);
+return btoa(JSON.stringify([d.type[0],g("a=ice-ufrag:"),g("a=ice-pwd:"),g("a=fingerprint:sha-256 ").replace(/:/g,""),c]))};
+const dec=s=>{const[t,u,p,f,c]=JSON.parse(atob(s.trim())),o=t==="o";
+const a=["v=0","o=- 1 2 IN IP4 127.0.0.1","s=-","t=0 0","a=group:BUNDLE 0","m=application 9 UDP/DTLS/SCTP webrtc-datachannel","c=IN IP4 0.0.0.0","a=ice-ufrag:"+u,"a=ice-pwd:"+p,"a=ice-options:trickle","a=fingerprint:sha-256 "+f.match(/../g).join(":"),"a=setup:"+(o?"actpass":"active"),"a=mid:0","a=sctp-port:5000","a=max-message-size:262144"];
+c.forEach((x,i)=>{const[ip,port,ty]=x.split(" ");a.push("a=candidate:"+(i+1)+" 1 udp "+((ty==="host"?2130706431:ty==="srflx"?1694498815:16777215)-i)+" "+ip+" "+port+" typ "+ty+(ty==="host"?"":" raddr 0.0.0.0 rport 0"))});
+return{type:o?"offer":"answer",sdp:a.join("\r\n")+"\r\n"}};
 const send=(dc,o)=>dc&&dc.readyState==="open"&&dc.send(JSON.stringify(o));
 function openPanel(){lb.style.display="none";rc.style.display="none";ov.querySelector("p").style.display="none";nw.style.display="flex"}
 function act(a){send(net.gdc,{t:"act",d:{a}})}
