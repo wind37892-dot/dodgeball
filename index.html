@@ -1,41 +1,4 @@
 <!DOCTYPE html>
-<!--
-[온라인 피구] 3D 3인칭 피구. 단일 HTML 파일, 모바일(터치) 우선.
-외부 스크립트는 three.js r128(cdnjs)과 PeerJS 1.5.4(jsdelivr) 둘뿐이고, 버전을 고정해서 불러옴.
-
-■ 규칙
-- 팀 인원 N명(2~5) 대 N명. 시작은 점프볼: 3초 카운트다운 후 공이 올라가고, 꼭대기 근처에서 던지기 버튼을 누를수록 높이 뜀. 더 높이 뛴 쪽이 공을 쳐서 팀원에게 보냄.
-- 공은 하나. 가진 사람은 던지기(가장 가까운 적 자동 조준, 이동 예측 포함)나 패스(팀원에게 유도 비행)를 함.
-- 던진 공에 맞으면 아웃되어 상대 코트의 뒤와 옆(외야)으로 이동.
-- 잡기 버튼: 0.45초 동안 잡기 상태(쿨다운 1.2초). 이때 던진 공에 맞으면 공만 받고 던진 사람은 그대로. 상대 패스가 근처를 지나가도 가로챔. AI도 던진 공은 20%, 패스는 25% 확률로 받아냄.
-- 코트 밖으로 나간 공은 바닥을 굴러감(마찰, 바깥 벽에서 튕김). 나간 쪽 외야가 주워 감. 그쪽 외야가 한 명도 없으면 그 코트의 내야가 가져감.
-- 상대 팀 전원 아웃이면 승리, 우리 팀 전원 아웃이면 패배.
-
-■ 좌표/데이터
-- 코트: x -6~6, z -10~10, 중앙선 z=0. 팀0(파랑, 우리 팀)은 z>0, 팀1(빨강)은 z<0. 외야는 상대 코트의 뒤(|z|>10)와 옆(|x|>6) 띠(clampOut).
-- T = 모든 캐릭터 배열. 인덱스 0..N-1 = 팀0(0번은 방장/내 캐릭터 P, 나머지는 AI 또는 친구), N..2N-1 = 팀1. 점프볼 대표는 T[0]과 T[N+(N>>1)].
-- 캐릭터 필드: m(3D 그룹), team, out, pl(사람이 조종하는지), cw/cc(잡기 창/쿨다운), rx/rz(원격 입력), seen(마지막 입력 시각), mk(이름표와 모자).
-- B = 공 상태. B.st: held(들고 있음, B.h) / fly(B.kind: t=던짐, p=패스) / loose(굴러감, B.rv) / jump(점프볼 중). 공 메시는 bm.
-- J = 점프볼 상태(카운트다운 cd, 경과 t, 누른 시각 tb/tr, 결과 문구 res).
-- 카메라: yaw(오른쪽 화면 드래그 또는 Z/X로 회전), wide(넓은 시점). 이동 입력은 카메라 기준(inp()).
-
-■ 멀티플레이(방장 권한 방식)
-- 방장 기기가 시뮬레이션을 전부 계산. 친구는 입력만 보내고 상태를 받아 그림. 친구는 팀0의 AI 자리(인덱스 1..N-1)를 맡음.
-- PeerJS 무료 공개 서버로 방 코드(피어 ID는 pgdodge-코드)를 찾은 뒤 WebRTC로 직접 연결(serialization json).
-- 방장 to 친구: assign{slot}, full, st{g(게임 번호), s(인원), nm(닉네임 맵), j(최고 높이 표시), n(카운트다운), e(종료 0/1/2), t[[x,z,out,y,잡기중]...], b[공상태코드, 들고있는사람, x,y,z]} 약 14Hz.
-- 친구 to 방장: in{x,z}(10Hz, 세계 좌표 이동 벡터), act{a: t(던지기/점프) 또는 p(패스) 또는 c(잡기)}, nick{n}.
-- 친구 화면은 시뮬레이션 없이 보간만 함(glerp). 4초 동안 입력이 없으면 그 자리는 AI로 복귀.
-
-■ 코드 지도(위에서 아래로)
-렌더러/씬 → 캐릭터/공 → 게임 로직(give, drop, shoot, pass, out, reset) → 입력(doThrow/doPass/doCatch, 조이스틱, 카메라 드래그) → 점프볼(startJump, jumpStep) → 네트워크(bcast, netApply, glerp, hostMsg, hostWatch, hs/js.onclick) → end/ui/loop(매 프레임 시뮬레이션과 카메라) → 로비 UI 생성 → 이름표(mark), 최고 높이 표시(apx).
-
-■ 알려진 한계/할 일 후보
-- 작성자가 직접 실행해 보지 못한 채 만든 부분이 많음. 특히 멀티플레이와 외야 이동은 실제 테스트가 필요함.
-- 친구 화면 움직임이 조금 끊김(14Hz 보간). 방장이 나가면 전부 끊김.
-- 게임 시작 후에는 친구 추가 불가, 방을 만든 뒤에는 인원 변경 불가.
-- 점수 기록, 난이도 조절, 효과음은 미구현.
-- 한 줄이 긴 압축된 코드 스타일이라, 이어서 개발하기 전에 포맷을 정리하면 편함.
--->
 <html lang="ko"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <title>온라인 피구</title>
@@ -109,7 +72,7 @@ B.rv.copy(B.v).multiplyScalar(.5);B.rv.y=0;B.st="loose";B.h=null;bm.position.set
 function shoot(c,t,sp,j){const p=c.m.position,q=t.m.position,tm=p.distanceTo(q)/sp;
 B.st="fly";B.kind="t";B.thr=c;B.in=0;B.team=c.team;B.h=null;B.t=0;bm.position.set(p.x,1.1,p.z);
 B.v.set(q.x+(t.vx||0)*tm*.7+(Math.random()-.5)*j-p.x,0,q.z+(t.vz||0)*tm*.7-p.z).normalize().multiplyScalar(sp)}
-function pass(c,m){const p=c.m.position;B.st="fly";B.kind="p";B.tt=[];B.team=c.team;B.tgt=m;B.h=null;B.t=0;bm.position.set(p.x,1.1,p.z)}
+function pass(c,m){const p=c.m.position;B.st="fly";B.kind="p";B.team=c.team;B.tgt=m;B.h=null;B.t=0;bm.position.set(p.x,1.1,p.z)}
 function out(c){c.out=1;if(c===P){wide=0;yaw=0}const p=c.m.position;p.z=c.team?12:-12;p.x=cl(p.x,-5,5);c.tz=p.z;
 if(!inn(1).length)end(true);else if(!inn(0).length)end(false)}
 function reset(){T.forEach(c=>S.remove(c.m));T=[];
@@ -142,7 +105,7 @@ const m=inn(w.team).filter(k=>k!==w);pass(w,m[Math.random()*m.length|0])}
 if(t>=tR+.6){J.on=0;b.m.position.y=0;r.m.position.y=0}}
 function startHost(){net.g++;net.e=0;reset();run=true;ov.style.display="none"}
 function netApply(d){if(d.s&&d.s!==N){N=d.s;reset();P=T[net.slot]}if(d.g!==net.g){net.g=d.g;net.first=1;run=true;ov.style.display="none"}
-d.t.forEach((a,i)=>{const c=T[i],o=c.out;c.out=a[2];c.gx=a[0];c.gz=a[1];c.gy=a[3]||0;if(c===P&&a[4])P.cw=Math.max(P.cw,.2);if(net.first)c.m.position.set(a[0],0,a[1]);if(!o&&c.out&&c===P){wide=0;yaw=0}});
+d.t.forEach((a,i)=>{const c=T[i],o=c.out;c.out=a[2];c.gx=a[0];c.gz=a[1];c.gy=a[3]||0;if(net.first)c.m.position.set(a[0],0,a[1]);if(!o&&c.out&&c===P){wide=0;yaw=0}});
 if(d.nm)for(const i in d.nm)if(T[i])mark(T[i],+i,d.nm[i]);T.forEach((c,i)=>{if(c.mk&&!(d.nm&&d.nm[i])){c.m.remove(c.mk.g);c.mk=null}});apx.visible=!!d.j;net.first=0;cdn.textContent=d.n||"";net.b=d.b;B.st=["held","fly","loose"][d.b[0]];B.h=d.b[1]>=0?T[d.b[1]]:null;
 if(d.e>0&&run)end(d.e===1)}
 function glerp(dt){const k=Math.min(1,dt*14);T.forEach(c=>{if(c.gx===undefined)return;const p=c.m.position;p.x+=(c.gx-p.x)*k;p.z+=(c.gz-p.z)*k;p.y+=((c.gy||0)-p.y)*k});
@@ -167,8 +130,7 @@ if(c.out)clampOut(c);c.vx=(p.x-ox)/dt;c.vz=(p.z-oz)/dt});
 const q=bm.position;
 if(B.st==="loose"){q.x+=B.rv.x*dt;q.z+=B.rv.z*dt;B.rv.multiplyScalar(Math.exp(-1.6*dt));if(Math.abs(q.x)>9.6){q.x=Math.sign(q.x)*9.6;B.rv.x*=-.5}if(Math.abs(q.z)>14.4){q.z=Math.sign(q.z)*14.4;B.rv.z*=-.5}bm.rotation.x+=B.rv.z*dt/.24;bm.rotation.z-=B.rv.x*dt/.24;const ic=Math.abs(q.x)<=6.2&&Math.abs(q.z)<=10.2;const pl=ic?inn(q.z>0?0:1):T.filter(c=>c.team===(q.z>0?1:0)&&c.out);if(!ic&&!pl.length){const f=inn(q.z>0?0:1);if(f.length)give(near(q,f))}for(const c of pl){const p=c.m.position;if(Math.hypot(q.x-p.x,q.z-p.z)<.9){give(c);break}}}
 else if(B.st==="fly"){B.t+=dt;
-if(B.kind==="p"){let ic=null;inn(1-B.team).forEach(c=>{const p=c.m.position;if(!ic&&Math.hypot(q.x-p.x,q.z-p.z)<.8){if(c.pl){if(c.cw>0)ic=c}else if(!B.tt.includes(c)){B.tt.push(c);if(Math.random()<.25)ic=c}}});
-if(ic){J.res=ic.team===0?"가로채기 성공!":"패스를 뺏겼어요!";J.until=performance.now()+1800;give(ic)}else{const m=B.tgt.m.position,dx=m.x-q.x,dz=m.z-q.z,d=Math.hypot(dx,dz);if(d<.6||B.t>3)give(B.tgt);else{q.x+=dx/d*12*dt;q.z+=dz/d*12*dt}}}
+if(B.kind==="p"){const m=B.tgt.m.position,dx=m.x-q.x,dz=m.z-q.z,d=Math.hypot(dx,dz);if(d<.6||B.t>3)give(B.tgt);else{q.x+=dx/d*12*dt;q.z+=dz/d*12*dt}}
 else{q.addScaledVector(B.v,dt);let hit=null;inn(1-B.team).forEach(c=>{if(Math.hypot(q.x-c.m.position.x,q.z-c.m.position.z)<.7)hit=c});
 if(hit){if(hit.pl?hit.cw>0:Math.random()<.2){give(hit)}else{if(hit===P)fl=.25;drop();out(hit)}}else{const ic=Math.abs(q.x)<=6.2&&Math.abs(q.z)<=10.2;if(ic)B.in=1;if((B.in&&!ic)||B.t>3)drop()}}}
 }
@@ -187,7 +149,7 @@ const cu=e=>{if(e.pointerId===cid)cid=null};cam.addEventListener("pointerup",cu)
 const send=(dc,o)=>dc&&(dc.open||dc.readyState==="open")&&dc.send(o);
 function openPanel(){lb.style.display="none";rc.style.display="none";how.style.display=sz.style.display=nk.style.display=ov.querySelector("p").style.display="none";nw.style.display="flex"}
 function act(a){send(net.gdc,{t:"act",d:{a}})}
-function bcast(now){if(now-(net.bt||0)<70)return;net.bt=now;const q=bm.position,r=v=>Math.round(v*100)/100;const o={t:"st",d:{g:net.g,s:N,nm:net.nicks,j:J.on&&!J.done?1:0,n:J.on&&J.cd>0?Math.ceil(J.cd):0,e:run?0:net.e||0,t:T.map(c=>[r(c.m.position.x),r(c.m.position.z),c.out,r(c.m.position.y),c.cw>0?1:0]),b:[B.st==="held"?0:B.st==="fly"?1:2,B.h?T.indexOf(B.h):-1,r(q.x),r(q.y),r(q.z)]}};net.dcs.forEach(dc=>send(dc,o))}
+function bcast(now){if(now-(net.bt||0)<70)return;net.bt=now;const q=bm.position,r=v=>Math.round(v*100)/100;const o={t:"st",d:{g:net.g,s:N,nm:net.nicks,j:J.on&&!J.done?1:0,n:J.on&&J.cd>0?Math.ceil(J.cd):0,e:run?0:net.e||0,t:T.map(c=>[r(c.m.position.x),r(c.m.position.z),c.out,r(c.m.position.y)]),b:[B.st==="held"?0:B.st==="fly"?1:2,B.h?T.indexOf(B.h):-1,r(q.x),r(q.y),r(q.z)]}};net.dcs.forEach(dc=>send(dc,o))}
 function hostMsg(k,s){let o=s;if(typeof s==="string"){try{o=JSON.parse(s)}catch(e){return}}if(!o)return;const d=o.d,c=T[k];if(!d||!c)return;c.seen=performance.now();
 if(o.t==="nick"){const n=String(d.n||"").slice(0,6)||"친구"+k;net.nicks[k]=n;mark(c,k,n)}else if(o.t==="in"){c.pl=1;c.rx=cl(+d.x||0,-1,1);c.rz=cl(+d.z||0,-1,1)}
 else if(o.t==="act"&&run){const h=B.st==="held"&&B.h===c;
@@ -197,7 +159,7 @@ else if(d.a==="c"&&!c.out&&c.cc<=0){c.cw=.45;c.cc=1.2}}}
 sb.onclick=()=>startHost();
 setInterval(()=>{if(net.mode!=="guest"||net.slot===undefined)return;const[x,z]=inp(),r=v=>Math.round(v*100)/100;send(net.gdc,{t:"in",d:{x:r(x),z:r(z)}})},100);
 const how=document.createElement("div");how.id="how";
-how.innerHTML="<b>게임 설명</b><ul><li>상대 팀을 모두 외야로 보내면 승리!</li><li>시작은 점프볼: 공이 꼭대기일 때 던지기 버튼으로 점프해요. 타이밍이 좋을수록 높이 뛰어요.</li><li>공을 잡으면 던지기로 적을 맞히거나 패스로 팀원에게 넘겨요.</li><li>적이 던진 공이나 패스는 잡기 버튼 타이밍에 맞춰 받아낼 수 있어요(패스 가로채기).</li><li>맞으면 상대 코트 뒤와 옆의 외야로 나가 돌아다닐 수 있고, 코트 밖으로 나간 공은 외야가 주워요. 외야가 없으면 내야가 가져가요.</li><li>왼쪽 화면 밀기=이동, 오른쪽 화면 밀기=화면 회전</li><li>PC: WASD, 스페이스=던지기, E=패스, F=잡기, Z/X=회전, V=시점</li></ul>";
+how.innerHTML="<b>게임 설명</b><ul><li>상대 팀을 모두 외야로 보내면 승리!</li><li>시작은 점프볼: 공이 꼭대기일 때 던지기 버튼으로 점프해요. 타이밍이 좋을수록 높이 뛰어요.</li><li>공을 잡으면 던지기로 적을 맞히거나 패스로 팀원에게 넘겨요.</li><li>적이 던진 공은 잡기 버튼으로 받아낼 수 있어요.</li><li>맞으면 상대 코트 뒤와 옆의 외야로 나가 돌아다닐 수 있고, 코트 밖으로 나간 공은 외야가 주워요. 외야가 없으면 내야가 가져가요.</li><li>왼쪽 화면 밀기=이동, 오른쪽 화면 밀기=화면 회전</li><li>PC: WASD, 스페이스=던지기, E=패스, F=잡기, Z/X=회전, V=시점</li></ul>";
 const sz=document.createElement("div");sz.id="sz";
 sz.innerHTML='팀 인원 <button id="szm" aria-label="인원 줄이기">−</button> <b id="szv">3</b> <button id="szp" aria-label="인원 늘리기">+</button> 명씩';
 ov.insertBefore(how,rc);ov.insertBefore(sz,rc);const nk=document.createElement("input");nk.id="nk";nk.maxLength=6;nk.placeholder="닉네임(최대 6자)";nk.autocomplete="off";ov.insertBefore(nk,rc);
