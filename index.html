@@ -17,7 +17,7 @@
 - 캐릭터 필드: m(3D 그룹), team, out, pl(사람이 조종하는지), cw/cc(잡기 창/쿨다운), rx/rz(원격 입력), seen(마지막 입력 시각), mk(이름표와 모자).
 - B = 공 상태. B.st: held(들고 있음, B.h) / fly(B.kind: t=던짐, p=패스) / loose(굴러감, B.rv) / jump(점프볼 중). 공 메시는 bm.
 - J = 점프볼 상태(카운트다운 cd, 경과 t, 누른 시각 tb/tr, 결과 문구 res).
-- 카메라: yaw(오른쪽 화면 드래그 또는 ←/→ 키로 회전), wide(넓은 시점). 이동 입력은 카메라 기준(inp()).
+- 카메라: yaw(오른쪽 화면 드래그 또는 ←/→ 키로 회전), zoom(확대/축소: 우측 상단 ＋/－ 버튼, 오른쪽 화면 핀치, 마우스 휠, +/- 키), wide(넓은 시점, 버튼을 없애서 항상 0). 이동 입력은 카메라 기준(inp()).
 
 ■ 멀티플레이(방장 권한 방식)
 - 방장 기기가 시뮬레이션을 전부 계산. 친구는 입력만 보내고 상태를 받아 그림. 친구는 방장 팀의 AI 자리(인덱스 1..N-1) 또는 상대 팀 자리(N..2N-1)를 골라 맡음(참가 시 metadata.team). 상대 팀 점프볼 대표도 사람이 될 수 있음.
@@ -66,7 +66,7 @@ canvas{display:block;position:fixed;inset:0}
 #thr{right:22px;bottom:calc(36px + env(safe-area-inset-bottom,0px));width:96px;height:96px;background:var(--acc);color:#10243a;box-shadow:0 0 0 6px rgba(255,183,3,.28)}
 #pss{right:36px;bottom:calc(150px + env(safe-area-inset-bottom,0px));width:70px;height:70px;background:#3a86ff;color:#fff}
 #ctc{right:132px;bottom:calc(48px + env(safe-area-inset-bottom,0px));width:64px;height:64px;background:#2ec4b6;color:#10243a}
-#vw{right:16px;top:calc(54px + env(safe-area-inset-top,0px));width:56px;height:56px;background:rgba(244,247,250,.9);color:#10243a;font-size:14px}
+#vw{position:fixed;display:flex;gap:6px;right:16px;top:calc(54px + env(safe-area-inset-top,0px))}#vw div{width:48px;height:48px;border-radius:50%;background:rgba(244,247,250,.9);color:#10243a;font-size:24px;line-height:1;display:flex;align-items:center;justify-content:center}#vw div:active{transform:scale(.94)}#vw div:focus-visible{outline:3px solid #fff;outline-offset:3px}
 #ov{position:fixed;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:14px;background:var(--panel);text-align:center;padding:24px}
 #ov h1{margin:0;font-size:40px;letter-spacing:-1px}
 #ov p{margin:0;max-width:32ch;line-height:1.6;font-family:"Apple SD Gothic Neo","Noto Sans KR",sans-serif;font-size:16px}
@@ -109,7 +109,7 @@ canvas{display:block;position:fixed;inset:0}
 #thr{right:calc(26px + env(safe-area-inset-right,0px));bottom:calc(24px + env(safe-area-inset-bottom,0px))}
 #pss{right:calc(34px + env(safe-area-inset-right,0px));bottom:calc(132px + env(safe-area-inset-bottom,0px))}
 #ctc{right:calc(138px + env(safe-area-inset-right,0px));bottom:calc(32px + env(safe-area-inset-bottom,0px))}
-#vw{right:calc(16px + env(safe-area-inset-right,0px))}
+#vw{right:calc(16px + env(safe-area-inset-right,0px));flex-direction:column}
 #pcs{left:50%;transform:translateX(-50%)}#em{top:calc(54px + env(safe-area-inset-top,0px));right:calc(82px + env(safe-area-inset-right,0px))}#emp{grid-template-columns:repeat(8,38px);right:calc(148px + env(safe-area-inset-right,0px));top:calc(54px + env(safe-area-inset-top,0px))}
 #cdn{top:14%;font-size:72px}
 #ov{padding:12px;gap:8px}#ov h1{font-size:28px}#how{max-width:60ch}}
@@ -118,7 +118,7 @@ canvas{display:block;position:fixed;inset:0}
 <div id="pad"></div><div id="cam"></div><div id="cdn"></div><div id="jb"></div><div id="jk"></div>
 <div id="pss" class="b" role="button" tabindex="0">패스</div>
 <div id="ctc" class="b" role="button" tabindex="0">잡기</div>
-<div id="vw" class="b" role="button" tabindex="0">시점</div><div id="em" class="b" role="button" tabindex="0">😊</div>
+<div id="vw" role="group" aria-label="확대 축소"><div id="zi" role="button" tabindex="0" aria-label="확대">＋</div><div id="zo" role="button" tabindex="0" aria-label="축소">－</div></div><div id="em" class="b" role="button" tabindex="0">😊</div>
 <div id="thr" class="b" role="button" tabindex="0">던지기</div><div id="pcs"></div>
 <div id="ov" class="ld"><h1>온라인 피구</h1><p>인원을 정하고 시작해요.</p><input id="rc" maxlength="12" placeholder="방 코드(호스트가 알려준 코드)" autocomplete="off"><div id="lb"><button id="go">혼자 하기</button><button id="hs">방 만들기</button><button id="js">친구 방 참가</button><button id="lsb">가로 모드</button></div><p id="ms"></p><button id="lob" style="display:none">로비로 돌아가기</button><div id="nw" style="display:none;flex-direction:column;gap:8px;align-items:center"><div id="nb" style="display:flex;gap:8px"><button id="sb">게임 시작</button></div></div></div>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
@@ -139,7 +139,7 @@ function mk(c){const g=new THREE.Group();const b=new THREE.Mesh(new THREE.Cylind
 const ring=new THREE.Mesh(new THREE.RingGeometry(.55,.72,24),new THREE.MeshBasicMaterial({color:0xffd166,side:2}));ring.rotation.x=-Math.PI/2;S.add(ring);
 const bm=new THREE.Mesh(new THREE.SphereGeometry(.24,14,14),M(0xffd166));S.add(bm);bm.add(new THREE.Mesh(new THREE.TorusGeometry(.245,.035,6,24),M(0xc2410c)));
 const B={st:"held",h:null,v:new THREE.Vector3(),rv:new THREE.Vector3(),kind:"",team:0,tgt:null,t:0};
-let T=[],P,run=false,fl=0,wide=0,yaw=0,N=3,J={on:0,until:0},net={mode:"solo",slots:{},g:0};
+let T=[],P,run=false,fl=0,wide=0,yaw=0,zoom=1,N=3,J={on:0,until:0},net={mode:"solo",slots:{},g:0};
 const inn=t=>T.filter(c=>c.team===t&&!c.out);
 const near=(v,a)=>{let n=a[0],d=1e9;a.forEach(c=>{const k=c.m.position.distanceTo(v);if(k<d){d=k;n=c}});return n};
 const cl=(v,a,b)=>Math.max(a,Math.min(b,v));
@@ -165,7 +165,7 @@ function pcands(){const a=lookA(),sn=Math.sin(a),cs=Math.cos(a),p=P.m.position;r
 const aimOf=l=>l.reduce((m,u)=>Math.abs(u.ang)<Math.abs(m.ang)?u:m,l[0]);
 function doPass(t){if(!run||B.st!=="held"||B.h!==P)return;const l=pcands();if(!l.length)return;const c=l.some(u=>u.c===t)?t:aimOf(l).c;if(net.mode==="guest")return act("p",T.indexOf(c));pass(P,c)}
 function doCatch(){if(!run)return;if(net.mode==="guest"){if(!P.out&&P.cc<=0){P.cw=.45;P.cc=3;act("c")}return}if(!P.out&&P.cc<=0){P.cw=.45;P.cc=3}}
-const K={};addEventListener("keydown",e=>{K[e.code]=1;if(e.code==="Space"){e.preventDefault();doThrow()}if(e.code==="KeyE")doPass();if(e.code==="KeyF")doCatch();if(/^Digit[1-8]$/.test(e.code))doEmote(+e.code.slice(5));if(e.code==="KeyV"){wide^=1;yaw=0}});addEventListener("keyup",e=>K[e.code]=0);
+const K={};addEventListener("keydown",e=>{K[e.code]=1;if(e.code==="Space"){e.preventDefault();doThrow()}if(e.code==="KeyE")doPass();if(e.code==="KeyF")doCatch();if(/^Digit[1-8]$/.test(e.code))doEmote(+e.code.slice(5));if(e.code==="Equal"||e.code==="NumpadAdd")zs(.8);if(e.code==="Minus"||e.code==="NumpadSubtract")zs(1/.8)});addEventListener("keyup",e=>K[e.code]=0);
 let jx=0,jz=0,ox=0,oy=0,pid=null;
 pad.addEventListener("pointerdown",e=>{pid=e.pointerId;ox=e.clientX;oy=e.clientY;pad.setPointerCapture(pid);jset(ox,oy,ox,oy,1)});
 pad.addEventListener("pointermove",e=>{if(e.pointerId!==pid)return;let x=(e.clientX-ox)/52,z=(e.clientY-oy)/52;const l=Math.hypot(x,z);if(l>1){x/=l;z/=l}jx=l<.12?0:x;jz=l<.12?0:z;jset(ox,oy,ox+x*52,oy+z*52,1)});
@@ -174,7 +174,8 @@ function jset(bx,by,kx,ky,on){jb.style.left=bx+"px";jb.style.top=by+"px";jk.styl
 function jrest(){const x=Math.max(78,innerWidth*.14),y=innerHeight-98;jset(x,y,x,y,0)}
 addEventListener("resize",()=>{if(pid===null)jrest()});jrest();
 thr.addEventListener("pointerdown",e=>{e.preventDefault();doThrow()});pss.addEventListener("pointerdown",e=>{e.preventDefault();doPass()});
-thr.addEventListener("keydown",e=>{if(e.key==="Enter")doThrow()});ctc.addEventListener("pointerdown",e=>{e.preventDefault();doCatch()});ctc.addEventListener("keydown",e=>{if(e.key==="Enter")doCatch()});vw.addEventListener("pointerdown",e=>{e.preventDefault();wide^=1;yaw=0});vw.addEventListener("keydown",e=>{if(e.key==="Enter"){wide^=1;yaw=0}});pss.addEventListener("keydown",e=>{if(e.key==="Enter")doPass()});
+thr.addEventListener("keydown",e=>{if(e.key==="Enter")doThrow()});ctc.addEventListener("pointerdown",e=>{e.preventDefault();doCatch()});ctc.addEventListener("keydown",e=>{if(e.key==="Enter")doCatch()});zi.addEventListener("pointerdown",e=>{e.preventDefault();zs(.8)});zo.addEventListener("pointerdown",e=>{e.preventDefault();zs(1/.8)});zi.addEventListener("keydown",e=>{if(e.key==="Enter")zs(.8)});zo.addEventListener("keydown",e=>{if(e.key==="Enter")zs(1/.8)});addEventListener("wheel",e=>{zs(e.deltaY>0?1.08:.93)},{passive:true});pss.addEventListener("keydown",e=>{if(e.key==="Enter")doPass()});
+const zs=f=>{zoom=Math.max(.55,Math.min(1.9,zoom*f))};
 function inp(){let x=jx+(K.KeyD?1:0)-(K.KeyA?1:0),z=jz+(K.KeyS?1:0)-(K.KeyW?1:0);const a=(wide?(P.team?Math.PI:0):((P.team===1)!==!!P.out?Math.PI:0))+yaw,sn=Math.sin(a),cs=Math.cos(a);return[x*cs+z*sn,-x*sn+z*cs]}
 function clampOut(c){const p=c.m.position,s=c.team?1:-1;p.x=cl(p.x,-9.2,9.2);p.z=s<0?cl(p.z,-14,-.5):cl(p.z,.5,14);
 if(Math.abs(p.x)<6.6&&(s<0?p.z>-10.6:p.z<10.6)){const dx=6.6-Math.abs(p.x),dz=s<0?p.z+10.6:10.6-p.z;if(dx<dz)p.x=(p.x<0?-1:1)*6.6;else p.z=s*10.6}}
@@ -214,7 +215,7 @@ if(!(run&&B.st==="held"&&B.h===P)){pcs.style.display="none";aimr.visible=aimA.vi
 const l=pcands();if(!l.length)return;const am=aimOf(l).c,ai=T.indexOf(am),k=l.map(u=>T.indexOf(u.c)+(u.c.out?"o":"i")).join();
 if(k!==pk){pk=k;pcs.innerHTML="";l.forEach(u=>{const i=T.indexOf(u.c),b=document.createElement("div");b.className="pc "+(u.c.out?"o":"i");b.dataset.i=i;b.innerHTML=(i%N+1)+"<small>"+(u.c.out?"외야":"내야")+"</small>";b.onpointerdown=e=>{e.preventDefault();doPass(T[i])};pcs.appendChild(b)})}
 pcs.style.display="flex";for(const b of pcs.children)b.classList.toggle("a",+b.dataset.i===ai);
-const q=am.m.position,cc=am.out?0xff9100:0x4dc3ff;aimr.visible=aimA.visible=true;aimr.position.set(q.x,.04,q.z);aimA.position.set(q.x,2.95+Math.sin(performance.now()/180)*.12,q.z);aimr.material.color.setHex(cc);aimA.material.color.setHex(cc)}
+const q=am.m.position,cc=am.out?0xff9100:0x4dc3ff;aimr.visible=true;aimA.visible=false;aimr.position.set(q.x,.04,q.z);aimA.position.set(q.x,2.95+Math.sin(performance.now()/180)*.12,q.z);aimr.material.color.setHex(cc);aimA.material.color.setHex(cc)}
 let last=performance.now();
 function loop(now){requestAnimationFrame(loop);const dt=Math.min((now-last)/1000,.05);last=now;if(K.ArrowLeft)yaw+=2*dt;if(K.ArrowRight)yaw-=2*dt;
 if(run&&net.mode!=="guest"){
@@ -242,13 +243,13 @@ if(net.mode==="host"&&net.room)bcast(now);else if(net.mode==="guest"){glerp(dt);
 if(B.st==="held"&&B.h){const q=B.h.m.position;bm.position.set(q.x+.45,1,q.z)}
 const pp=P.m.position,px=pp.x*.8;ring.position.set(pp.x,.03,pp.z);ring.material.color.setHex(P.cw>0?0xffffff:0xffd166);ring.scale.setScalar(P.cw>0?1.8:1);ctc.textContent=P.cc>0&&!P.out?P.cc.toFixed(1):"잡기";ctc.style.opacity=P.cc>0?.45:1;
 const yw=(wide?(P.team?Math.PI:0):((P.team===1)!==!!P.out?Math.PI:0))+yaw,sn=Math.sin(yw),cs=Math.cos(yw);let cx=px,cz=pp.z,dz=Math.max(6.5,15.5-Math.abs(pp.z)),dy=4.6,fw=5,ly=.8;if(wide){cx=pp.x*.3;cz=P.team?-7:7;dz=8.5;dy=9;fw=8;ly=0}else if(P.out){dz=6;dy=3.4;fw=6;ly=1}
-C.position.set(cx+sn*dz,dy,cz+cs*dz);C.lookAt(cx-sn*fw,ly,cz-cs*fw)
+dz*=zoom;dy=ly+(dy-ly)*zoom;C.position.set(cx+sn*dz,dy,cz+cs*dz);C.lookAt(cx-sn*fw,ly,cz-cs*fw)
 if(fl>0){fl-=dt;S.background.setHex(0x5a1020)}else S.background.setHex(0x10243a);
 emLoop(now);ui();pui();R.render(S,C)}
-let cx0=0,cid=null;
-cam.addEventListener("pointerdown",e=>{cid=e.pointerId;cx0=e.clientX;cam.setPointerCapture(cid)});
-cam.addEventListener("pointermove",e=>{if(e.pointerId!==cid)return;yaw-=(e.clientX-cx0)*.008;cx0=e.clientX});
-const cu=e=>{if(e.pointerId===cid)cid=null};cam.addEventListener("pointerup",cu);cam.addEventListener("pointercancel",cu);
+let cx0=0,cid=null,cid2=null,pd=1,pz=1,pp1=null,pp2=null;
+cam.addEventListener("pointerdown",e=>{if(cid===null){cid=e.pointerId;cx0=e.clientX;pp1=[e.clientX,e.clientY]}else if(cid2===null){cid2=e.pointerId;pp2=[e.clientX,e.clientY];pd=Math.hypot(pp1[0]-pp2[0],pp1[1]-pp2[1])||1;pz=zoom}cam.setPointerCapture(e.pointerId)});
+cam.addEventListener("pointermove",e=>{if(e.pointerId===cid){pp1=[e.clientX,e.clientY];if(cid2===null)yaw-=(e.clientX-cx0)*.008;cx0=e.clientX}else if(e.pointerId===cid2)pp2=[e.clientX,e.clientY];else return;if(cid2!==null)zoom=Math.max(.55,Math.min(1.9,pz*pd/(Math.hypot(pp1[0]-pp2[0],pp1[1]-pp2[1])||1)))});
+const cu=e=>{if(e.pointerId===cid){cid=cid2;pp1=pp2;cx0=pp2?pp2[0]:0;cid2=null}else if(e.pointerId===cid2)cid2=null};cam.addEventListener("pointerup",cu);cam.addEventListener("pointercancel",cu);
 const send=(dc,o)=>dc&&(dc.open||dc.readyState==="open")&&dc.send(o);
 function openPanel(){lb.style.display="none";rc.style.display="none";hb.style.display=how.style.display=sz.style.display=nk.style.display=tm.style.display=ov.querySelector("p").style.display="none";nw.style.display="flex"}
 function act(a,i,y){send(net.gdc,{t:"act",d:{a,i,y}})}
@@ -262,7 +263,7 @@ else if(d.a==="c"&&!c.out&&c.cc<=0){c.cw=.45;c.cc=3}else if(d.a==="e"){const i=d
 sb.onclick=()=>startHost();
 setInterval(()=>{if(net.mode!=="guest"||net.slot===undefined)return;const[x,z]=inp(),r=v=>Math.round(v*100)/100;send(net.gdc,{t:"in",d:{x:r(x),z:r(z)}})},100);
 const how=document.createElement("div");how.id="how";
-how.innerHTML="<b>게임 설명</b><ul><li>상대 팀을 모두 외야로 보내면 승리!</li><li>시작은 점프볼: 공이 꼭대기일 때 던지기 버튼으로 점프해요. 타이밍이 좋을수록 높이 뛰어요.</li><li>공을 잡으면 던지기로 적을 맞히거나 패스로 팀원에게 넘겨요.</li><li>적이 던진 공이나 패스는 잡기 버튼 타이밍에 맞춰 받아낼 수 있어요(패스 가로채기).</li><li>맞으면 상대 코트 뒤와 옆의 외야로 나가 돌아다닐 수 있고, 코트 밖으로 나간 공은 외야가 주워요. 외야가 없으면 내야가 가져가요.</li><li>왼쪽 화면을 누르고 밀면 조이스틱이 떠서 이동, 오른쪽 화면 밀기=화면 회전</li><li>공을 들면 아래에 패스 원이 떠요: 파랑=내야, 주황=외야. 원을 누르면 그 사람에게, 패스 버튼은 내가 보는 방향에 가장 가까운 팀원(하얀 링)에게 가요.</li><li>던지기는 자동 조준이 아니에요. 오른쪽 화면을 밀어 빨간 조준선을 적에게 맞추고 던져요.</li><li>오른쪽 위 😊 버튼으로 웃음·울기·메롱 같은 감정표현을 할 수 있어요 (PC: 숫자 1~8).</li><li>PC: WASD, 스페이스=던지기, E=패스, F=잡기, ←/→=회전, V=시점</li></ul>";
+how.innerHTML="<b>게임 설명</b><ul><li>상대 팀을 모두 외야로 보내면 승리!</li><li>시작은 점프볼: 공이 꼭대기일 때 던지기 버튼으로 점프해요. 타이밍이 좋을수록 높이 뛰어요.</li><li>공을 잡으면 던지기로 적을 맞히거나 패스로 팀원에게 넘겨요.</li><li>적이 던진 공이나 패스는 잡기 버튼 타이밍에 맞춰 받아낼 수 있어요(패스 가로채기).</li><li>맞으면 상대 코트 뒤와 옆의 외야로 나가 돌아다닐 수 있고, 코트 밖으로 나간 공은 외야가 주워요. 외야가 없으면 내야가 가져가요.</li><li>왼쪽 화면을 누르고 밀면 조이스틱이 떠서 이동, 오른쪽 화면 밀기=화면 회전</li><li>공을 들면 아래에 패스 원이 떠요: 파랑=내야, 주황=외야. 원을 누르면 그 사람에게, 패스 버튼은 내가 보는 방향에 가장 가까운 팀원(하얀 링)에게 가요.</li><li>던지기는 자동 조준이 아니에요. 오른쪽 화면을 밀어 빨간 조준선을 적에게 맞추고 던져요.</li><li>오른쪽 위 😊 버튼으로 웃음·울기·메롱 같은 감정표현을 할 수 있어요 (PC: 숫자 1~8).</li><li>오른쪽 위 ＋/－ 버튼이나 오른쪽 화면에서 두 손가락을 모으고 벌려 화면을 확대·축소할 수 있어요.</li><li>PC: WASD, 스페이스=던지기, E=패스, F=잡기, ←/→=회전, +/−/마우스 휠=확대·축소</li></ul>";
 const sz=document.createElement("div");sz.id="sz";
 sz.innerHTML='팀 인원 <button id="szm" aria-label="인원 줄이기">−</button> <b id="szv">3</b> <button id="szp" aria-label="인원 늘리기">+</button> 명씩';
 how.style.display="none";const hb=document.createElement("button");hb.id="hb";hb.textContent="게임 설명";hb.onclick=()=>{const o=how.style.display==="none";how.style.display=o?"block":"none";hb.textContent=o?"설명 닫기":"게임 설명"};ov.insertBefore(hb,rc);ov.insertBefore(how,rc);ov.insertBefore(sz,rc);const nk=document.createElement("input");nk.id="nk";nk.maxLength=6;nk.placeholder="닉네임(최대 6자)";nk.autocomplete="off";ov.insertBefore(nk,rc);const tm=document.createElement("div");tm.id="tm";tm.innerHTML='참가할 팀 <button id="tm0" class="on">방장 팀</button><button id="tm1">상대 팀</button>';ov.insertBefore(tm,rc);net.want=0;
