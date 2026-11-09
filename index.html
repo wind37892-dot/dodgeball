@@ -10,7 +10,6 @@
 - 잡기 버튼: 0.45초 동안 잡기 상태(쿨다운 3초, 버튼에 남은 시간 표시). 이때 던진 공에 맞으면 공만 받고 던진 사람은 그대로. 상대 패스가 근처를 지나가도 가로챔. AI도 던진 공은 20%, 패스는 25% 확률로 받아냄.
 - 코트 밖으로 나간 공은 바닥을 굴러감(마찰, 바깥 벽에서 튕김). 나간 쪽 외야가 주워 감. 그쪽 외야가 한 명도 없으면 그 코트의 내야가 가져감.
 - 상대 팀 전원 아웃이면 승리, 우리 팀 전원 아웃이면 패배.
-- 모드: GM=0 일반 피구, GM=1 왕 피구(팀마다 랜덤 1명이 왕, KG=[팀0 왕 인덱스, 팀1 왕 인덱스]. 왕관은 자기 팀에게만 보이고 끝나면 둘 다 공개. 왕이 아웃되면 그 팀 패배. 왕관은 커스터마이징에서 고를 수 없음).
 
 ■ 좌표/데이터
 - 코트: x -6~6, z -10~10, 중앙선 z=0. 팀0(파랑, 우리 팀)은 z>0, 팀1(빨강)은 z<0. 외야는 상대 코트의 뒤(|z|>10)와 옆(|x|>6) 띠(clampOut).
@@ -61,7 +60,7 @@ canvas{display:block;position:fixed;inset:0}
 #hud{position:fixed;left:0;right:0;top:env(safe-area-inset-top,0px);display:flex;justify-content:space-between;padding:12px 16px;font-size:17px;pointer-events:none}
 #pad{position:fixed;left:0;bottom:0;width:58%;height:62%}
 #cam{position:fixed;left:58%;top:0;width:42%;height:100%}
-#hp,#en{display:none}#hud{justify-content:center}#pcs{display:none!important}#rd{border:0;border-radius:999px;background:var(--acc);color:#10243a;font:inherit;font-size:18px;padding:12px 28px}#md{display:flex;align-items:center;gap:8px;font-size:15px}#md button{border:2px solid var(--acc);background:transparent;color:inherit;border-radius:999px;font:inherit;font-size:15px;padding:8px 14px}#md button.on{background:var(--acc);color:#10243a}
+#hp,#en{display:none}#hud{justify-content:center}#pcs{display:none!important}#rd{border:0;border-radius:999px;background:var(--acc);color:#10243a;font:inherit;font-size:18px;padding:12px 28px}
 #cdn{position:fixed;left:0;right:0;top:28%;text-align:center;font-size:96px;line-height:1;pointer-events:none;color:var(--acc);text-shadow:0 4px 20px rgba(0,0,0,.5)}
 .b{position:fixed;border-radius:50%;display:flex;align-items:center;justify-content:center;font-size:17px}
 .b:active{transform:scale(.94)}
@@ -100,6 +99,7 @@ canvas{display:block;position:fixed;inset:0}
 .cr .nm{flex:1;text-align:center;font-size:15px}
 #cmp .bt{display:flex;gap:8px}#cmp .bt button{flex:1;border:0;border-radius:999px;background:var(--acc);color:#10243a;font:inherit;font-size:16px;padding:10px 0}#cmp .bt button.o{background:transparent;border:2px solid var(--acc);color:inherit}
 @media (orientation:landscape){#cmp{left:auto;top:0;width:48%;max-height:none;border-radius:18px 0 0 18px}}
+.cmo #hud,.cmo #pad,.cmo #cam,.cmo #cdn,.cmo #jb,.cmo #jk,.cmo #pss,.cmo #ctc,.cmo #vw,.cmo #zi,.cmo #zo,.cmo #em,.cmo #emp,.cmo #thr,.cmo #pcs,.cmo #rd{display:none!important}
 #hb{border:2px solid var(--acc);border-radius:999px;background:transparent;color:inherit;font:inherit;font-size:14px;padding:8px 16px}
 #lob{border:2px solid var(--acc);border-radius:999px;background:transparent;color:inherit;font:inherit;font-size:15px;padding:12px 18px}
 #jb,#jk{position:fixed;border-radius:50%;pointer-events:none;opacity:.35}
@@ -129,7 +129,7 @@ canvas{display:block;position:fixed;inset:0}
 <div id="ctc" class="b" role="button" tabindex="0">잡기</div>
 <div id="vw" role="group" aria-label="확대 축소"><div id="zi" role="button" tabindex="0" aria-label="확대">＋</div><div id="zo" role="button" tabindex="0" aria-label="축소">－</div></div><div id="em" class="b" role="button" tabindex="0">😊</div>
 <div id="thr" class="b" role="button" tabindex="0">던지기</div><div id="pcs"></div>
-<div id="ov" class="ld"><h1>온라인 피구</h1><p>인원을 정하고 시작해요.</p><input id="rc" maxlength="12" placeholder="방 코드(호스트가 알려준 코드)" autocomplete="off"><div id="lb"><button id="go">혼자 하기</button><button id="hs">방 만들기</button><button id="js">친구 방 참가</button><button id="lsb">가로 모드</button><button id="cmb">커마</button></div><p id="ms"></p><button id="lob" style="display:none">로비로 돌아가기</button><div id="nw" style="display:none;flex-direction:column;gap:8px;align-items:center"><div id="nb" style="display:flex;gap:8px"><button id="sb">게임 시작</button><button id="rcp">방 코드 복사</button></div></div></div>
+<div id="ov" class="ld"><h1>온라인 피구</h1><p>인원을 정하고 시작해요.</p><input id="rc" maxlength="12" placeholder="방 코드(호스트가 알려준 코드)" autocomplete="off"><div id="lb"><button id="go">혼자 하기</button><button id="hs">방 만들기</button><button id="js">친구 방 참가</button><button id="lsb">가로 모드</button><button id="cmb">커마</button><button id="mpb">맵: 기본 코트</button></div><p id="ms"></p><button id="lob" style="display:none">로비로 돌아가기</button><div id="nw" style="display:none;flex-direction:column;gap:8px;align-items:center"><div id="nb" style="display:flex;gap:8px"><button id="sb">게임 시작</button><button id="rcp">방 코드 복사</button></div></div></div>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/peerjs@1.5.4/dist/peerjs.min.js"></script>
 <script>
@@ -144,15 +144,74 @@ const M=c=>new THREE.MeshLambertMaterial({color:c});
 const flat=(w,d,x,z,c,y)=>{const l=new THREE.Mesh(new THREE.PlaneGeometry(w,d),M(c));l.rotation.x=-Math.PI/2;l.position.set(x,y,z);S.add(l)};
 flat(22,32,0,0,0x17405a,-.02);flat(12,20,0,0,0x2f7f86,0);
 flat(12,.12,0,0,0xffffff,.01);flat(12,.12,0,10,0xffffff,.01);flat(12,.12,0,-10,0xffffff,.01);flat(.12,20,6,0,0xffffff,.01);flat(.12,20,-6,0,0xffffff,.01);
+const g0=new THREE.Group();S.children.filter(o=>o.isMesh).forEach(o=>g0.add(o));S.add(g0);
+const MAPS=["기본 코트","학교 운동장"];let curMap=0;try{curMap=Math.min(MAPS.length-1,+localStorage.getItem("pgMap")||0)}catch(e){}
+function cvTex(w,h,fn,rep){const c=document.createElement("canvas");c.width=w;c.height=h;fn(c.getContext("2d"),w,h);const t=new THREE.CanvasTexture(c);if(rep){t.wrapS=t.wrapT=THREE.RepeatWrapping;t.repeat.set(rep[0],rep[1])}return t}
+function buildYard(){const g=new THREE.Group(),P=Math.PI,add=(m,x,y,z)=>{m.position.set(x,y,z);g.add(m);return m};
+const pl=(w,d,x,z,c,y)=>{const m=new THREE.Mesh(new THREE.PlaneGeometry(w,d),M(c));m.rotation.x=-P/2;return add(m,x,y,z)};
+pl(400,400,0,0,0xb8a57c,-.04);pl(22,32,0,0,0xc6b187,-.02);pl(12,20,0,0,0xd8c598,0);
+[[12,.12,0,0],[12,.12,0,10],[12,.12,0,-10],[.12,20,6,0],[.12,20,-6,0]].forEach(a=>pl(a[0],a[1],a[2],a[3],0xffffff,.01));
+[[6.4,10.4],[-6.4,10.4],[6.4,-10.4],[-6.4,-10.4],[6.4,0],[-6.4,0]].forEach(a=>add(new THREE.Mesh(new THREE.ConeGeometry(.2,.38,10),M(0xff7a1a)),a[0],.19,a[1]));
+const hoop=zs=>{const h=new THREE.Group(),b=(geo,col,x,y,z,o)=>{const m=new THREE.Mesh(geo,o||M(col));m.position.set(x,y,z);h.add(m);return m};
+b(new THREE.BoxGeometry(.7,1.4,.5),0x2b5fd0,0,.7,.15);b(new THREE.CylinderGeometry(.08,.08,3.2,10),0xaab2bb,0,1.6,.2);b(new THREE.BoxGeometry(.1,.1,.9),0xaab2bb,0,3.05,-.2);
+b(new THREE.PlaneGeometry(1.8,1.05),0,0,3.2,-.65,new THREE.MeshLambertMaterial({color:0xcfe7f5,transparent:true,opacity:.35,side:2}));
+const e=new THREE.LineSegments(new THREE.EdgesGeometry(new THREE.BoxGeometry(1.8,1.05,.03)),new THREE.LineBasicMaterial({color:0xffffff}));e.position.set(0,3.2,-.65);h.add(e);
+const r=b(new THREE.TorusGeometry(.23,.02,8,18),0xff6a1a,0,3.05,-.9);r.rotation.x=P/2;
+b(new THREE.CylinderGeometry(.22,.13,.32,10,1,true),0,0,2.88,-.9,new THREE.MeshBasicMaterial({color:0xffffff,wireframe:true}));
+h.position.z=zs;if(zs<0)h.rotation.y=P;g.add(h)};hoop(17);hoop(-17);
+const fnF=x=>{x.strokeStyle="rgba(190,200,205,.9)";x.lineWidth=3;x.beginPath();x.moveTo(0,0);x.lineTo(64,64);x.moveTo(0,64);x.lineTo(64,0);x.stroke()};
+const fence=(len,x,z,ry)=>{const m=new THREE.Mesh(new THREE.PlaneGeometry(len,5),new THREE.MeshBasicMaterial({map:cvTex(64,64,fnF,[len/1.1,5/1.1]),transparent:true,opacity:.5,side:2,depthWrite:false}));m.rotation.y=ry;add(m,x,2.5,z);const n=Math.round(len/6);for(let k=0;k<=n;k++){const o=-len/2+len*k/n;add(new THREE.Mesh(new THREE.CylinderGeometry(.06,.06,5.4,6),M(0x9aa3ab)),x+(ry?0:o),2.7,z+(ry?o:0))}};
+fence(42,-15.5,0,P/2);fence(42,15.5,0,P/2);fence(31,0,-21,0);fence(31,0,21,0);
+const goal=(x,ry)=>{const q=new THREE.Group(),bx=(a,b,c,px,py,pz)=>{const m=new THREE.Mesh(new THREE.BoxGeometry(a,b,c),M(0xffffff));m.position.set(px,py,pz);q.add(m)};
+bx(.1,2,.1,-1.5,1,0);bx(.1,2,.1,1.5,1,0);bx(3.1,.1,.1,0,2,0);bx(.06,.06,.9,-1.5,1.95,-.45);bx(.06,.06,.9,1.5,1.95,-.45);bx(3.1,.06,.06,0,1.95,-.9);
+const nt=new THREE.Mesh(new THREE.PlaneGeometry(3,1.95),new THREE.MeshBasicMaterial({color:0xffffff,transparent:true,opacity:.25,side:2}));nt.position.set(0,.98,-.9);q.add(nt);q.position.set(x,0,-8);q.rotation.y=ry;g.add(q)};goal(-19,P/2);goal(19,-P/2);
+const fac=cvTex(1024,256,(x,w,h)=>{x.fillStyle="#e7d3b2";x.fillRect(0,0,w,h);for(let i=0;i<w;i+=256){x.fillStyle="#e8662a";x.fillRect(i,0,64,h);x.fillStyle="#f2b830";x.fillRect(i+64,h*.55,64,h*.18)}x.fillStyle="#8d4a4a";[0,.33,.66].forEach(f=>x.fillRect(0,h*f+h*.26,w,h*.07));for(let r=0;r<3;r++)for(let i=140;i<w-20;i+=64){x.fillStyle="#2e55a8";x.fillRect(i,h*(.04+r*.33),44,h*.2);x.fillStyle="#d6e6ef";x.fillRect(i+4,h*(.04+r*.33)+4,36,h*.2-8)}});
+add(new THREE.Mesh(new THREE.PlaneGeometry(150,32),new THREE.MeshBasicMaterial({map:fac})),0,16,-75);
+const rf=cvTex(256,64,(x,w,h)=>{const c=["#e8892a","#9aa0a6","#f2c230"];for(let i=-4;i<12;i++){x.fillStyle=c[((i%3)+3)%3];x.beginPath();x.moveTo(i*32,h);x.lineTo(i*32+32,h);x.lineTo(i*32+64,0);x.lineTo(i*32+32,0);x.fill()}});
+add(new THREE.Mesh(new THREE.BoxGeometry(150,.3,5),new THREE.MeshBasicMaterial({map:rf})),0,3.6,-62);for(let k=-70;k<=70;k+=10)add(new THREE.Mesh(new THREE.CylinderGeometry(.1,.1,3.5,6),M(0x8a8f94)),k,1.75,-60);
+const tree=(x,z,k)=>{add(new THREE.Mesh(new THREE.CylinderGeometry(.3,.4,3,6),M(0x6b4a2b)),x,1.5,z);add(new THREE.Mesh(new THREE.SphereGeometry(2.6*k,8,6),M(0x3f8f3f)),x,4.6*k,z);add(new THREE.Mesh(new THREE.SphereGeometry(1.9*k,8,6),M(0x4aa04a)),x+.6,6.4*k,z-.4)};
+for(let k=-60;k<=60;k+=12)tree(k+(k%5),-50-(Math.abs(k)%7),1+(Math.abs(k)%3)*.15);for(let k=-24;k<=24;k+=12){tree(-48,k,1.1);tree(48,k+4,1)}
+return g}
+const g1=buildYard();g1.visible=false;S.add(g1);
+function applyMap(i,sv){curMap=i;g0.visible=i===0;g1.visible=i===1;S.background.setHex(i?0x8fc8ff:0x10243a);S.fog.color.setHex(i?0xcfe6ff:0x10243a);mpb.textContent="맵: "+MAPS[i];if(sv)try{localStorage.setItem("pgMap",i)}catch(e){}}
 const SK=[0xffe0bd,0xf5c9a0,0xe0ac7a,0xc68642,0x8d5524,0x5c3a21],HC=[0x2b1d14,0x6b4423,0xe7c35b,0xc0392b,0x2f6fe4,0xff7eb6,0xeeeeee,0x2ecc71];
-const HSN=["짧은 머리","긴 머리","포니테일","삐죽 머리","아프로","민머리"],FEN=["기본","활짝 웃음","무표정","놀람","윙크","메롱"],HTN=["없음","야구모자","비니"],GLN=["없음","안경","선글라스"];
-const AVN=[SK.length,HC.length,HSN.length,FEN.length,HTN.length,GLN.length];
+const HSN=["짧은 머리","긴 머리","포니테일","삐죽 머리","아프로","민머리"],FEN=["기본","활짝 웃음","무표정","놀람","윙크","메롱"],HTN=["없음","야구모자","비니","왕관"],GLN=["없음","안경","선글라스"],OUN=["기본","체육복","하복"];
+const AVN=[SK.length,HC.length,HSN.length,FEN.length,HTN.length,GLN.length,OUN.length];
 function parseAv(s){const a=String(s||"").split(",").map(Number);return AVN.map((n,i)=>{const v=a[i]|0;return v>=0&&v<n?v:0})}
-let myAv=(()=>{try{const s=localStorage.getItem("pgAv");if(s)return parseAv(s)}catch(e){}return[0,0,0,0,0,0]})();
+let myAv=(()=>{try{const s=localStorage.getItem("pgAv");if(s)return parseAv(s)}catch(e){}return[0,0,0,0,0,0,0]})();
 function saveAv(){try{localStorage.setItem("pgAv",myAv.join(","))}catch(e){}}
-const defAv=i=>[i%3,(i*3+1)%8,i%5,i%2?0:1,0,0];
+const defAv=i=>[i%3,(i*3+1)%8,i%5,i%2?0:1,0,0,0];
 function avFor(i){if(net.mode==="guest"?i===net.slot:i===0)return myAv;if(net.slots&&net.slots["s"+i]&&net.avs&&net.avs[i])return parseAv(net.avs[i]);return defAv(i)}
-function applyAv(g,av){const u=g.userData,hg=u.hg;if(!hg)return;const c=u.col;u.skM.color.setHex(SK[av[0]]);while(hg.children.length)hg.remove(hg.children[0]);
+let crestT=null;
+function crestMesh(cx){if(!crestT){const cv=document.createElement("canvas");cv.width=128;cv.height=140;const x=cv.getContext("2d"),Y="#f2c230",G="#1f9d4b",D="#0f5a3a",L="#8cc63f",BL="#1c3f94",T=Math.PI*2;
+x.fillStyle=D;x.beginPath();x.ellipse(64,72,58,62,0,0,T);x.fill();
+x.fillStyle=G;x.beginPath();x.arc(64,36,26,0,T);x.fill();
+for(let s=-1;s<=1;s+=2)for(let k=0;k<7;k++){const al=(30+k*20)*Math.PI/180,px=64-s*46*Math.sin(al),py=74+46*Math.cos(al),ag=Math.atan2(-46*Math.sin(al),-s*46*Math.cos(al));x.fillStyle=k%2?L:Y;x.beginPath();x.ellipse(px,py,11,5,ag,0,T);x.fill()}
+x.fillStyle=Y;x.beginPath();x.arc(64,74,29,0,T);x.fill();x.strokeStyle=G;x.lineWidth=3;x.beginPath();x.arc(64,74,22,0,T);x.stroke();
+x.save();x.beginPath();x.arc(64,74,20,0,T);x.clip();x.fillStyle="#f7dd62";x.fillRect(40,50,48,48);x.fillStyle=G;x.beginPath();x.ellipse(64,100,28,15,0,0,T);x.fill();x.restore();
+x.fillStyle="#ecebc8";x.beginPath();x.arc(64,66,7,0,T);x.fill();x.fillStyle=G;x.beginPath();x.arc(64,66,3,0,T);x.fill();
+x.fillStyle=BL;x.strokeStyle=Y;x.lineWidth=4;x.beginPath();x.moveTo(8,104);x.quadraticCurveTo(64,126,120,104);x.lineTo(124,120);x.quadraticCurveTo(64,142,4,120);x.closePath();x.fill();x.stroke();
+x.fillStyle="#fff";[.2,.35,.5,.65,.8].forEach(t=>{const u=1-t;x.fillRect(6*u*u+128*u*t+122*t*t-4,112*u*u+268*u*t+112*t*t-1.5,8,3)});
+crestT=new THREE.CanvasTexture(cv)}
+const gm=new THREE.PlaneGeometry(.1,.11,8,4);gm.rotateY(Math.PI);const pa=gm.attributes.position;for(let i=0;i<pa.count;i++){const xw=cx+pa.getX(i),yw=1.28+pa.getY(i),R=.25+.06*(yw-.78)/.64;pa.setXYZ(i,xw,yw,-.7*Math.sqrt(Math.max(0,R*R-xw*xw))-.004)}gm.computeVertexNormals();
+return new THREE.Mesh(gm,new THREE.MeshLambertMaterial({map:crestT,transparent:true}))}
+function applyOutfit(g,ou){const u=g.userData,c=u.col,skM=u.skM,P_=Math.PI,LM=0xa8e62e,NV=0x151a30,WH=0xf4f4f4,BR=0x4a3326,YL=0xf2c230;
+const B=(x,y,z,col)=>new THREE.Mesh(new THREE.BoxGeometry(x,y,z),M(col)),Y=(r1,r2,h,col,o)=>new THREE.Mesh(new THREE.CylinderGeometry(r1,r2,h,o||10),M(col)),Sp=(r,col)=>new THREE.Mesh(new THREE.SphereGeometry(r,10,8),M(col)),pos=(m,x,y,z)=>{m.position.set(x,y,z);return m};
+const clr=o=>{while(o.children.length)o.remove(o.children[0])};clr(u.ox);u.arms.forEach(a=>clr(a.userData.fx));u.legs.forEach(l=>clr(l.userData.fx));
+u.tor.material.color.setHex(ou===0?c:ou===1?NV:WH);u.pel.material.color.setHex(ou===0?0x22304a:ou===1?NV:BR);
+const shoe=(fx,col,sole)=>{const f=pos(Sp(.12,col),0,-.74,-.05);f.scale.set(1,.55,1.6);fx.add(f);if(sole){const o=pos(Sp(.12,0xffffff),0,-.775,-.05);o.scale.set(1.05,.18,1.65);fx.add(o)}};
+u.arms.forEach((a,k)=>{const sg=k?-1:1,fx=a.userData.fx,sc=ou===0?c:ou===1?NV:WH;fx.add(Sp(.085,sc));
+if(ou===2){fx.add(pos(Y(.075,.075,.2,WH,10),0,-.1,0));fx.add(pos(new THREE.Mesh(new THREE.CylinderGeometry(.07,.065,.3,8),skM),0,-.35,0))}else fx.add(pos(Y(.075,.07,.5,sc,8),0,-.25,0));
+if(ou===1)[-.026,0,.026].forEach(z=>{const r=Math.sqrt(.007225-z*z)+.001,t=pos(B(.012,.5,.012,LM),sg*(Math.sqrt(.0056-z*z)+.001),-.24,z);t.rotation.z=-sg*.01;fx.add(t);[15,45,75].forEach(d=>{const q=d*P_/180,w=pos(B(.012,.05,.012,LM),sg*r*Math.cos(q),r*Math.sin(q),z);w.rotation.z=sg*q;fx.add(w)})});
+if(ou>0)fx.add(pos(Y(.082,.082,.05,c,10),0,-.13,0))});
+u.legs.forEach((l,k)=>{const sg=k?-1:1,fx=l.userData.fx;
+if(ou===0){fx.add(pos(Y(.1,.085,.78,0x22304a,8),0,-.39,0));shoe(fx,0xf5f5f5,0)}
+else if(ou===1){fx.add(pos(Y(.1,.085,.78,NV,8),0,-.39,0));[-.03,0,.03].forEach(z=>fx.add(pos(B(.012,.74,.012,LM),sg*(Math.sqrt(.009-z*z)+.002),-.39,z)));shoe(fx,0xe8e8e8,0)}
+else{fx.add(pos(Y(.115,.11,.4,BR,10),0,-.2,0));[-.02,.02].forEach(z=>fx.add(pos(B(.012,.38,.014,YL),sg*(Math.sqrt(.0126-z*z)+.002),-.2,z)));fx.add(pos(new THREE.Mesh(new THREE.CylinderGeometry(.08,.07,.22,8),skM),0,-.51,0));fx.add(pos(Y(.075,.075,.1,WH,8),0,-.67,0));shoe(fx,0x151515,1)}});
+const ox=u.ox,col2=(col)=>new THREE.MeshLambertMaterial({color:col,side:2}),collar=col=>{const o=new THREE.Mesh(new THREE.CylinderGeometry(.095,.095,.07,10,1,true),col2(col));o.position.y=1.47;ox.add(o)},crest=x=>ox.add(crestMesh(x));
+if(ou===1){collar(NV);const z=pos(B(.012,.6,.01,0xc9d3dc),0,1.1,-.202);z.rotation.x=-.0655;ox.add(z);crest(-.12)}
+if(ou===2){collar(WH);const p=pos(B(.025,.14,.008,0xdcdcdc),0,1.37,-.218);p.rotation.x=-.0655;ox.add(p);crest(-.12)}}
+function applyAv(g,av){const u=g.userData,hg=u.hg;if(!hg)return;const c=u.col;u.skM.color.setHex(SK[av[0]]);applyOutfit(g,av[6]|0);while(hg.children.length)hg.remove(hg.children[0]);
 const add=(geo,mt,x,y,z)=>{const o=new THREE.Mesh(geo,mt);o.position.set(x,y,z);hg.add(o);return o},sp=(r,a,b)=>new THREE.SphereGeometry(r,a||10,b||8);
 add(sp(.26,14,12),u.skM,0,0,0);
 const hm=M(HC[av[1]]),hs=av[2],ht=av[4],P_=Math.PI;
@@ -174,21 +233,20 @@ if(gl===1){[.085,-.085].forEach(x=>add(new THREE.TorusGeometry(.055,.009,6,16),e
 if(gl===2){[.085,-.085].forEach(x=>{const l=add(new THREE.CylinderGeometry(.06,.06,.012,12),eM,x,.04,-.254);l.rotation.x=P_/2});add(new THREE.BoxGeometry(.2,.012,.012),eM,0,.05,-.254)}
 if(ht===1){const cp=add(new THREE.SphereGeometry(.29,14,8,0,P_*2,0,P_*.38),M(c),0,0,0);cp.rotation.x=-.05;const br=add(new THREE.BoxGeometry(.3,.016,.17),M(c),0,.1,-.34);br.rotation.x=.1}
 if(ht===2){add(new THREE.SphereGeometry(.29,14,8,0,P_*2,0,P_*.4),M(c),0,0,0);add(sp(.06,8,8),M(0xffffff),0,.29,0)}
-}
+if(ht===3){const gm=new THREE.MeshLambertMaterial({color:0xffd54a,side:2});add(new THREE.CylinderGeometry(.17,.15,.1,10,1,true),gm,0,.3,0);for(let k=0;k<5;k++){const a=k/5*P_*2;add(new THREE.ConeGeometry(.04,.12,6),gm,Math.sin(a)*.16,.41,Math.cos(a)*.16)}}}
 function mk(c){const g=new THREE.Group(),skM=M(0xffe0bd),pt=0x22304a;
 const b=new THREE.Mesh(new THREE.CylinderGeometry(.31,.25,.64,14),M(c));b.position.y=1.1;b.scale.z=.7;
 const pv=new THREE.Mesh(new THREE.CylinderGeometry(.26,.25,.2,14),M(pt));pv.position.y=.78;pv.scale.z=.75;
 const nk=new THREE.Mesh(new THREE.CylinderGeometry(.075,.075,.12,8),skM);nk.position.y=1.47;
-const hg=new THREE.Group();hg.position.y=1.64;g.add(b,pv,nk,hg);
-const cr=new THREE.Group();cr.position.y=1.64;cr.visible=false;{const gm=new THREE.MeshLambertMaterial({color:0xffd54a,side:2});const ad=(geo,x,y,z)=>{const o=new THREE.Mesh(geo,gm);o.position.set(x,y,z);cr.add(o)};ad(new THREE.CylinderGeometry(.17,.15,.1,10,1,true),0,.3,0);for(let k=0;k<5;k++){const a=k/5*Math.PI*2;ad(new THREE.ConeGeometry(.04,.12,6),Math.sin(a)*.16,.41,Math.cos(a)*.16)}}g.add(cr);g.userData.crown=cr;
-const arm=x=>{const p=new THREE.Group();p.position.set(x,1.36,0);const sh=new THREE.Mesh(new THREE.SphereGeometry(.09,10,8),M(c));const a=new THREE.Mesh(new THREE.CylinderGeometry(.075,.07,.5,8),M(c));a.position.y=-.25;const hd=new THREE.Mesh(new THREE.SphereGeometry(.095,10,8),skM);hd.position.y=-.55;p.add(sh,a,hd);g.add(p);return p};
-const leg=x=>{const p=new THREE.Group();p.position.set(x,.78,0);const l=new THREE.Mesh(new THREE.CylinderGeometry(.1,.085,.78,8),M(pt));l.position.y=-.39;const f=new THREE.Mesh(new THREE.SphereGeometry(.12,8,6),M(0xf5f5f5));f.scale.set(1,.55,1.6);f.position.set(0,-.74,-.05);p.add(l,f);g.add(p);return p};
-g.userData.lR=leg(.13);g.userData.lL=leg(-.13);g.userData.aR=arm(.38);g.userData.aL=arm(-.38);g.userData.hg=hg;g.userData.skM=skM;g.userData.col=c;applyAv(g,[0,0,0,0,0,0]);S.add(g);return g}
+const hg=new THREE.Group(),ox=new THREE.Group();hg.position.y=1.64;g.add(b,pv,nk,hg,ox);
+const arm=x=>{const p=new THREE.Group();p.position.set(x,1.36,0);const fx=new THREE.Group(),hd=new THREE.Mesh(new THREE.SphereGeometry(.095,10,8),skM);hd.position.y=-.55;p.userData.fx=fx;p.add(fx,hd);g.add(p);return p};
+const leg=x=>{const p=new THREE.Group();p.position.set(x,.78,0);const fx=new THREE.Group();p.userData.fx=fx;p.add(fx);g.add(p);return p};
+const u=g.userData;u.lR=leg(.13);u.lL=leg(-.13);u.aR=arm(.38);u.aL=arm(-.38);u.arms=[u.aR,u.aL];u.legs=[u.lR,u.lL];u.hg=hg;u.skM=skM;u.col=c;u.tor=b;u.pel=pv;u.ox=ox;applyAv(g,[0,0,0,0,0,0,0]);S.add(g);return g}
 const ring=new THREE.Mesh(new THREE.RingGeometry(.55,.72,24),new THREE.MeshBasicMaterial({color:0xffd166,side:2}));ring.rotation.x=-Math.PI/2;S.add(ring);
 const bt=(()=>{const cv=document.createElement("canvas");cv.width=512;cv.height=256;const x=cv.getContext("2d");x.fillStyle="#f59f1b";x.fillRect(0,0,512,256);x.fillStyle="#141414";x.fillRect(96,0,54,256);x.fillRect(352,0,54,256);x.fillStyle="#1d4ed8";x.beginPath();x.arc(256,128,26,0,7);x.fill();x.strokeStyle="#fff";x.lineWidth=4;x.stroke();x.fillStyle="#fff";x.beginPath();x.arc(256,128,8,0,7);x.fill();return new THREE.CanvasTexture(cv)})();
 const bm=new THREE.Mesh(new THREE.SphereGeometry(.25,24,16),new THREE.MeshLambertMaterial({map:bt}));S.add(bm);
 const B={st:"held",h:null,v:new THREE.Vector3(),rv:new THREE.Vector3(),kind:"",team:0,tgt:null,t:0};
-let T=[],P,run=false,fl=0,wide=0,yaw=0,zoom=1,N=3,GM=0,KG=[-1,-1],J={on:0,until:0},net={mode:"solo",slots:{},g:0};
+let T=[],P,run=false,fl=0,wide=0,yaw=0,zoom=1,N=3,J={on:0,until:0},net={mode:"solo",slots:{},g:0};
 const inn=t=>T.filter(c=>c.team===t&&!c.out);
 const near=(v,a)=>{let n=a[0],d=1e9;a.forEach(c=>{const k=c.m.position.distanceTo(v);if(k<d){d=k;n=c}});return n};
 const cl=(v,a,b)=>Math.max(a,Math.min(b,v));
@@ -203,11 +261,11 @@ B.v.set(q.x+(t.vx||0)*tm*.7+(Math.random()-.5)*j-p.x,0,q.z+(t.vz||0)*tm*.7-p.z).
 function shootDir(c,dx,dz,sp){const p=c.m.position,l=Math.hypot(dx,dz)||1;c.fy=Math.atan2(-dx,-dz);c.fh=.9;B.st="fly";B.kind="t";B.thr=c;B.in=0;B.team=c.team;B.h=null;B.t=0;bm.position.set(p.x,1.1,p.z);B.v.set(dx/l*sp,0,dz/l*sp)}
 function pass(c,m){const p=c.m.position;c.fy=Math.atan2(p.x-m.m.position.x,p.z-m.m.position.z);c.fh=.9;B.st="fly";B.kind="p";B.tt=[];B.team=c.team;B.tgt=m;B.h=null;B.t=0;bm.position.set(p.x,1.1,p.z)}
 function out(c){c.out=1;sfxHit();sfxAt=performance.now();net.bt=0;if(!c.pl)setEm(c,2);if(c===P){wide=0;yaw=0}const p=c.m.position;p.z=c.team?12:-12;p.x=cl(p.x,-5,5);c.tz=p.z;
-if(GM===1&&T.indexOf(c)===KG[c.team])end(c.team===1);else if(!inn(1).length)end(true);else if(!inn(0).length)end(false)}
+if(!inn(1).length)end(true);else if(!inn(0).length)end(false)}
 function reset(){T.forEach(c=>S.remove(c.m));T=[];
 const add=(team,x,z,pl)=>{const m=mk(pl?0x00c2ff:team?0xef476f:0x3a86ff);m.position.set(x,0,z);const c={m,team,out:0,pl,cd:1,tx:x,tz:z,wt:0,vx:0,vz:0,cw:0,cc:0,seen:0,rx:0,rz:0};T.push(c);return c};
 P=add(0,0,7,1);P.cw=0;P.cc=0;{const xs=n=>Array.from({length:n},(_,i)=>(i-(n-1)/2)*Math.min(7,10/n));xs(N-1).forEach(x=>add(0,x,6,0));xs(N).forEach(x=>add(1,x,-6,0))}
-for(const k in net.slots){const c=T[net.slots[k]];if(c){c.pl=1;c.seen=performance.now()}}if(net.nicks)for(const i in net.nicks)if(T[i]&&(i==0||net.slots["s"+i]))mark(T[i],+i,net.nicks[i]);T.forEach((c,i)=>applyAv(c.m,avFor(i)));KG=[Math.random()*N|0,N+(Math.random()*N|0)];startJump()}
+for(const k in net.slots){const c=T[net.slots[k]];if(c){c.pl=1;c.seen=performance.now()}}if(net.nicks)for(const i in net.nicks)if(T[i]&&(i==0||net.slots["s"+i]))mark(T[i],+i,net.nicks[i]);T.forEach((c,i)=>applyAv(c.m,avFor(i)));startJump()}
 let cw0=0;
 function chargeStart(){if(cw0||!run)return;if(apx.visible&&jids().includes(T.indexOf(P))){doThrow(0);return}if(B.st!=="held"||B.h!==P)return;cw0=performance.now()}
 function chargeEnd(){if(!cw0)return;const pw=Math.min(1,Math.max(0,(performance.now()-cw0-150)/1000));cw0=0;doThrow(pw)}
@@ -239,7 +297,7 @@ if(!blk(q,o))return o;
 const y=s*11.4,A=[-7.4,y],D=[7.4,y];let best=null,bd=1e9;
 for(const[a,b]of[[A,D],[D,A]]){if(dd(q,a)<.3||blk(q,a))continue;const d=!blk(a,o)?dd(q,a)+dd(a,o):!blk(b,o)?dd(q,a)+dd(a,b)+dd(b,o):1e9;if(d<bd){bd=d;best=a}}
 return best||o}
-function startJump(){if(net.mode==="guest"){J.on=0;return}T.forEach(c=>c.m.position.y=0);const hb=T.filter(c=>c.team===0&&(c===T[0]||c.pl)),hr=T.filter(c=>c.team===1&&c.pl),k=(net.jc||1)-1;const bj=hb[k%hb.length],rj=hr.length?hr[k%hr.length]:T[N+(N>>1)];bj.m.position.set(0,0,1.2);rj.m.position.set(0,0,-1.2);
+function startJump(){if(net.mode==="guest")return;T.forEach(c=>c.m.position.y=0);const hb=T.filter(c=>c.team===0&&(c===T[0]||c.pl)),hr=T.filter(c=>c.team===1&&c.pl),k=(net.jc||1)-1;const bj=hb[k%hb.length],rj=hr.length?hr[k%hr.length]:T[N+(N>>1)];bj.m.position.set(0,0,1.2);rj.m.position.set(0,0,-1.2);
 apx.visible=true;J={on:1,done:0,t:0,cd:3,bj,rj,tb:-1,tr:-1,aiT:.84+(Math.random()-.5)*.7,until:0};B.st="jump";B.h=null;bm.position.set(0,1.5,0);fl=0;wide=0}
 function jumpStep(dt){if(J.cd>0){J.cd-=dt;cdn.textContent=J.cd>0?Math.ceil(J.cd):"";return}cdn.textContent=J.t<.5?"점프!":"";const b=J.bj,r=J.rj,pk=.84,tR=1.1,q=bm.position,t=(J.t+=dt);
 if(!J.done)q.set(0,1.5+8.2*t-4.9*t*t,0);
@@ -253,12 +311,12 @@ if(t>=tR+.6){J.on=0;b.m.position.y=0;r.m.position.y=0}}
 function startHost(){net.g++;net.e=0;net.jc=(net.jc||0)+1;net.rdy={};reset();run=true;ov.style.display="none"}
 function netApply(d){if(d.s&&d.s!==N){N=d.s;reset();P=T[net.slot]}if(d.g!==net.g){net.g=d.g;net.first=1;run=true;net.rd=0;rd.textContent="준비하기";ov.style.display="none"}
 d.t.forEach((a,i)=>{const c=T[i],o=c.out;c.out=a[2];c.gx=a[0];c.gz=a[1];c.gy=a[3]||0;if(a[4])c.cw=Math.max(c.cw,.2);if(a[5]!==undefined)c.fa=a[5];if(net.first)c.m.position.set(a[0],0,a[1]);if(!o&&c.out&&c===P){wide=0;yaw=0}});
-if(d.av)for(const i in d.av){const c=T[i];if(c&&c.avs!==d.av[i]){c.avs=d.av[i];applyAv(c.m,parseAv(d.av[i]))}}if(d.em)d.em.forEach((v,i)=>{if(T[i])T[i].ei=v});if(d.nm)for(const i in d.nm)if(T[i])mark(T[i],+i,d.nm[i]);T.forEach((c,i)=>{if(c.mk&&!(d.nm&&d.nm[i])){c.m.remove(c.mk.g);c.mk=null}});apx.visible=!!d.j;net.jj=d.j||[];J.on=d.j?1:0;J.done=0;GM=d.gm|0;net.kg=d.kg;net.ka=d.ka;net.over=d.e>0;net.ya=d.ya||0;net.hh=d.hh||0;net.first=0;cdn.textContent=d.n||"";net.b=d.b;B.st=["held","fly","loose"][d.b[0]];B.h=d.b[1]>=0?T[d.b[1]]:null;B.kind=d.b[5]?"t":"p";
+if(d.mp!==undefined&&d.mp!==curMap)applyMap(d.mp);if(d.av)for(const i in d.av){const c=T[i];if(c&&c.avs!==d.av[i]){c.avs=d.av[i];applyAv(c.m,parseAv(d.av[i]))}}if(d.em)d.em.forEach((v,i)=>{if(T[i])T[i].ei=v});if(d.nm)for(const i in d.nm)if(T[i])mark(T[i],+i,d.nm[i]);T.forEach((c,i)=>{if(c.mk&&!(d.nm&&d.nm[i])){c.m.remove(c.mk.g);c.mk=null}});apx.visible=!!d.j;net.jj=d.j||[];net.ya=d.ya||0;net.hh=d.hh||0;net.first=0;cdn.textContent=d.n||"";net.b=d.b;B.st=["held","fly","loose"][d.b[0]];B.h=d.b[1]>=0?T[d.b[1]]:null;B.kind=d.b[5]?"t":"p";
 if(d.e>0&&run)end((d.e===1)===(P.team===0))}
 function glerp(dt){const k=Math.min(1,dt*14);T.forEach(c=>{if(c.gx===undefined)return;const p=c.m.position;p.x+=(c.gx-p.x)*k;p.z+=(c.gz-p.z)*k;p.y+=((c.gy||0)-p.y)*k});
 if(net.b&&B.st!=="held"){const q=bm.position;q.x+=(net.b[2]-q.x)*k;q.y=net.b[3];q.z+=(net.b[4]-q.z)*k}}
 go.onclick=()=>{if(net.mode==="host")return startHost();net.mode="solo";net.jc=(net.jc||0)+1;reset();run=true;ov.style.display="none"};
-function end(win){win?sfxWin():sfxLose();emp.style.display="none";run=false;net.e=win?1:2;ov.style.display="flex";lb.style.display=net.mode==="solo"?"flex":"none";if(net.mode==="host"){net.rdy={};upd()}else ms.textContent="";if(net.mode==="guest"){net.rd=0;rd.textContent="준비하기";rd.style.display="inline-block"}lob.style.display="block";if(net.mode==="solo")[hs,js,lsb,cmb,hb,sz,nk,rc,tm,how].forEach(e=>e.style.display="none");ov.querySelector("h1").textContent=win?"승리!":"패배";ov.querySelector("p").style.display="none";go.textContent="다시 하기"}
+function end(win){emp.style.display="none";run=false;net.e=win?1:2;ov.style.display="flex";lb.style.display=net.mode==="solo"?"flex":"none";if(net.mode==="host"){net.rdy={};upd()}else ms.textContent="";if(net.mode==="guest"){net.rd=0;rd.textContent="준비하기";rd.style.display="inline-block"}lob.style.display="block";if(net.mode==="solo")[hs,js,lsb,cmb,mpb,hb,sz,nk,rc,tm,how].forEach(e=>e.style.display="none");ov.querySelector("h1").textContent=win?"승리!":"패배";ov.querySelector("p").style.display="none";go.textContent="다시 하기"}
 function ui(){const h=B.st==="held"?B.h:null;hp.textContent=J.on&&!J.done?"점프볼! 공이 꼭대기일 때 던지기!":(performance.now()<J.until?J.res+" · ":"")+(P.out?"외야 · ":"")+"공: "+(B.st==="fly"?"날아가는 중":B.st==="loose"?"바닥":!h?"…":h===P?"내 손!":h.team!==P.team?"상대 팀":"우리 팀");en.textContent="우리 "+inn(P.team).length+" · 적 "+inn(1-P.team).length}
 const ag=new THREE.Group();{const mt=new THREE.MeshBasicMaterial({color:0xff4d4d,transparent:true,opacity:.75,side:2,depthWrite:false}),l=new THREE.Mesh(new THREE.PlaneGeometry(.14,9),mt),t=new THREE.Mesh(new THREE.ConeGeometry(.32,.8,12),mt);l.rotation.x=-Math.PI/2;l.position.set(0,.08,-4.9);t.rotation.x=-Math.PI/2;t.position.set(0,.1,-9.6);ag.add(l,t)}ag.visible=false;S.add(ag);
 const aimr=new THREE.Mesh(new THREE.RingGeometry(1,1.3,32),new THREE.MeshBasicMaterial({color:0xffffff,side:2,transparent:true,opacity:.95,depthTest:false}));aimr.rotation.x=-Math.PI/2;aimr.visible=false;aimr.renderOrder=5;S.add(aimr);
@@ -302,15 +360,15 @@ const yw=(wide?(P.team?Math.PI:0):((P.team===1)!==!!P.out?Math.PI:0))+yaw,sn=Mat
 const fpv=zoom<=.14;P.m.visible=!fpv;
 if(fpv){C.position.set(pp.x-sn*.12,1.58,pp.z-cs*.12);C.lookAt(pp.x-sn*6,1.45,pp.z-cs*6)}else{dz*=zoom;dy=ly+(dy-ly)*zoom;C.position.set(cx+sn*dz,dy,cz+cs*dz);C.lookAt(cx-sn*fw,ly,cz-cs*fw)}
 if(fl>0){fl-=dt;S.background.setHex(0x5a1020)}else S.background.setHex(0x10243a);
-if(cmOn)cmCam(now);emLoop(now);ui();pui();pui2();sfxWatch();crownWatch();R.render(S,C)}
+if(cmOn)cmCam(now);emLoop(now);ui();pui();pui2();sfxWatch();R.render(S,C)}
 let cx0=0,cid=null,cid2=null,pd=1,pz=1,pp1=null,pp2=null;
 cam.addEventListener("pointerdown",e=>{if(cid===null){cid=e.pointerId;cx0=e.clientX;pp1=[e.clientX,e.clientY]}else if(cid2===null){cid2=e.pointerId;pp2=[e.clientX,e.clientY];pd=Math.hypot(pp1[0]-pp2[0],pp1[1]-pp2[1])||1;pz=zoom}cam.setPointerCapture(e.pointerId)});
 cam.addEventListener("pointermove",e=>{if(e.pointerId===cid){pp1=[e.clientX,e.clientY];if(cid2===null)yaw-=(e.clientX-cx0)*.008;cx0=e.clientX}else if(e.pointerId===cid2)pp2=[e.clientX,e.clientY];else return;if(cid2!==null)zoom=Math.max(.08,Math.min(1.9,pz*pd/(Math.hypot(pp1[0]-pp2[0],pp1[1]-pp2[1])||1)))});
 const cu=e=>{if(e.pointerId===cid){cid=cid2;pp1=pp2;cx0=pp2?pp2[0]:0;cid2=null}else if(e.pointerId===cid2)cid2=null};cam.addEventListener("pointerup",cu);cam.addEventListener("pointercancel",cu);
 const send=(dc,o)=>dc&&(dc.open||dc.readyState==="open")&&dc.send(o);
-function openPanel(){lb.style.display="none";rc.style.display="none";hb.style.display=how.style.display=sz.style.display=nk.style.display=tm.style.display=md.style.display=ov.querySelector("p").style.display="none";nw.style.display="flex"}
+function openPanel(){lb.style.display="none";rc.style.display="none";hb.style.display=how.style.display=sz.style.display=nk.style.display=tm.style.display=ov.querySelector("p").style.display="none";nw.style.display="flex"}
 function act(a,i,y,w){send(net.gdc,{t:"act",d:{a,i,y,w}})}
-function bcast(now){if(now-(net.bt||0)<70)return;net.bt=now;const q=bm.position,r=v=>Math.round(v*100)/100;const o={t:"st",d:{em:T.map(c=>c.ei||0),g:net.g,s:N,nm:net.nicks,av:net.avs,j:J.on&&!J.done?[T.indexOf(J.bj),T.indexOf(J.rj)]:0,ya:Math.round((B.st==="held"&&B.h?(B.h===P?lookA():(B.h.ya||0)):0)*100)/100,hh:B.st==="held"&&B.h&&(B.h===P||B.h.pl)?1:0,n:J.on&&J.cd>0?Math.ceil(J.cd):0,e:run?0:net.e||0,t:T.map(c=>[r(c.m.position.x),r(c.m.position.z),c.out,r(c.m.position.y),c.cw>0?1:0,r(c.fa||0)]),b:[B.st==="held"?0:B.st==="fly"?1:2,B.h?T.indexOf(B.h):-1,r(q.x),r(q.y),r(q.z),B.kind==="t"?1:0]}};net.dcs.forEach((dc,k)=>{if(!dc)return;o.d.kg=KG[T[k]?T[k].team:0];o.d.ka=run?0:KG;o.d.gm=GM;send(dc,o)})}
+function bcast(now){if(now-(net.bt||0)<70)return;net.bt=now;const q=bm.position,r=v=>Math.round(v*100)/100;const o={t:"st",d:{mp:curMap,em:T.map(c=>c.ei||0),g:net.g,s:N,nm:net.nicks,av:net.avs,j:J.on&&!J.done?[T.indexOf(J.bj),T.indexOf(J.rj)]:0,ya:Math.round((B.st==="held"&&B.h?(B.h===P?lookA():(B.h.ya||0)):0)*100)/100,hh:B.st==="held"&&B.h&&(B.h===P||B.h.pl)?1:0,n:J.on&&J.cd>0?Math.ceil(J.cd):0,e:run?0:net.e||0,t:T.map(c=>[r(c.m.position.x),r(c.m.position.z),c.out,r(c.m.position.y),c.cw>0?1:0,r(c.fa||0)]),b:[B.st==="held"?0:B.st==="fly"?1:2,B.h?T.indexOf(B.h):-1,r(q.x),r(q.y),r(q.z),B.kind==="t"?1:0]}};net.dcs.forEach(dc=>send(dc,o))}
 function hostMsg(k,s){let o=s;if(typeof s==="string"){try{o=JSON.parse(s)}catch(e){return}}if(!o)return;const d=o.d,c=T[k];if(!d||!c)return;c.seen=performance.now();
 if(o.t==="rdy"){net.rdy[k]=d.r?1:0;upd()}else if(o.t==="nick"){const n=String(d.n||"").slice(0,6)||"친구"+k;net.nicks[k]=n;mark(c,k,n);(net.avs=net.avs||{})[k]=parseAv(d.a).join(",");applyAv(c.m,parseAv(d.a))}else if(o.t==="in"){c.pl=1;c.rx=cl(+d.x||0,-1,1);c.rz=cl(+d.z||0,-1,1);c.ya=+d.ya||0}
 else if(o.t==="act"&&run){const h=B.st==="held"&&B.h===c;
@@ -321,10 +379,10 @@ sb.onclick=()=>{if(allRdy())startHost();else upd()};
 rcp.onclick=async()=>{const c=net.code||"";if(!c)return;try{await navigator.clipboard.writeText(c)}catch(e){const t=document.createElement("textarea");t.value=c;t.style.cssText="position:fixed;opacity:0";document.body.appendChild(t);t.select();try{document.execCommand("copy")}catch(e2){}t.remove()}rcp.textContent="복사했어요!";setTimeout(()=>rcp.textContent="방 코드 복사",1500)};
 setInterval(()=>{if(net.mode!=="guest"||net.slot===undefined)return;const[x,z]=inp(),r=v=>Math.round(v*100)/100;send(net.gdc,{t:"in",d:{x:r(x),z:r(z),ya:r(lookA())}})},100);
 const how=document.createElement("div");how.id="how";
-how.innerHTML="<b>게임 설명</b><ul><li>상대 팀을 모두 외야로 보내면 승리!</li><li>시작은 점프볼: 공이 꼭대기일 때 던지기 버튼으로 점프해요. 타이밍이 좋을수록 높이 뛰어요.</li><li>공을 잡으면 던지기로 적을 맞히거나 패스로 팀원에게 넘겨요.</li><li>적이 던진 공이나 패스는 잡기 버튼 타이밍에 맞춰 받아낼 수 있어요(패스 가로채기).</li><li>맞으면 상대 코트 뒤와 옆의 외야로 나가 돌아다닐 수 있고, 코트 밖으로 나간 공은 외야가 주워요. 외야가 없으면 내야가 가져가요.</li><li>왼쪽 화면을 누르고 밀면 조이스틱이 떠서 이동, 오른쪽 화면 밀기=화면 회전</li><li>공을 들면 아래에 패스 원이 떠요: 파랑=내야, 주황=외야. 원을 누르면 그 사람에게, 패스 버튼은 내가 보는 방향에 가장 가까운 팀원(하얀 링)에게 가요.</li><li>던지기는 자동 조준이 아니에요. 오른쪽 화면을 밀어 빨간 조준선을 적에게 맞추고 던져요.</li><li>던지기 버튼을 꾹 누르면 더 세고 빠르게 날아가지만, 세질수록 조금씩 덜 정확해요. 누른 채로 손가락을 좌우로 밀면 조준이 움직여요.</li><li>오른쪽 위 😊 버튼으로 웃음·울기·메롱 같은 감정표현을 할 수 있어요 (PC: 숫자 1~8).</li><li>왕 피구: 팀원 중 랜덤으로 한 명이 왕이 돼요. 왕관은 우리 팀에게만 보이고, 왕이 아웃되면 그 팀이 져요.</li><li>오른쪽 위 ＋/－ 버튼이나 오른쪽 화면에서 두 손가락을 모으고 벌려 화면을 확대·축소할 수 있어요. 끝까지 확대하면 1인칭 시점이 돼요.</li><li>PC: WASD, 스페이스=던지기, E=패스, F=잡기, ←/→=회전, +/−/마우스 휠=확대·축소</li></ul>";
+how.innerHTML="<b>게임 설명</b><ul><li>상대 팀을 모두 외야로 보내면 승리!</li><li>시작은 점프볼: 공이 꼭대기일 때 던지기 버튼으로 점프해요. 타이밍이 좋을수록 높이 뛰어요.</li><li>공을 잡으면 던지기로 적을 맞히거나 패스로 팀원에게 넘겨요.</li><li>적이 던진 공이나 패스는 잡기 버튼 타이밍에 맞춰 받아낼 수 있어요(패스 가로채기).</li><li>맞으면 상대 코트 뒤와 옆의 외야로 나가 돌아다닐 수 있고, 코트 밖으로 나간 공은 외야가 주워요. 외야가 없으면 내야가 가져가요.</li><li>왼쪽 화면을 누르고 밀면 조이스틱이 떠서 이동, 오른쪽 화면 밀기=화면 회전</li><li>공을 들면 아래에 패스 원이 떠요: 파랑=내야, 주황=외야. 원을 누르면 그 사람에게, 패스 버튼은 내가 보는 방향에 가장 가까운 팀원(하얀 링)에게 가요.</li><li>던지기는 자동 조준이 아니에요. 오른쪽 화면을 밀어 빨간 조준선을 적에게 맞추고 던져요.</li><li>던지기 버튼을 꾹 누르면 더 세고 빠르게 날아가지만, 세질수록 조금씩 덜 정확해요. 누른 채로 손가락을 좌우로 밀면 조준이 움직여요.</li><li>오른쪽 위 😊 버튼으로 웃음·울기·메롱 같은 감정표현을 할 수 있어요 (PC: 숫자 1~8).</li><li>오른쪽 위 ＋/－ 버튼이나 오른쪽 화면에서 두 손가락을 모으고 벌려 화면을 확대·축소할 수 있어요. 끝까지 확대하면 1인칭 시점이 돼요.</li><li>PC: WASD, 스페이스=던지기, E=패스, F=잡기, ←/→=회전, +/−/마우스 휠=확대·축소</li></ul>";
 const sz=document.createElement("div");sz.id="sz";
 sz.innerHTML='팀 인원 <button id="szm" aria-label="인원 줄이기">−</button> <b id="szv">3</b> <button id="szp" aria-label="인원 늘리기">+</button> 명씩';
-how.style.display="none";const hb=document.createElement("button");hb.id="hb";hb.textContent="게임 설명";hb.onclick=()=>{const o=how.style.display==="none";how.style.display=o?"block":"none";hb.textContent=o?"설명 닫기":"게임 설명"};ov.insertBefore(hb,rc);ov.insertBefore(how,rc);ov.insertBefore(sz,rc);const nk=document.createElement("input");nk.id="nk";nk.maxLength=6;nk.placeholder="닉네임(최대 6자)";nk.autocomplete="off";ov.insertBefore(nk,rc);const tm=document.createElement("div");tm.id="tm";tm.innerHTML='참가할 팀 <button id="tm0" class="on">방장 팀</button><button id="tm1">상대 팀</button>';ov.insertBefore(tm,rc);const md=document.createElement("div");md.id="md";md.innerHTML='모드 <button id="md0" class="on">일반 피구</button><button id="md1">왕 피구</button>';ov.insertBefore(md,rc);md0.onclick=()=>{GM=0;md0.className="on";md1.className=""};md1.onclick=()=>{GM=1;md1.className="on";md0.className=""};net.want=0;
+how.style.display="none";const hb=document.createElement("button");hb.id="hb";hb.textContent="게임 설명";hb.onclick=()=>{const o=how.style.display==="none";how.style.display=o?"block":"none";hb.textContent=o?"설명 닫기":"게임 설명"};ov.insertBefore(hb,rc);ov.insertBefore(how,rc);ov.insertBefore(sz,rc);const nk=document.createElement("input");nk.id="nk";nk.maxLength=6;nk.placeholder="닉네임(최대 6자)";nk.autocomplete="off";ov.insertBefore(nk,rc);const tm=document.createElement("div");tm.id="tm";tm.innerHTML='참가할 팀 <button id="tm0" class="on">방장 팀</button><button id="tm1">상대 팀</button>';ov.insertBefore(tm,rc);net.want=0;
 tm0.onclick=()=>{net.want=0;tm0.className="on";tm1.className=""};tm1.onclick=()=>{net.want=1;tm1.className="on";tm0.className=""};
 const chg=v=>{N=Math.max(2,Math.min(5,N+v));szv.textContent=N};
 szm.onclick=()=>chg(-1);szp.onclick=()=>chg(1);
@@ -407,12 +465,6 @@ if(i===2||i===6)auNoise(t,.1,"bandpass",1800,1200,.18,auM);
 auNoise(t,.03,"highpass",7000,9000,i%2?.06:.035,auM);
 muNext+=.234;muStep++}
 while(muNext2<auC.currentTime+.35){const t=muNext2,i=muStep2%8;auTone(t,.19,MU[i],MU[i]*.99,.2,"sawtooth",auT,280);if(i%2===0)auTone(t,.15,95,40,.5,"sine",auT);else auNoise(t,.04,"highpass",7000,9000,.07,auT);if(muStep2%16===0){auTone(t,.7,440,436,.05,"triangle",auT);auTone(t,.7,622,618,.05,"triangle",auT)}muNext2+=.2;muStep2++}}
-const ownK=()=>net.mode==="guest"?(net.kg===undefined?-1:net.kg):KG[P.team];
-const allK=t=>net.mode==="guest"?(net.ka?net.ka[t]:-1):KG[t];
-const overNow=()=>net.mode==="guest"?!!net.over:(!run&&net.e>0);
-function crownWatch(){const ov0=overNow();T.forEach((c,i)=>{const cr=c.m.userData.crown;if(cr)cr.visible=GM===1&&((c.team===P.team&&i===ownK())||(ov0&&i===allK(c.team)))})}
-function sfxWin(){if(!auC)return;const t=auC.currentTime;[523.25,659.25,783.99,1046.5].forEach((f,i)=>auTone(t+i*.13,.28,f,f*1.002,.3,"triangle"));auTone(t+.52,.7,1046.5,1050,.22,"square",null,2400);auTone(t+.52,.7,783.99,786,.18,"triangle")}
-function sfxLose(){if(!auC)return;const t=auC.currentTime;[392,370,349.23,311.13].forEach((f,i)=>auTone(t+i*.28,.32,f,f*.97,.3,"sawtooth",null,900));auTone(t+1.12,.9,220,150,.3,"sawtooth",null,500)}
 const MU=[55,55,65.41,55,55,77.78,55,73.42];
 function muMix(){const t=auC.currentTime;auM.gain.setTargetAtTime(muTense?0:.8,t,.5);auT.gain.setTargetAtTime(muTense?.55:0,t,.5)}
 function muStart(){if(muOn||!auC)return;muOn=1;if(muTimer)clearInterval(muTimer);auM.gain.cancelScheduledValues(auC.currentTime);auT.gain.cancelScheduledValues(auC.currentTime);muMix();muNext=muNext2=auC.currentTime+.1;muStep=muStep2=0;muTimer=setInterval(muSched,90)}
@@ -423,16 +475,16 @@ const rd=document.createElement("button");rd.id="rd";rd.textContent="준비하�
 rd.onclick=()=>{net.rd=net.rd?0:1;rd.textContent=net.rd?"준비 완료 (취소)":"준비하기";send(net.gdc,{t:"rdy",d:{r:net.rd}})};
 let cmOn=0;const pvg=new THREE.Group(),pvc=mk(0x3a86ff),ped=new THREE.Mesh(new THREE.CylinderGeometry(.9,.9,.06,24),M(0x20405a));pvg.position.set(80,0,0);ped.position.y=-.03;pvg.add(pvc,ped);pvg.visible=false;S.add(pvg);
 const cmp=document.createElement("div");cmp.id="cmp";document.body.appendChild(cmp);
-const CR=[["피부색","sw",SK],["머리색","sw",HC],["헤어","st",HSN],["표정","st",FEN],["모자","st",HTN],["안경","st",GLN]];
+const CR=[["피부색","sw",SK],["머리색","sw",HC],["헤어","st",HSN],["표정","st",FEN],["모자","st",HTN],["안경","st",GLN],["옷","st",OUN]];
 function buildCm(){const sc=cmp.scrollTop;cmp.innerHTML="";CR.forEach((r,k)=>{const row=document.createElement("div"),lab=document.createElement("span");row.className="cr";lab.textContent=r[0];row.appendChild(lab);
 if(r[1]==="sw"){const w=document.createElement("div");w.style.cssText="display:flex;flex-wrap:wrap;gap:6px";r[2].forEach((col,i)=>{const d=document.createElement("div");d.className="sw"+(myAv[k]===i?" on":"");d.style.background="#"+col.toString(16).padStart(6,"0");d.onpointerdown=e=>{e.preventDefault();myAv[k]=i;cmUp()};w.appendChild(d)});row.appendChild(w)}
 else{const bt=(t,dv)=>{const b=document.createElement("div");b.className="st";b.textContent=t;b.onpointerdown=e=>{e.preventDefault();myAv[k]=(myAv[k]+dv+AVN[k])%AVN[k];cmUp()};return b},nm=document.createElement("div");nm.className="nm";nm.textContent=r[2][myAv[k]];row.append(bt("◀",-1),nm,bt("▶",1))}
 cmp.appendChild(row)});
 const bs=document.createElement("div");bs.className="bt";const rb=document.createElement("button"),db=document.createElement("button");rb.className="o";rb.textContent="랜덤";db.textContent="완료";rb.onclick=()=>{myAv=AVN.map(n=>Math.random()*n|0);cmUp()};db.onclick=closeCm;bs.append(rb,db);cmp.appendChild(bs);cmp.scrollTop=sc}
 function cmUp(){applyAv(pvc,myAv);buildCm()}
-function openCm(){cmOn=1;pvg.visible=true;ov.style.display="none";cmp.style.display="flex";applyAv(pvc,myAv);buildCm()}
-function closeCm(){cmOn=0;pvg.visible=false;cmp.style.display="none";ov.style.display="flex";saveAv();if(net.avs)net.avs[0]=myAv.join(",");if(T[0]&&net.mode!=="guest")applyAv(T[0].m,myAv)}
+function openCm(){cmOn=1;document.body.classList.add("cmo");pvg.visible=true;ov.style.display="none";cmp.style.display="flex";applyAv(pvc,myAv);buildCm()}
+function closeCm(){cmOn=0;document.body.classList.remove("cmo");pvg.visible=false;cmp.style.display="none";ov.style.display="flex";saveAv();if(net.avs)net.avs[0]=myAv.join(",");if(T[0]&&net.mode!=="guest")applyAv(T[0].m,myAv)}
 function cmCam(now){pvc.rotation.y=Math.PI+Math.sin(now/900)*.9;if(innerWidth>innerHeight){C.position.set(82.6,1.05,4.4);C.lookAt(82.6,.95,0)}else{C.position.set(80,1.2,4.3);C.lookAt(80,-.3,0)}}
-cmb.onclick=openCm;
+cmb.onclick=openCm;mpb.onclick=()=>applyMap((curMap+1)%MAPS.length,1);applyMap(curMap);
 ov.classList.remove("ld");reset();requestAnimationFrame(loop);
 </script></body></html>
