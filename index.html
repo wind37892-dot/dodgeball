@@ -136,9 +136,12 @@ const M=c=>new THREE.MeshLambertMaterial({color:c});
 const flat=(w,d,x,z,c,y)=>{const l=new THREE.Mesh(new THREE.PlaneGeometry(w,d),M(c));l.rotation.x=-Math.PI/2;l.position.set(x,y,z);S.add(l)};
 flat(22,32,0,0,0x17405a,-.02);flat(12,20,0,0,0x2f7f86,0);
 flat(12,.12,0,0,0xffffff,.01);flat(12,.12,0,10,0xffffff,.01);flat(12,.12,0,-10,0xffffff,.01);flat(.12,20,6,0,0xffffff,.01);flat(.12,20,-6,0,0xffffff,.01);
-function mk(c){const g=new THREE.Group();const b=new THREE.Mesh(new THREE.CylinderGeometry(.4,.45,1.2,12),M(c));b.position.y=.6;const h=new THREE.Mesh(new THREE.SphereGeometry(.3,12,12),M(0xffe0bd));h.position.y=1.5;g.add(b,h);S.add(g);return g}
+function mk(c){const g=new THREE.Group();const b=new THREE.Mesh(new THREE.CylinderGeometry(.4,.45,1.2,12),M(c));b.position.y=.6;const h=new THREE.Mesh(new THREE.SphereGeometry(.3,12,12),M(0xffe0bd));h.position.y=1.5;g.add(b,h);
+const arm=x=>{const p=new THREE.Group();p.position.set(x,1.05,0);const a=new THREE.Mesh(new THREE.CylinderGeometry(.09,.09,.5,8),M(c));a.position.y=-.25;const hd=new THREE.Mesh(new THREE.SphereGeometry(.11,10,8),M(0xffe0bd));hd.position.y=-.55;p.add(a,hd);g.add(p);return p};
+g.userData.aR=arm(.45);g.userData.aL=arm(-.45);S.add(g);return g}
 const ring=new THREE.Mesh(new THREE.RingGeometry(.55,.72,24),new THREE.MeshBasicMaterial({color:0xffd166,side:2}));ring.rotation.x=-Math.PI/2;S.add(ring);
-const bm=new THREE.Mesh(new THREE.SphereGeometry(.24,14,14),M(0xffd166));S.add(bm);bm.add(new THREE.Mesh(new THREE.TorusGeometry(.245,.035,6,24),M(0xc2410c)));
+const bt=(()=>{const cv=document.createElement("canvas");cv.width=512;cv.height=256;const x=cv.getContext("2d");x.fillStyle="#f59f1b";x.fillRect(0,0,512,256);x.fillStyle="#141414";x.fillRect(96,0,54,256);x.fillRect(352,0,54,256);x.fillStyle="#1d4ed8";x.beginPath();x.arc(256,128,26,0,7);x.fill();x.strokeStyle="#fff";x.lineWidth=4;x.stroke();x.fillStyle="#fff";x.beginPath();x.arc(256,128,8,0,7);x.fill();return new THREE.CanvasTexture(cv)})();
+const bm=new THREE.Mesh(new THREE.SphereGeometry(.25,24,16),new THREE.MeshLambertMaterial({map:bt}));S.add(bm);
 const B={st:"held",h:null,v:new THREE.Vector3(),rv:new THREE.Vector3(),kind:"",team:0,tgt:null,t:0};
 let T=[],P,run=false,fl=0,wide=0,yaw=0,zoom=1,N=3,J={on:0,until:0},net={mode:"solo",slots:{},g:0};
 const inn=t=>T.filter(c=>c.team===t&&!c.out);
@@ -179,7 +182,7 @@ function jrest(){const x=Math.max(78,innerWidth*.14),y=innerHeight-98;jset(x,y,x
 addEventListener("resize",()=>{if(pid===null)jrest()});jrest();
 let tx0=null;thr.addEventListener("pointerdown",e=>{e.preventDefault();thr.setPointerCapture(e.pointerId);tx0=e.clientX;chargeStart()});thr.addEventListener("pointermove",e=>{if(tx0===null)return;yaw-=(e.clientX-tx0)*.008;tx0=e.clientX});thr.addEventListener("pointerup",e=>{tx0=null;chargeEnd()});thr.addEventListener("pointercancel",()=>{tx0=null;cw0=0});pss.addEventListener("pointerdown",e=>{e.preventDefault();doPass()});
 thr.addEventListener("keydown",e=>{if(e.key==="Enter"&&!e.repeat)chargeStart()});thr.addEventListener("keyup",e=>{if(e.key==="Enter")chargeEnd()});ctc.addEventListener("pointerdown",e=>{e.preventDefault();doCatch()});ctc.addEventListener("keydown",e=>{if(e.key==="Enter")doCatch()});zi.addEventListener("pointerdown",e=>{e.preventDefault();zs(.8)});zo.addEventListener("pointerdown",e=>{e.preventDefault();zs(1/.8)});zi.addEventListener("keydown",e=>{if(e.key==="Enter")zs(.8)});zo.addEventListener("keydown",e=>{if(e.key==="Enter")zs(1/.8)});addEventListener("wheel",e=>{zs(e.deltaY>0?1.08:.93)},{passive:true});pss.addEventListener("keydown",e=>{if(e.key==="Enter")doPass()});
-const zs=f=>{zoom=Math.max(.55,Math.min(1.9,zoom*f))};
+const zs=f=>{zoom=Math.max(.08,Math.min(1.9,zoom*Math.pow(f,1.6)))};
 const jids=()=>net.mode==="guest"?(net.jj||[]):[T.indexOf(J.bj),T.indexOf(J.rj)];
 function inp(){let x=jx+(K.KeyD?1:0)-(K.KeyA?1:0),z=jz+(K.KeyS?1:0)-(K.KeyW?1:0);const a=(wide?(P.team?Math.PI:0):((P.team===1)!==!!P.out?Math.PI:0))+yaw,sn=Math.sin(a),cs=Math.cos(a);return[x*cs+z*sn,-x*sn+z*cs]}
 function clampOut(c){const p=c.m.position,s=c.team?1:-1;p.x=cl(p.x,-9.2,9.2);p.z=s<0?cl(p.z,-14,-.5):cl(p.z,.5,14);
@@ -204,8 +207,8 @@ const m=inn(w.team).filter(k=>k!==w);pass(w,m[Math.random()*m.length|0])}
 if(t>=tR+.6){J.on=0;b.m.position.y=0;r.m.position.y=0}}
 function startHost(){net.g++;net.e=0;net.jc=(net.jc||0)+1;reset();run=true;ov.style.display="none"}
 function netApply(d){if(d.s&&d.s!==N){N=d.s;reset();P=T[net.slot]}if(d.g!==net.g){net.g=d.g;net.first=1;run=true;ov.style.display="none"}
-d.t.forEach((a,i)=>{const c=T[i],o=c.out;c.out=a[2];c.gx=a[0];c.gz=a[1];c.gy=a[3]||0;if(c===P&&a[4])P.cw=Math.max(P.cw,.2);if(net.first)c.m.position.set(a[0],0,a[1]);if(!o&&c.out&&c===P){wide=0;yaw=0}});
-if(d.em)d.em.forEach((v,i)=>{if(T[i])T[i].ei=v});if(d.nm)for(const i in d.nm)if(T[i])mark(T[i],+i,d.nm[i]);T.forEach((c,i)=>{if(c.mk&&!(d.nm&&d.nm[i])){c.m.remove(c.mk.g);c.mk=null}});apx.visible=!!d.j;net.jj=d.j||[];net.ya=d.ya||0;net.hh=d.hh||0;net.first=0;cdn.textContent=d.n||"";net.b=d.b;B.st=["held","fly","loose"][d.b[0]];B.h=d.b[1]>=0?T[d.b[1]]:null;
+d.t.forEach((a,i)=>{const c=T[i],o=c.out;c.out=a[2];c.gx=a[0];c.gz=a[1];c.gy=a[3]||0;if(a[4])c.cw=Math.max(c.cw,.2);if(net.first)c.m.position.set(a[0],0,a[1]);if(!o&&c.out&&c===P){wide=0;yaw=0}});
+if(d.em)d.em.forEach((v,i)=>{if(T[i])T[i].ei=v});if(d.nm)for(const i in d.nm)if(T[i])mark(T[i],+i,d.nm[i]);T.forEach((c,i)=>{if(c.mk&&!(d.nm&&d.nm[i])){c.m.remove(c.mk.g);c.mk=null}});apx.visible=!!d.j;net.jj=d.j||[];net.ya=d.ya||0;net.hh=d.hh||0;net.first=0;cdn.textContent=d.n||"";net.b=d.b;B.st=["held","fly","loose"][d.b[0]];B.h=d.b[1]>=0?T[d.b[1]]:null;B.kind=d.b[5]?"t":"p";
 if(d.e>0&&run)end((d.e===1)===(P.team===0))}
 function glerp(dt){const k=Math.min(1,dt*14);T.forEach(c=>{if(c.gx===undefined)return;const p=c.m.position;p.x+=(c.gx-p.x)*k;p.z+=(c.gz-p.z)*k;p.y+=((c.gy||0)-p.y)*k});
 if(net.b&&B.st!=="held"){const q=bm.position;q.x+=(net.b[2]-q.x)*k;q.y=net.b[3];q.z+=(net.b[4]-q.z)*k}}
@@ -247,21 +250,22 @@ else{q.addScaledVector(B.v,dt);let hit=null;inn(1-B.team).forEach(c=>{if(Math.hy
 if(hit){if(hit.pl?hit.cw>0:Math.random()<.2){give(hit)}else{if(hit===P)fl=.25;drop();out(hit)}}else{const ic=Math.abs(q.x)<=6.2&&Math.abs(q.z)<=10.2;if(ic)B.in=1;if((B.in&&!ic)||B.t>3)drop()}}}
 }
 if(run&&net.mode!=="guest"&&J.on)jumpStep(dt);
-if(net.mode==="host"&&net.room)bcast(now);else if(net.mode==="guest"){glerp(dt);P.cw-=dt;P.cc-=dt}
-if(B.st==="held"&&B.h){const q=B.h.m.position;bm.position.set(q.x+.45,1,q.z)}
+if(net.mode==="host"&&net.room)bcast(now);else if(net.mode==="guest"){glerp(dt);T.forEach(c=>{c.cw-=dt});P.cc-=dt}
+animChars(dt);
 const pp=P.m.position,px=pp.x*.8;ring.position.set(pp.x,.03,pp.z);ring.material.color.setHex(P.cw>0?0xffffff:0xffd166);ring.scale.setScalar(P.cw>0?1.8:1);ctc.textContent=P.cc>0&&!P.out?P.cc.toFixed(1):"잡기";ctc.style.opacity=P.cc>0?.45:1;thr.textContent=apx.visible&&jids().includes(T.indexOf(P))?"점프":"던지기";{const pw=cw0?Math.min(1,Math.max(0,(now-cw0-150)/1000)):0;thr.style.boxShadow=cw0?"0 0 0 "+(6+pw*16)+"px rgba(255,"+(183-pw*130|0)+",3,.55)":""}
 const yw=(wide?(P.team?Math.PI:0):((P.team===1)!==!!P.out?Math.PI:0))+yaw,sn=Math.sin(yw),cs=Math.cos(yw);let cx=px,cz=pp.z,dz=Math.max(6.5,15.5-Math.abs(pp.z)),dy=4.6,fw=5,ly=.8;if(wide){cx=pp.x*.3;cz=P.team?-7:7;dz=8.5;dy=9;fw=8;ly=0}else if(P.out){dz=6;dy=3.4;fw=6;ly=1}
-dz*=zoom;dy=ly+(dy-ly)*zoom;C.position.set(cx+sn*dz,dy,cz+cs*dz);C.lookAt(cx-sn*fw,ly,cz-cs*fw)
+const fpv=zoom<=.14;P.m.visible=!fpv;
+if(fpv){C.position.set(pp.x-sn*.12,1.58,pp.z-cs*.12);C.lookAt(pp.x-sn*6,1.45,pp.z-cs*6)}else{dz*=zoom;dy=ly+(dy-ly)*zoom;C.position.set(cx+sn*dz,dy,cz+cs*dz);C.lookAt(cx-sn*fw,ly,cz-cs*fw)}
 if(fl>0){fl-=dt;S.background.setHex(0x5a1020)}else S.background.setHex(0x10243a);
-emLoop(now);ui();pui();pui2();R.render(S,C)}
+emLoop(now);ui();pui();pui2();sfxWatch();R.render(S,C)}
 let cx0=0,cid=null,cid2=null,pd=1,pz=1,pp1=null,pp2=null;
 cam.addEventListener("pointerdown",e=>{if(cid===null){cid=e.pointerId;cx0=e.clientX;pp1=[e.clientX,e.clientY]}else if(cid2===null){cid2=e.pointerId;pp2=[e.clientX,e.clientY];pd=Math.hypot(pp1[0]-pp2[0],pp1[1]-pp2[1])||1;pz=zoom}cam.setPointerCapture(e.pointerId)});
-cam.addEventListener("pointermove",e=>{if(e.pointerId===cid){pp1=[e.clientX,e.clientY];if(cid2===null)yaw-=(e.clientX-cx0)*.008;cx0=e.clientX}else if(e.pointerId===cid2)pp2=[e.clientX,e.clientY];else return;if(cid2!==null)zoom=Math.max(.55,Math.min(1.9,pz*pd/(Math.hypot(pp1[0]-pp2[0],pp1[1]-pp2[1])||1)))});
+cam.addEventListener("pointermove",e=>{if(e.pointerId===cid){pp1=[e.clientX,e.clientY];if(cid2===null)yaw-=(e.clientX-cx0)*.008;cx0=e.clientX}else if(e.pointerId===cid2)pp2=[e.clientX,e.clientY];else return;if(cid2!==null)zoom=Math.max(.08,Math.min(1.9,pz*pd/(Math.hypot(pp1[0]-pp2[0],pp1[1]-pp2[1])||1)))});
 const cu=e=>{if(e.pointerId===cid){cid=cid2;pp1=pp2;cx0=pp2?pp2[0]:0;cid2=null}else if(e.pointerId===cid2)cid2=null};cam.addEventListener("pointerup",cu);cam.addEventListener("pointercancel",cu);
 const send=(dc,o)=>dc&&(dc.open||dc.readyState==="open")&&dc.send(o);
 function openPanel(){lb.style.display="none";rc.style.display="none";hb.style.display=how.style.display=sz.style.display=nk.style.display=tm.style.display=ov.querySelector("p").style.display="none";nw.style.display="flex"}
 function act(a,i,y,w){send(net.gdc,{t:"act",d:{a,i,y,w}})}
-function bcast(now){if(now-(net.bt||0)<70)return;net.bt=now;const q=bm.position,r=v=>Math.round(v*100)/100;const o={t:"st",d:{em:T.map(c=>c.ei||0),g:net.g,s:N,nm:net.nicks,j:J.on&&!J.done?[T.indexOf(J.bj),T.indexOf(J.rj)]:0,ya:Math.round((B.st==="held"&&B.h?(B.h===P?lookA():(B.h.ya||0)):0)*100)/100,hh:B.st==="held"&&B.h&&(B.h===P||B.h.pl)?1:0,n:J.on&&J.cd>0?Math.ceil(J.cd):0,e:run?0:net.e||0,t:T.map(c=>[r(c.m.position.x),r(c.m.position.z),c.out,r(c.m.position.y),c.cw>0?1:0]),b:[B.st==="held"?0:B.st==="fly"?1:2,B.h?T.indexOf(B.h):-1,r(q.x),r(q.y),r(q.z)]}};net.dcs.forEach(dc=>send(dc,o))}
+function bcast(now){if(now-(net.bt||0)<70)return;net.bt=now;const q=bm.position,r=v=>Math.round(v*100)/100;const o={t:"st",d:{em:T.map(c=>c.ei||0),g:net.g,s:N,nm:net.nicks,j:J.on&&!J.done?[T.indexOf(J.bj),T.indexOf(J.rj)]:0,ya:Math.round((B.st==="held"&&B.h?(B.h===P?lookA():(B.h.ya||0)):0)*100)/100,hh:B.st==="held"&&B.h&&(B.h===P||B.h.pl)?1:0,n:J.on&&J.cd>0?Math.ceil(J.cd):0,e:run?0:net.e||0,t:T.map(c=>[r(c.m.position.x),r(c.m.position.z),c.out,r(c.m.position.y),c.cw>0?1:0]),b:[B.st==="held"?0:B.st==="fly"?1:2,B.h?T.indexOf(B.h):-1,r(q.x),r(q.y),r(q.z),B.kind==="t"?1:0]}};net.dcs.forEach(dc=>send(dc,o))}
 function hostMsg(k,s){let o=s;if(typeof s==="string"){try{o=JSON.parse(s)}catch(e){return}}if(!o)return;const d=o.d,c=T[k];if(!d||!c)return;c.seen=performance.now();
 if(o.t==="nick"){const n=String(d.n||"").slice(0,6)||"친구"+k;net.nicks[k]=n;mark(c,k,n)}else if(o.t==="in"){c.pl=1;c.rx=cl(+d.x||0,-1,1);c.rz=cl(+d.z||0,-1,1);c.ya=+d.ya||0}
 else if(o.t==="act"&&run){const h=B.st==="held"&&B.h===c;
@@ -272,7 +276,7 @@ sb.onclick=()=>startHost();
 rcp.onclick=async()=>{const c=net.code||"";if(!c)return;try{await navigator.clipboard.writeText(c)}catch(e){const t=document.createElement("textarea");t.value=c;t.style.cssText="position:fixed;opacity:0";document.body.appendChild(t);t.select();try{document.execCommand("copy")}catch(e2){}t.remove()}rcp.textContent="복사했어요!";setTimeout(()=>rcp.textContent="방 코드 복사",1500)};
 setInterval(()=>{if(net.mode!=="guest"||net.slot===undefined)return;const[x,z]=inp(),r=v=>Math.round(v*100)/100;send(net.gdc,{t:"in",d:{x:r(x),z:r(z),ya:r(lookA())}})},100);
 const how=document.createElement("div");how.id="how";
-how.innerHTML="<b>게임 설명</b><ul><li>상대 팀을 모두 외야로 보내면 승리!</li><li>시작은 점프볼: 공이 꼭대기일 때 던지기 버튼으로 점프해요. 타이밍이 좋을수록 높이 뛰어요.</li><li>공을 잡으면 던지기로 적을 맞히거나 패스로 팀원에게 넘겨요.</li><li>적이 던진 공이나 패스는 잡기 버튼 타이밍에 맞춰 받아낼 수 있어요(패스 가로채기).</li><li>맞으면 상대 코트 뒤와 옆의 외야로 나가 돌아다닐 수 있고, 코트 밖으로 나간 공은 외야가 주워요. 외야가 없으면 내야가 가져가요.</li><li>왼쪽 화면을 누르고 밀면 조이스틱이 떠서 이동, 오른쪽 화면 밀기=화면 회전</li><li>공을 들면 아래에 패스 원이 떠요: 파랑=내야, 주황=외야. 원을 누르면 그 사람에게, 패스 버튼은 내가 보는 방향에 가장 가까운 팀원(하얀 링)에게 가요.</li><li>던지기는 자동 조준이 아니에요. 오른쪽 화면을 밀어 빨간 조준선을 적에게 맞추고 던져요.</li><li>던지기 버튼을 꾹 누르면 더 세고 빠르게 날아가지만, 세질수록 조금씩 덜 정확해요. 누른 채로 손가락을 좌우로 밀면 조준이 움직여요.</li><li>오른쪽 위 😊 버튼으로 웃음·울기·메롱 같은 감정표현을 할 수 있어요 (PC: 숫자 1~8).</li><li>오른쪽 위 ＋/－ 버튼이나 오른쪽 화면에서 두 손가락을 모으고 벌려 화면을 확대·축소할 수 있어요.</li><li>PC: WASD, 스페이스=던지기, E=패스, F=잡기, ←/→=회전, +/−/마우스 휠=확대·축소</li></ul>";
+how.innerHTML="<b>게임 설명</b><ul><li>상대 팀을 모두 외야로 보내면 승리!</li><li>시작은 점프볼: 공이 꼭대기일 때 던지기 버튼으로 점프해요. 타이밍이 좋을수록 높이 뛰어요.</li><li>공을 잡으면 던지기로 적을 맞히거나 패스로 팀원에게 넘겨요.</li><li>적이 던진 공이나 패스는 잡기 버튼 타이밍에 맞춰 받아낼 수 있어요(패스 가로채기).</li><li>맞으면 상대 코트 뒤와 옆의 외야로 나가 돌아다닐 수 있고, 코트 밖으로 나간 공은 외야가 주워요. 외야가 없으면 내야가 가져가요.</li><li>왼쪽 화면을 누르고 밀면 조이스틱이 떠서 이동, 오른쪽 화면 밀기=화면 회전</li><li>공을 들면 아래에 패스 원이 떠요: 파랑=내야, 주황=외야. 원을 누르면 그 사람에게, 패스 버튼은 내가 보는 방향에 가장 가까운 팀원(하얀 링)에게 가요.</li><li>던지기는 자동 조준이 아니에요. 오른쪽 화면을 밀어 빨간 조준선을 적에게 맞추고 던져요.</li><li>던지기 버튼을 꾹 누르면 더 세고 빠르게 날아가지만, 세질수록 조금씩 덜 정확해요. 누른 채로 손가락을 좌우로 밀면 조준이 움직여요.</li><li>오른쪽 위 😊 버튼으로 웃음·울기·메롱 같은 감정표현을 할 수 있어요 (PC: 숫자 1~8).</li><li>오른쪽 위 ＋/－ 버튼이나 오른쪽 화면에서 두 손가락을 모으고 벌려 화면을 확대·축소할 수 있어요. 끝까지 확대하면 1인칭 시점이 돼요.</li><li>PC: WASD, 스페이스=던지기, E=패스, F=잡기, ←/→=회전, +/−/마우스 휠=확대·축소</li></ul>";
 const sz=document.createElement("div");sz.id="sz";
 sz.innerHTML='팀 인원 <button id="szm" aria-label="인원 줄이기">−</button> <b id="szv">3</b> <button id="szp" aria-label="인원 늘리기">+</button> 명씩';
 how.style.display="none";const hb=document.createElement("button");hb.id="hb";hb.textContent="게임 설명";hb.onclick=()=>{const o=how.style.display==="none";how.style.display=o?"block":"none";hb.textContent=o?"설명 닫기":"게임 설명"};ov.insertBefore(hb,rc);ov.insertBefore(how,rc);ov.insertBefore(sz,rc);const nk=document.createElement("input");nk.id="nk";nk.maxLength=6;nk.placeholder="닉네임(최대 6자)";nk.autocomplete="off";ov.insertBefore(nk,rc);const tm=document.createElement("div");tm.id="tm";tm.innerHTML='참가할 팀 <button id="tm0" class="on">방장 팀</button><button id="tm1">상대 팀</button>';ov.insertBefore(tm,rc);net.want=0;
@@ -325,5 +329,33 @@ function emSpr(i){if(!emTex[i]){const cv=document.createElement("canvas");cv.wid
 function emLoop(now){T.forEach(c=>{if(net.mode!=="guest"&&c.ei&&now>c.et)c.ei=0;if((c.ei||0)!==(c.vi||0)){c.vi=c.ei||0;if(c.es){c.m.remove(c.es);c.es=null}if(c.vi){c.es=emSpr(c.vi);c.est=now;c.m.add(c.es)}}if(c.es){c.es.scale.setScalar(.7*Math.min(1,(now-c.est)/180));c.es.position.y=3.05+Math.sin(now/220)*.05}})}
 const emp=document.createElement("div");emp.id="emp";EM.forEach((e,i)=>{const b=document.createElement("div");b.className="eb";b.innerHTML=e[0]+"<small>"+e[1]+"</small>";b.onpointerdown=ev=>{ev.preventDefault();doEmote(i+1);emp.style.display="none"};emp.appendChild(b)});document.body.appendChild(emp);
 em.addEventListener("pointerdown",e=>{e.preventDefault();emp.style.display=emp.style.display==="grid"?"none":"grid"});pad.addEventListener("pointerdown",()=>{emp.style.display="none"});
+const AU0=window.AudioContext||window.webkitAudioContext;let auC=null,auG=null,auM=null,auN=null,muOn=0,muTimer=null,muNext=0,muStep=0,wSt="held",wOut=0,lastH=null;
+function unlockAudio(){if(!AU0)return;if(!auC){auC=new AU0();auG=auC.createGain();auG.gain.value=.8;auG.connect(auC.destination);auM=auC.createGain();auM.gain.value=0;auM.connect(auC.destination);const n=auC.sampleRate*.5|0;auN=auC.createBuffer(1,n,auC.sampleRate);const d=auN.getChannelData(0);for(let i=0;i<n;i++)d[i]=Math.random()*2-1}if(auC.state==="suspended")auC.resume()}
+addEventListener("pointerdown",unlockAudio,{passive:true});addEventListener("keydown",unlockAudio);
+function auNoise(t,dur,type,f0,f1,g,bus){const s=auC.createBufferSource();s.buffer=auN;const f=auC.createBiquadFilter();f.type=type;f.frequency.setValueAtTime(f0,t);f.frequency.exponentialRampToValueAtTime(f1,t+dur);const v=auC.createGain();v.gain.setValueAtTime(g,t);v.gain.exponentialRampToValueAtTime(.001,t+dur);s.connect(f);f.connect(v);v.connect(bus||auG);s.start(t);s.stop(t+dur+.02)}
+function auTone(t,dur,f0,f1,g,type,bus,lp){const o=auC.createOscillator();o.type=type||"sine";o.frequency.setValueAtTime(f0,t);o.frequency.exponentialRampToValueAtTime(f1,t+dur);const v=auC.createGain();v.gain.setValueAtTime(g,t);v.gain.exponentialRampToValueAtTime(.001,t+dur);let n=o;if(lp){const f=auC.createBiquadFilter();f.type="lowpass";f.frequency.value=lp;o.connect(f);n=f}n.connect(v);v.connect(bus||auG);o.start(t);o.stop(t+dur+.02)}
+function sfxThrow(){if(!auC)return;const t=auC.currentTime;auNoise(t,.22,"bandpass",500,2600,.35);auTone(t,.12,320,120,.12,"triangle")}
+function sfxPass(){if(!auC)return;auTone(auC.currentTime,.09,540,380,.12,"sine")}
+function sfxHit(){if(!auC)return;const t=auC.currentTime;auTone(t,.24,170,45,.55,"sine");auNoise(t,.09,"lowpass",1800,300,.4)}
+const _v1=new THREE.Vector3(),_v2=new THREE.Vector3();
+function animChars(dt){const hb=B.st==="held"?B.h:null;
+T.forEach(c=>{const u=c.m.userData;if(!u.aR)return;if(c.at>0)c.at-=dt;if(c.ct>0)c.ct-=dt;
+c.m.rotation.y=((c.team===0)!==!!c.out)?0:Math.PI;
+let tr=.05,pr=.08,tl=.05,pl=.08;
+if(c.cw>0||c.ct>0){const b=1.1+(c.ct>0?Math.sin((1-c.ct/.6)*Math.PI)*.35:0);tr=tl=b;pr=-.45;pl=.45}else if(c===hb){tr=1.55;pr=-.12;tl=.15;pl=.1}
+if(c===P&&cw0&&c===hb){const w=Math.min(1,Math.max(0,(performance.now()-cw0-150)/1000));tr=1.55-w*2.6;tl=.7;pr=-.12}
+if(c.at>0){const p=1-c.at/(c.ak==="p"?.25:.32);if(c.ak==="p"){tr=1.35+p*.4;pr=-.12;tl=.1;pl=.1}else{tr=2.3-1.8*p*(2-p);pr=-.1;tl=.35;pl=.1}}
+u.aR.rotation.set(tr,0,pr);u.aL.rotation.set(tl,0,pl)});
+if(B.st==="held"&&B.h){const u=B.h.m.userData;if(u.aR){u.aR.children[1].getWorldPosition(_v1);if(B.h.ct>0||B.h.cw>0){u.aL.children[1].getWorldPosition(_v2);bm.position.copy(_v1).add(_v2).multiplyScalar(.5)}else{bm.position.copy(_v1);bm.position.y+=.08}bm.position.y+=.22}else{const q=B.h.m.position;bm.position.set(q.x+.45,1,q.z)}}}
+const MU=[55,55,65.41,55,55,77.78,55,73.42];
+function muSched(){if(!auC)return;while(muNext<auC.currentTime+.35){const t=muNext,i=muStep%8;
+auTone(t,.19,MU[i],MU[i]*.99,.2,"sawtooth",auM,280);
+if(i%2===0)auTone(t,.15,95,40,.5,"sine",auM);else auNoise(t,.04,"highpass",7000,9000,.07,auM);
+if(muStep%16===0){auTone(t,.7,440,436,.05,"triangle",auM);auTone(t,.7,622,618,.05,"triangle",auM)}
+muNext+=.2;muStep++}}
+function muStart(){if(muOn||!auC)return;muOn=1;if(muTimer)clearInterval(muTimer);auM.gain.cancelScheduledValues(auC.currentTime);auM.gain.setTargetAtTime(.55,auC.currentTime,.25);muNext=auC.currentTime+.1;muStep=0;muTimer=setInterval(muSched,90)}
+function muStop(){if(!muOn)return;muOn=0;auM.gain.setTargetAtTime(0,auC.currentTime,.25);setTimeout(()=>{if(!muOn&&muTimer){clearInterval(muTimer);muTimer=null}},1500)}
+document.addEventListener("visibilitychange",()=>{if(document.hidden)muStop()});
+function sfxWatch(){const out=T.reduce((n,c)=>n+(c.out?1:0),0);if(out>wOut)sfxHit();wOut=out;if(B.st==="fly"&&wSt!=="fly"){if(B.kind==="t")sfxThrow();else sfxPass();if(lastH){lastH.at=B.kind==="t"?.32:.25;lastH.ak=B.kind==="t"?"t":"p"}}if(B.st==="held"&&B.h){if(wSt==="fly")B.h.ct=.6;lastH=B.h}wSt=B.st;const tense=run&&inn(P.team).length===1&&inn(1-P.team).length>0;if(tense)muStart();else muStop()}
 ov.classList.remove("ld");reset();requestAnimationFrame(loop);
 </script></body></html>
