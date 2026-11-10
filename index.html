@@ -155,6 +155,8 @@ canvas{display:block;position:fixed;inset:0}
 #b2b{grid-column:1/-1}
 .tl{display:flex;gap:8px;flex-wrap:wrap;justify-content:center}
 #lsb{border:2px solid var(--acc);border-radius:999px;background:transparent;color:inherit;font:inherit;font-size:14px;padding:8px 16px}
+.jr{display:flex;align-items:center;gap:8px;flex:1 1 100%;justify-content:center}
+#lb #tm button{padding:8px 10px;font-size:14px}
 #lb #go{font-size:18px;padding:14px 24px}
 #lb #hs,#lb #js{background:transparent;border:2px solid var(--acc);color:inherit}
 #how{max-width:none;width:min(360px,92vw);box-sizing:border-box;padding:12px 14px}
@@ -460,9 +462,9 @@ const lookA=()=>((P.team===1)!==!!P.out?Math.PI:0)+yaw;
 function pcands(){const a=lookA(),sn=Math.sin(a),cs=Math.cos(a),p=P.m.position;return T.filter(c=>c.team===P.team&&c!==P).map(c=>{const dx=c.m.position.x-p.x,dz=c.m.position.z-p.z;return{c,ang:Math.atan2(dx*cs-dz*sn,-dx*sn-dz*cs)}}).sort((u,v)=>u.ang-v.ang)}
 const aimOf=l=>l.reduce((m,u)=>Math.abs(u.ang)<Math.abs(m.ang)?u:m,l[0]);
 function doPass(t){if(!run||hk(P)<0)return;const l=pcands();if(!l.length)return;const c=l.some(u=>u.c===t)?t:aimOf(l).c;if(net.mode==="guest")return act("p",T.indexOf(c));selB(hk(P));pass(P,c);selB(0)}
-function startJmp(c){if(J.on){if(run&&J.cd<=0&&!J.done){if(c===J.bj&&J.tb<0)J.tb=J.t;else if(c===J.rj&&J.tr<0)J.tr=J.t}return}if(!run||c.out||c.jt>0||c.jc>0)return;c.jt=.0001;c.jc=1.6}
+function startJmp(c){if(J.on){if(run&&J.cd<=0&&!J.done){if(c===J.bj&&J.tb<0)J.tb=J.t;else if(c===J.rj&&J.tr<0)J.tr=J.t}return}if(!run||c.jt>0||c.jc>0)return;c.jt=.0001;c.jc=1.6}
 function jmpStep(c,dt){if(c.jc>0)c.jc-=dt;if(c.jt>0){c.jt+=dt;const u=Math.min(1,c.jt/.7);c.m.position.y=1.1*Math.sin(Math.PI*u);if(u>=1){c.jt=0;c.m.position.y=0}}}
-function doJump(){if(!run||P.out)return;if(net.mode==="guest"){if(!J.on&&P.jc<=0)P.jc=1.6;act("j");return}startJmp(P)}
+function doJump(){if(!run)return;if(net.mode==="guest"){if(!J.on&&P.jc<=0)P.jc=1.6;act("j");return}startJmp(P)}
 function doCatch(){if(!run)return;if(net.mode==="guest"){if(!P.out&&P.cc<=0){P.cw=.45;P.cc=3;act("c")}return}if(!P.out&&P.cc<=0){P.cw=.45;P.cc=3}}
 const K={};addEventListener("keydown",e=>{K[e.code]=1;if(e.code==="Space"){e.preventDefault();if(!e.repeat)chargeStart()}if(e.code==="KeyE")doPass();if(e.code==="KeyF")doCatch();if(e.code==="KeyQ")doJump();if(/^Digit[1-8]$/.test(e.code))doEmote(+e.code.slice(5));if(e.code==="Equal"||e.code==="NumpadAdd")zs(.8);if(e.code==="Minus"||e.code==="NumpadSubtract")zs(1/.8)});addEventListener("keyup",e=>{K[e.code]=0;if(e.code==="Space")chargeEnd()});
 let jx=0,jz=0,ox=0,oy=0,pid=null;
@@ -523,7 +525,7 @@ pcs.style.display="flex";for(const b of pcs.children)b.classList.toggle("a",+b.d
 const q=am.m.position,cc=am.out?0xff9100:0x4dc3ff;aimr.visible=true;aimA.visible=false;aimr.position.set(q.x,.04,q.z);aimA.position.set(q.x,2.95+Math.sin(performance.now()/180)*.12,q.z);aimr.material.color.setHex(cc);aimA.material.color.setHex(cc)}
 const mine=()=>BL.some(b=>b.st==="held"&&!!b.h&&(b.h===P||(net.mode==="guest"&&T.indexOf(b.h)===net.slot)));
 const ag2=new THREE.Group();{const mt=new THREE.MeshBasicMaterial({color:0xffffff,transparent:true,opacity:.7,side:2,depthWrite:false}),l=new THREE.Mesh(new THREE.PlaneGeometry(.16,9),mt),t=new THREE.Mesh(new THREE.ConeGeometry(.26,.6,12),mt);l.rotation.x=-Math.PI/2;l.position.set(0,.08,-4.9);t.rotation.x=-Math.PI/2;t.position.set(0,.1,-9.6);ag2.add(l,t)}ag2.visible=false;S.add(ag2);
-function pui2(){const h=run&&!(J.on&&!J.done)&&B.st==="held"&&B.h&&!mine()?B.h:null;let a=null;if(h){if(net.mode==="guest"){if(net.hh)a=net.ya||0}else if(h.pl)a=h.ya||0}ag2.visible=a!==null;if(a!==null){const p=h.m.position;ag2.position.set(p.x,0,p.z);ag2.rotation.y=a}}
+function pui2(){ag2.visible=false;return;const h=run&&!(J.on&&!J.done)&&B.st==="held"&&B.h&&!mine()?B.h:null;let a=null;if(h){if(net.mode==="guest"){if(net.hh)a=net.ya||0}else if(h.pl)a=h.ya||0}ag2.visible=a!==null;if(a!==null){const p=h.m.position;ag2.position.set(p.x,0,p.z);ag2.rotation.y=a}}
 let last=performance.now();
 function loop(now){requestAnimationFrame(loop);const dt=Math.min((now-last)/1000,.05);last=now;selB(0);syncBall();if(K.ArrowLeft)yaw+=2*dt;if(K.ArrowRight)yaw-=2*dt;if(K.KeyT)pitch=Math.min(.7,pitch+1.2*dt);if(K.KeyG)pitch=Math.max(-.45,pitch-1.2*dt);
 if(run&&net.mode!=="guest"){
@@ -541,15 +543,15 @@ if(c.out)clampOut(c);c.vx=(p.x-ox)/dt;c.vz=(p.z-oz)/dt});
 for(let bk=0;bk<NB();bk++){selB(bk);const q=bm.position;
 if(B.st==="loose"){q.x+=B.rv.x*dt;q.z+=B.rv.z*dt;B.rv.multiplyScalar(Math.exp(-1.6*dt));if(Math.abs(q.x)>9.6){q.x=Math.sign(q.x)*9.6;B.rv.x*=-.5}if(Math.abs(q.z)>14.4){q.z=Math.sign(q.z)*14.4;B.rv.z*=-.5}bm.rotation.x+=B.rv.z*dt/.24;bm.rotation.z-=B.rv.x*dt/.24;const ic=Math.abs(q.x)<=5.9&&Math.abs(q.z)<=9.9;const pl=ic?inn(q.z>0?0:1):T.filter(c=>c.team===(q.z>0?1:0)&&c.out);if(!ic&&!pl.length){const f=inn(q.z>0?0:1).filter(k=>canH(k,B));if(f.length)give(near(q,f))}for(const c of pl){const p=c.m.position;if(Math.hypot(q.x-p.x,q.z-p.z)<1&&canH(c,B)){give(c);break}}}
 else if(B.st==="fly"){B.t+=dt;
-if(B.kind==="p"){let ic=null;inn(1-B.team).forEach(c=>{const p=c.m.position;if(!ic&&Math.hypot(q.x-p.x,q.z-p.z)<.8){if(c.pl){if(c.cw>0)ic=c}else if(!B.tt.includes(c)){B.tt.push(c);if(Math.random()<.25)ic=c}}});
-if(ic){J.res=ic.team===0?"가로채기 성공!":"패스를 뺏겼어요!";J.until=performance.now()+1800;give(ic)}else{const m=B.tgt.m.position,dx=m.x-q.x,dz=m.z-q.z,d=Math.hypot(dx,dz);if(d<.6||B.t>3)give(B.tgt);else{q.x+=dx/d*12*dt;q.z+=dz/d*12*dt}}}
+if(B.kind==="p"){let ic=null,ht=null;inn(1-B.team).forEach(c=>{const p=c.m.position;if(!ic&&!ht&&Math.hypot(q.x-p.x,q.z-p.z)<.8&&(big(B)||p.y<.45)){if(c.pl?c.cw>0:Math.random()<.25)ic=c;else ht=c}});
+if(ic){J.res=ic.team===0?"가로채기 성공!":"패스를 뺏겼어요!";J.until=performance.now()+1800;give(ic)}else if(ht){const m=B.tgt.m.position;B.v.set(m.x-q.x,0,m.z-q.z).normalize().multiplyScalar(6);if(ht===P)fl=.25;drop();out(ht)}else{const m=B.tgt.m.position,dx=m.x-q.x,dz=m.z-q.z,d=Math.hypot(dx,dz);if(d<.6||B.t>3)give(B.tgt);else{q.x+=dx/d*12*dt;q.z+=dz/d*12*dt}}}
 else{q.addScaledVector(B.v,dt);let hit=null;inn(1-B.team).forEach(c=>{if(Math.hypot(q.x-c.m.position.x,q.z-c.m.position.z)<(big(B)?1.2:.7)&&(big(B)||c.m.position.y<.45)&&q.y<2.05)hit=c});
 if(hit){if(hit.pl?hit.cw>0:Math.random()<.2){give(hit)}else{if(hit===P)fl=.25;drop();out(hit)}}else{const ic=Math.abs(q.x)<=6.2&&Math.abs(q.z)<=10.2;if(ic)B.in=1;if((B.in&&!ic)||B.t>3||q.y<.27*bm.scale.x)drop()}}}}selB(0);
 }
 if(run&&net.mode!=="guest"&&J.on)jumpStep(dt);
 if(net.mode==="host"&&net.room)bcast(now);else if(net.mode==="guest"){glerp(dt);T.forEach(c=>{c.cw-=dt});P.cc-=dt;if(P.jc>0)P.jc-=dt}
 animChars(dt);
-const pp=P.m.position,px=pp.x*.8;ring.position.set(pp.x,.03,pp.z);ring.material.color.setHex(P.cw>0?0xffffff:0xffd166);ring.scale.setScalar(P.cw>0?1.8:1);W(ctc,"t",P.cc>0&&!P.out?P.cc.toFixed(1):"잡기");W(ctc,"opacity",P.cc>0?.45:1);W(thr,"t","던지기");W(jmp,"t",P.jc>0?P.jc.toFixed(1):"점프");W(jmp,"opacity",P.jc>0?.45:1);W(jmp,"boxShadow",apx.visible&&jids().includes(T.indexOf(P))?"0 0 0 8px rgba(255,214,102,.75)":"");{const pw=cw0?Math.min(1,Math.max(0,(now-cw0-150)/1000)):0;W(thr,"boxShadow",cw0?"0 0 0 "+(6+pw*16)+"px rgba(255,"+(183-pw*130|0)+",3,.55)":"")}
+const pp=P.m.position,px=pp.x*.8;ring.position.set(pp.x,.03,pp.z);ring.material.color.setHex(P.cw>0?0xffffff:0xffd166);ring.scale.setScalar(P.cw>0?1.8:1);W(ctc,"t",P.cc>0&&!P.out?P.cc.toFixed(1):"잡기");W(ctc,"opacity",P.cc>0?.45:1);W(thr,"t","던지기");W(jmp,"t",P.jc>0?P.jc.toFixed(1):"점프");W(jmp,"opacity",P.jc>0?.8:1);W(jmp,"background",P.jc>0?"conic-gradient(rgba(0,0,0,.55) "+(Math.min(1,P.jc/1.6)*360|0)+"deg,transparent 0),#9b5de5":"");W(jmp,"boxShadow",apx.visible&&jids().includes(T.indexOf(P))?"0 0 0 8px rgba(255,214,102,.75)":"");{const pw=cw0?Math.min(1,Math.max(0,(now-cw0-150)/1000)):0;W(thr,"boxShadow",cw0?"0 0 0 "+(6+pw*16)+"px rgba(255,"+(183-pw*130|0)+",3,.55)":"")}
 const yw=((P.team===1)!==!!P.out?Math.PI:0)+yaw,sn=Math.sin(yw),cs=Math.cos(yw);let cx=px,cz=pp.z,dz=Math.max(6.5,15.5-Math.abs(pp.z)),dy=4.6,fw=5,ly=.8;if(P.out){dz=6;dy=3.4;fw=6;ly=1}
 const fpv=zoom<=.14;P.m.visible=!fpv;
 if(fpv){C.position.set(pp.x-sn*.12,1.58,pp.z-cs*.12);C.lookAt(pp.x-sn*6,1.45+6*Math.tan(pitch),pp.z-cs*6)}else{dz*=zoom;dy=ly+(dy-ly)*zoom;C.position.set(cx+sn*dz,dy,cz+cs*dz);C.lookAt(cx-sn*fw,ly+fw*Math.tan(pitch),cz-cs*fw)}
@@ -574,12 +576,12 @@ rcp.onclick=async()=>{const c=net.code||"";if(!c)return;try{await navigator.clip
 setInterval(()=>{if(net.mode!=="guest"||net.slot===undefined)return;const[x,z]=inp(),r=v=>Math.round(v*100)/100;send(net.gdc,{t:"in",d:{x:r(x),z:r(z),ya:r(lookA())}})},100);
 const how=document.createElement("div");how.id="how";
 how.innerHTML="<div class='tbs'><button data-t='0' class='on'>규칙</button><button data-t='1'>조작</button><button data-t='2'>모드·설정</button></div>"+
-"<ul class='on' data-p='0'><li>상대 팀을 모두 외야로 보내면 승리!</li><li>시작은 점프볼: 공이 꼭대기일 때 점프 버튼을 눌러요. 타이밍이 좋을수록 높이 뛰어요.</li><li>공을 잡으면 던지기로 적을 맞히거나 패스로 팀원에게 넘겨요.</li><li>맞으면 상대 코트 뒤와 옆의 외야로 나가요. 코트 밖으로 나간 공은 외야가 줍고, 외야가 없으면 내야가 가져가요.</li><li>잡기: 날아오는 공이나 패스를 타이밍 맞춰 받아낼 수 있어요(패스 가로채기).</li><li>점프: 낮게 날아오는 공을 뛰어넘어 피할 수 있어요(짐볼은 못 피해요). 한 번 뛰면 1.6초 뒤에 다시 뛸 수 있어요.</li></ul>"+
+"<ul class='on' data-p='0'><li>상대 팀을 모두 외야로 보내면 승리!</li><li>시작은 점프볼: 공이 꼭대기일 때 점프 버튼을 눌러요. 타이밍이 좋을수록 높이 뛰어요.</li><li>공을 잡으면 던지기로 적을 맞히거나 패스로 팀원에게 넘겨요.</li><li>맞으면 상대 코트 뒤와 옆의 외야로 나가요. 코트 밖으로 나간 공은 외야가 줍고, 외야가 없으면 내야가 가져가요.</li><li>잡기: 날아오는 공이나 패스를 타이밍 맞춰 받아낼 수 있어요(패스 가로채기). 상대 패스가 몸에 맞으면 그 사람도 아웃이에요. 점프로 뛰어넘으면 피해요.</li><li>점프: 낮게 날아오는 공을 뛰어넘어 피할 수 있어요(짐볼은 못 피해요). 한 번 뛰면 1.6초 뒤에 다시 뛸 수 있어요.</li></ul>"+
 "<ul data-p='1'><li>이동: 왼쪽 화면을 누르고 밀기 (PC: WASD)</li><li>시점 회전: 오른쪽 화면 밀기 (PC: ←/→)</li><li>던지기: 빨간 조준선을 적에게 맞추고 던져요. 꾹 누르면 더 세고 빠르게 날아가고, 누른 채 밀면 조준이 움직여요. 위로 조준하면 머리 위로 넘어가고, 아래로 조준하면 바닥에 먼저 떨어져요. (PC: 스페이스)</li><li>패스: 공을 들면 아래에 팀원 원이 떠요. 파랑=내야, 주황=외야. 원을 누르면 그 사람에게, 패스 버튼은 하얀 링의 팀원에게 가요. (PC: E)</li><li>잡기 (PC: F), 점프 (PC: Q)</li><li>확대/축소: 오른쪽 위 ＋/－ 버튼, 두 손가락 모으기/벌리기, 마우스 휠. 끝까지 확대하면 1인칭이에요.</li><li>감정표현: 오른쪽 위 😊 버튼 (PC: 숫자 1~8)</li></ul>"+
 "<ul data-p='2'><li>팀 인원은 1:1부터 6:6까지예요. AI 버튼으로 AI를 끌 수 있어요(친구와 방을 만들었을 때만, 양 팀에 친구가 있어야 해요).</li><li>라운드: 1, 3, 5, 7판 중에 골라요. 먼저 과반을 이기면 승리예요.</li><li>왕 피구: 팀마다 한 명이 왕관을 써요(상대에게는 안 보여요). 왕이 맞으면 그 팀이 져요.</li><li>짐볼 피구: 공이 3배로 크고, 든 사람은 느려지고, 던지는 속도도 느려져요.</li><li>공 2개 피구: 공이 두 개예요. 공 버튼은 첫 번째 공, 공2 버튼은 두 번째 공이고, 이 모드에서만 짐볼을 고를 수 있어요. 점프볼에서 진 팀은 두 번째 공으로 시작해요. 한 사람이 공 두 개를 양손에 들 수 있고, 두 개를 든 채 던지면 느려요. 짐볼은 다른 공과 같이 못 들어요.</li></ul>";
 const sz=document.createElement("div");sz.id="sz";
 sz.innerHTML='팀 인원 <button id="szm" aria-label="인원 줄이기">−</button> <b id="szv">3</b> <button id="szp" aria-label="인원 늘리기">+</button> 명씩 <button id="aib">AI 켜짐</button>';
-how.style.display="none";const hb=document.createElement("button");hb.id="hb";hb.textContent="게임 설명";hb.onclick=()=>{const o=how.style.display==="none";how.style.display=o?"block":"none";hb.textContent=o?"설명 닫기":"게임 설명"};ov.insertBefore(hb,rc);ov.insertBefore(how,rc);ov.insertBefore(sz,rc);const nk=document.createElement("input");nk.id="nk";nk.maxLength=6;nk.placeholder="닉네임(최대 6자)";nk.autocomplete="off";ov.insertBefore(nk,rc);const tm=document.createElement("div");tm.id="tm";tm.innerHTML='참가할 팀 <button id="tm0" class="on">방장 팀</button><button id="tm1">상대 팀</button>';ov.insertBefore(tm,rc);net.want=0;
+how.style.display="none";const hb=document.createElement("button");hb.id="hb";hb.textContent="게임 설명";hb.onclick=()=>{const o=how.style.display==="none";how.style.display=o?"block":"none";hb.textContent=o?"설명 닫기":"게임 설명"};ov.insertBefore(hb,rc);ov.insertBefore(how,rc);ov.insertBefore(sz,rc);const nk=document.createElement("input");nk.id="nk";nk.maxLength=6;nk.placeholder="닉네임(최대 6자)";nk.autocomplete="off";ov.insertBefore(nk,rc);const tm=document.createElement("div");tm.id="tm";tm.innerHTML='팀 <button id="tm0" class="on">방장 팀</button><button id="tm1">상대 팀</button>';ov.insertBefore(tm,rc);net.want=0;
 tm0.onclick=()=>{net.want=0;tm0.className="on";tm1.className=""};tm1.onclick=()=>{net.want=1;tm1.className="on";tm0.className=""};
 const chg=v=>{N=Math.max(1,Math.min(6,N+v));szv.textContent=N};
 szm.onclick=()=>chg(-1);szp.onclick=()=>chg(1);
@@ -595,7 +597,7 @@ S.add(apx);apx.visible=false;
 const PAL=[0x00e5ff,0xffd60a,0xb388ff,0x69f0ae,0xff9100];
 function mark(c,i,name){if(c.mk&&c.mk.n===name)return;if(c.mk)c.m.remove(c.mk.g);const col=PAL[i%5],g=new THREE.Group();
 const cv=document.createElement("canvas");cv.width=256;cv.height=64;const x=cv.getContext("2d");x.font="bold 34px sans-serif";x.textAlign="center";x.lineWidth=7;x.strokeStyle="#0a1a2b";x.strokeText(name,128,44);x.fillStyle="#"+col.toString(16).padStart(6,"0");x.fillText(name,128,44);
-const sp=new THREE.Sprite(new THREE.SpriteMaterial({map:new THREE.CanvasTexture(cv),depthTest:false,transparent:true}));sp.scale.set(2.4,.6,1);sp.position.y=2.4;g.add(sp);c.m.add(g);c.mk={g,n:name}}
+const sp=new THREE.Sprite(new THREE.SpriteMaterial({map:new THREE.CanvasTexture(cv),depthTest:false,transparent:true,opacity:.45}));sp.scale.set(2.4,.6,1);sp.position.y=2.4;g.add(sp);c.m.add(g);c.mk={g,n:name}}
 const mkRoom=()=>{const a="ABCDEFGHJKLMNPQRSTUVWXYZ23456789";return Array.from({length:4},()=>a[Math.random()*a.length|0]).join("")};
 const cleanCode=()=>(rc.value||"").toUpperCase().replace(/[^A-Z0-9]/g,"").slice(0,8);
 const allRdy=()=>Object.values(net.slots).every(k=>net.rdy&&net.rdy[k]);
@@ -694,9 +696,9 @@ mdb.onclick=()=>{gmode=(gmode+1)%GMODES.length;mdb.textContent="모드: "+GMODES
 rc.placeholder="방 코드 (친구 방에 참가할 때 입력)";
 const c1=card("cdSt"),c2=card("cdSet","게임 설정"),c3=card("cdMe","내 캐릭터"),tl=el("div","tl"),og=el("div","og"),rw=el("div","rw");
 [c1,c2,c3,tl].forEach(x=>ov.insertBefore(x,ms));
-c1.append(rc,lb);
+c1.append(rc,lb);const jr=el("div","jr");jr.append(js,tm);lb.append(jr);
 [mdb,rnb,mpb,blb,b2b].forEach(b=>b.classList.add("opt"));og.append(mdb,rnb,mpb,blb,b2b);c2.append(sz,og);
-cmb.classList.add("opt");rw.append(nk,cmb);c3.append(rw,tm);
+cmb.classList.add("opt");rw.append(nk,cmb);c3.append(rw);
 tl.append(hb,lsb);
 ov.insertBefore(how,ms);
 how.addEventListener("click",e=>{const b=e.target.closest("[data-t]");if(!b)return;how.querySelectorAll("[data-t]").forEach(x=>x.classList.toggle("on",x===b));how.querySelectorAll("[data-p]").forEach(u=>u.classList.toggle("on",u.dataset.p===b.dataset.t))})}
