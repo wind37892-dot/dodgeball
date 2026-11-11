@@ -198,6 +198,8 @@ canvas{display:block;position:fixed;inset:0}
 #tut{position:fixed;z-index:15;left:50%;top:calc(6px + env(safe-area-inset-top,0px));left:calc(80px + env(safe-area-inset-left,0px));transform:none;width:calc(100vw - 160px);max-width:300px;box-sizing:border-box;background:rgba(8,21,34,.86);border-radius:14px;padding:10px 14px;text-align:center;color:#fff;font-family:"Apple SD Gothic Neo","Noto Sans KR",sans-serif;line-height:1.4}
 #tut small{display:block;font-size:12px;opacity:.6}
 #tut b{display:block;font-size:17px;margin:2px 0}#tut b.td{color:var(--acc)}
+@keyframes hlp{0%,100%{box-shadow:0 0 0 3px #fff,0 0 0 8px rgba(255,255,255,.35)}50%{box-shadow:0 0 0 5px #fff,0 0 0 16px rgba(255,255,255,.12)}}
+.hl{animation:hlp 1s ease-in-out infinite;z-index:12}
 #tut span{display:block;font-size:13px;opacity:.85;white-space:pre-line;word-break:keep-all;line-height:1.6}
 #tut button{margin-top:8px;border:0;border-radius:999px;background:rgba(255,255,255,.16);color:#fff;font:inherit;font-size:12px;padding:5px 12px}
 @media (orientation:landscape){#tut{top:calc(8px + env(safe-area-inset-top,0px));width:min(300px,46vw);max-width:none;left:auto;right:calc(110px + env(safe-area-inset-right,0px));transform:none}}
@@ -516,6 +518,7 @@ function jmpStep(c,dt){if(c.jc>0)c.jc-=dt;if(c.jt>0){c.jt+=dt;const u=Math.min(1
 function doJump(){if(!run)return;if(net.mode==="guest"){if(!J.on&&P.jc<=0)P.jc=1.2;act("j");return}startJmp(P)}
 function doCatch(){if(!run)return;if(net.mode==="guest"){if(!P.out&&P.cc<=0){P.cw=.45;P.cc=3;act("c")}return}if(!P.out&&P.cc<=0){P.cw=.45;P.cc=3}}
 const K={};addEventListener("keydown",e=>{K[e.code]=1;if(e.code==="Space"){e.preventDefault();if(!e.repeat)chargeStart()}if(e.code==="KeyE")doPass();if(e.code==="KeyF")doCatch();if(e.code==="KeyQ")doJump();if(/^Digit[1-8]$/.test(e.code))doEmote(+e.code.slice(5));if(e.code==="Equal"||e.code==="NumpadAdd")zs(.8);if(e.code==="Minus"||e.code==="NumpadSubtract")zs(1/.8)});addEventListener("keyup",e=>{K[e.code]=0;if(e.code==="Space")chargeEnd()});
+addEventListener("pointerdown",e=>{if(e.pointerType==="mouse"&&e.button===0&&(e.target===pad||e.target===cam)){e.stopPropagation();e.preventDefault();chargeStart()}},true);addEventListener("pointerup",e=>{if(e.pointerType==="mouse"&&e.button===0)chargeEnd()},true);
 let jx=0,jz=0,ox=0,oy=0,pid=null;
 pad.addEventListener("pointerdown",e=>{pid=e.pointerId;ox=e.clientX;oy=e.clientY;pad.setPointerCapture(pid);jset(ox,oy,ox,oy,1)});
 pad.addEventListener("pointermove",e=>{if(e.pointerId!==pid)return;let x=(e.clientX-ox)/52,z=(e.clientY-oy)/52;const l=Math.hypot(x,z);if(l>1){x/=l;z/=l}jx=l<.12?0:x;jz=l<.12?0:z;jset(ox,oy,ox+x*52,oy+z*52,1)});
@@ -561,9 +564,10 @@ function nextRound(){if(RW<0)return;RI++;RW=-1;net.e=0;if(net.mode==="host"){net
 function end(win){sfxEnd(win);emp.style.display="none";run=false;net.e=win?1:2;ov.style.display="flex";lb.style.display=net.mode==="solo"?"flex":"none";if(net.mode==="host"){net.rdy={};upd()}else ms.textContent="";if(net.mode==="guest"){net.rd=0;rd.textContent="준비하기";rd.style.display="inline-block"}lob.style.display="block";if(net.mode==="solo")[hs,js,lsb,cmb,hb,upb,tub,sz,nk,rc,tm,how,cdMe].forEach(e=>e.style.display="none");ov.querySelector("h1").textContent=(win?"승리!":"패배")+(RN>1?" "+SC[P.team===1?1:0]+" : "+SC[P.team===1?0:1]:"");ov.querySelector("h1").style.color=win?"#5dff9a":"#ff6b7a";ov.querySelector("p").style.display="none";go.textContent="다시 하기"}
 const W=(el,k,v)=>{const c=el._c||(el._c={});if(c[k]!==v){c[k]=v;if(k==="t")el.textContent=v;else el.style[k]=v}};
 /* 업데이트 내용(문장은 "~ 추가/가능/불가/수정/표시" 명사형 한 가지 말투로 통일): 새 버전은 UPD 맨 앞에(새 버전이면 처음 들어올 때 자동으로 한 번 뜸) {v:"3.1",d:"날짜 시간",s:[{h:"소제목",t:["요점",...]}]} 으로 추가 */
-const UPD=[{v:"3.1",d:"2026.11.11 21:45",s:[
+const UPD=[{v:"3.1",d:"2026.11.11 23:19",s:[
 {h:"튜토리얼",t:["로비에 튜토리얼 추가","이동, 시점, 확대·축소, 던지기, 패스, 점프, 잡기 7단계 안내"]},
 {h:"방",t:["라운드 종료 시 승리·패배 및 점수 표시","방 코드 입력칸 옆에 참가 버튼 추가","접속에 실패해도 입력한 방 코드 유지"]},
+{h:"조작",t:["PC에서 마우스 왼쪽 클릭으로 던지기 가능","PC 시점 위아래 조작을 방향키 ↑/↓로 변경"]},
 {h:"문의",t:["개발자에게 문의 보내기 추가","로비, 방 대기, 게임 종료 화면 왼쪽 위에서 이용 가능"]},
 {h:"화면",t:["나가기 버튼과 점수가 겹치는 문제 수정","확대·축소 버튼 삭제 (두 손가락 벌리기·모으기로 조절)","아이폰에서 화면이 확대되는 문제 수정"]}
 ]},{v:"3.0",d:"2026.11.11 02:27",s:[
@@ -590,15 +594,15 @@ let tS=0,tNext=0,tRel=0,tY0=0,tZ0=1,tP0={x:0,z:0};
 const angd=(a,b)=>Math.abs(Math.atan2(Math.sin(a-b),Math.cos(a-b)));
 function tLaunch(){if(!T.some(c=>c.team===1&&!c.out)){const en=T.filter(c=>c.team===1);en.forEach((c,i)=>{c.out=0;const x=(i-(en.length-1)/2)*Math.min(7,10/en.length);c.m.position.set(x,0,-6);c.tx=x;c.tz=-6;c.cd=1})}const e=T.find(c=>c.team===1&&!c.out);if(!e)return;selB(0);give(e);shoot(e,P,9,0);tRel=performance.now()}
 const TSP=[
-{t:"이동해 보세요",s:"왼쪽 화면을 누른 채 밀어요 (PC: WASD)",ok:()=>Math.hypot(P.m.position.x-tP0.x,P.m.position.z-tP0.z)>3},
-{t:"시점을 돌려 보세요",s:"오른쪽 화면을 좌우로 돌려요 (PC: ← →)",ok:()=>angd(yaw,tY0)>.6},
+{t:"이동해 보세요",hl:"jb",s:"왼쪽 화면을 누른 채 밀어요 (PC: WASD)",ok:()=>Math.hypot(P.m.position.x-tP0.x,P.m.position.z-tP0.z)>3},
+{t:"시점을 돌려 보세요",s:"오른쪽 화면을 좌우, 위아래로 돌려요 (PC: ←/→ 좌우, ↑/↓ 위아래)",ok:()=>angd(yaw,tY0)>.6},
 {t:"확대·축소해 보세요",s:"오른쪽 화면에서 두 손가락을 벌리거나 모아요 (PC: 마우스 휠, +/-)",ok:()=>Math.abs(Math.log(zoom/tZ0))>.3},
-{t:"공을 던져 보세요",np:1,s:"빨간 조준선을 상대에게 맞추고 던지기 버튼! 꾹 누르면 더 세게 날아가요 (PC: 스페이스)",in:()=>{selB(0);give(P)},ok:()=>B.st==="fly"&&B.thr===P},
-{t:"패스해 보세요",nt:1,s:"원이 표시된 팀원에게 가요. 패스 버튼을 누르면 공이 넘어가요 (PC: E)",in:()=>{selB(0);give(P)},ok:()=>B.st==="fly"&&B.kind==="p"},
-{t:"점프해 보세요",s:"점프 버튼! 낮게 날아오는 공을 뛰어넘어 피해요 (PC: Q)",ok:()=>P.jc>0},
-{t:"공을 잡아 보세요",s:"연습용 공이 날아와요. 타이밍 맞춰 잡기 버튼! (PC: F)",in:tLaunch,ok:()=>{const n=performance.now();const hp=hk(P)>=0;if(hp&&(P.cw>0||P.ct>0)){tPend=0;return true}if(tPend){if(n>=tPend){tPend=0;tLaunch();tTxt(TSP[tS].s)}else tTxt("못 잡았어요! "+Math.ceil((tPend-n)/1000)+"초 뒤에 다시 날아와요");return false}if(n-tRel>700&&P.cc<=0&&(B.st==="loose"||hp||(B.st==="held"&&B.h!==P)))tPend=n+3000;return false}}
+{t:"공을 던져 보세요",np:1,hl:"thr",s:"빨간 조준선을 상대에게 맞추고 던지기 버튼! 꾹 누르면 더 세게 날아가요 (PC: 스페이스 또는 마우스 왼쪽 클릭)",in:()=>{selB(0);give(P)},ok:()=>B.st==="fly"&&B.thr===P},
+{t:"패스해 보세요",nt:1,hl:"pss",s:"원이 표시된 팀원에게 가요. 패스 버튼을 누르면 공이 넘어가요 (PC: E)",in:()=>{selB(0);give(P)},ok:()=>B.st==="fly"&&B.kind==="p"},
+{t:"점프해 보세요",hl:"jmp",s:"점프 버튼! 낮게 날아오는 공을 뛰어넘어 피해요 (PC: Q)",ok:()=>P.jc>0},
+{t:"공을 잡아 보세요",hl:"ctc",s:"연습용 공이 날아와요. 타이밍 맞춰 잡기 버튼! (PC: F)",in:tLaunch,ok:()=>{const n=performance.now();const hp=hk(P)>=0;if(hp&&(P.cw>0||P.ct>0)){tPend=0;return true}if(tPend){if(n>=tPend){tPend=0;tLaunch();tTxt(TSP[tS].s)}else tTxt("못 잡았어요! "+Math.ceil((tPend-n)/1000)+"초 뒤에 다시 날아와요");return false}if(n-tRel>700&&P.cc<=0&&(B.st==="loose"||hp||(B.st==="held"&&B.h!==P)))tPend=n+3000;return false}}
 ];
-function tRender(done){const st=TSP[tS];tut.style.display="block";if(!st){tut.innerHTML="<b class='td'>튜토리얼 완료!</b><span>이제 로비에서 게임을 시작해 보세요</span><button id='tx'>로비로</button>"}else tut.innerHTML="<small>"+(tS+1)+" / "+TSP.length+"</small><b"+(done?" class='td'":"")+">"+(done?"✓ 좋아요!":st.t)+"</b><span>"+tf(st.s)+"</span><button id='tx'>끝내기</button>";tut.querySelector("#tx").onclick=()=>lob.onclick()}
+function tRender(done){const st=TSP[tS];document.querySelectorAll(".hl").forEach(e=>e.classList.remove("hl"));if(st&&!done&&st.hl){const e=document.getElementById(st.hl);if(e)e.classList.add("hl")}tut.style.display="block";if(!st){tut.innerHTML="<b class='td'>튜토리얼 완료!</b><span>이제 로비에서 게임을 시작해 보세요</span><button id='tx'>로비로</button>"}else tut.innerHTML="<small>"+(tS+1)+" / "+TSP.length+"</small><b"+(done?" class='td'":"")+">"+(done?"✓ 좋아요!":st.t)+"</b><span>"+tf(st.s)+"</span><button id='tx'>끝내기</button>";tut.querySelector("#tx").onclick=()=>lob.onclick()}
 const tf=x=>x.replace(/ (버튼)/g,"\u00a0$1").replace(/([.!?])\s+/g,"$1\n").replace(/\s*(\(PC:)/g,"\n$1");let tPend=0;function tTxt(m){m=tf(m);const x=tut.querySelector("span");if(x&&x.textContent!==m)x.textContent=m}
 function tHint(m){const x=tut.querySelector("span");if(x){x.textContent=m;setTimeout(()=>{if(TUT&&TSP[tS]&&TSP[tS].t==="공을 잡아 보세요"&&!tNext){const y=tut.querySelector("span");if(y)y.textContent=TSP[tS].s}},1500)}}
 function tEnter(){const st=TSP[tS];tPend=0;tP0={x:P.m.position.x,z:P.m.position.z};tY0=yaw;tZ0=zoom;if(st&&st.in)st.in();tRender(0)}
@@ -629,7 +633,7 @@ const mine=()=>BL.some(b=>b.st==="held"&&!!b.h&&(b.h===P||(net.mode==="guest"&&T
 const ag2=new THREE.Group();{const mt=new THREE.MeshBasicMaterial({color:0xffffff,transparent:true,opacity:.7,side:2,depthWrite:false}),l=new THREE.Mesh(new THREE.PlaneGeometry(.16,9),mt),t=new THREE.Mesh(new THREE.ConeGeometry(.26,.6,12),mt);l.rotation.x=-Math.PI/2;l.position.set(0,.08,-4.9);t.rotation.x=-Math.PI/2;t.position.set(0,.1,-9.6);ag2.add(l,t)}ag2.visible=false;S.add(ag2);
 function pui2(){ag2.visible=false;return;const h=run&&!(J.on&&!J.done)&&B.st==="held"&&B.h&&!mine()?B.h:null;let a=null;if(h){if(net.mode==="guest"){if(net.hh)a=net.ya||0}else if(h.pl)a=h.ya||0}ag2.visible=a!==null;if(a!==null){const p=h.m.position;ag2.position.set(p.x,0,p.z);ag2.rotation.y=a}}
 let last=performance.now();
-function loop(now){requestAnimationFrame(loop);const dt=Math.min((now-last)/1000,.05);last=now;selB(0);syncBall();if(K.ArrowLeft)yaw+=2*dt;if(K.ArrowRight)yaw-=2*dt;if(K.KeyT)pitch=Math.min(.7,pitch+1.2*dt);if(K.KeyG)pitch=Math.max(-.45,pitch-1.2*dt);
+function loop(now){requestAnimationFrame(loop);const dt=Math.min((now-last)/1000,.05);last=now;selB(0);syncBall();if(K.ArrowLeft)yaw+=2*dt;if(K.ArrowRight)yaw-=2*dt;if(K.ArrowUp)pitch=Math.min(.7,pitch+1.2*dt);if(K.ArrowDown)pitch=Math.max(-.45,pitch-1.2*dt);
 if(run&&net.mode!=="guest"){
 T.forEach(c=>{if(c.gone)return;const p=c.m.position,ox=p.x,oz=p.z;if(c.pl&&c!==P&&now-c.seen>4000)c.pl=0;if(J.on&&(c===J.bj||c===J.rj))return;jmpStep(c,dt);
 if(c.pl){let[x,z]=c===P?inp():[c.rx||0,c.rz||0];const l=Math.hypot(x,z);if(l>1){x/=l;z/=l}
@@ -679,7 +683,7 @@ setInterval(()=>{if(net.mode!=="guest"||net.slot===undefined)return;const[x,z]=i
 const how=document.createElement("div");how.id="how";
 how.innerHTML="<div class='tbs'><button data-t='0' class='on'>규칙</button><button data-t='1'>조작</button><button data-t='2'>모드·설정</button></div>"+
 "<ul class='on' data-p='0'><li>상대 팀을 모두 외야로 보내면 승리!</li><li>시작은 점프볼: 공이 꼭대기일 때 점프 버튼을 눌러요. 타이밍이 좋을수록 높이 뛰어요.</li><li>공을 잡으면 던지기로 적을 맞히거나 패스로 팀원에게 넘겨요.</li><li>맞으면 상대 코트 뒤와 옆의 외야로 나가요(들고 있던 공은 그 자리에 떨어져요). 코트 밖으로 나간 공은 외야가 줍고, 외야가 없으면 내야가 가져가요.</li><li>잡기: 날아오는 공이나 패스를 타이밍 맞춰 받아낼 수 있어요(패스 가로채기). 상대 패스가 몸에 맞으면 그 사람도 아웃이에요. 점프로 뛰어넘으면 피해요. 점프볼 직후 첫 패스는 맞아도 아웃이 아니에요.</li><li>점프: 낮게 날아오는 공을 뛰어넘어 피할 수 있어요(짐볼은 못 피해요). 한 번 뛰면 1.2초 뒤에 다시 뛸 수 있어요.</li></ul>"+
-"<ul data-p='1'><li>이동: 왼쪽 화면을 누르고 밀기 (PC: WASD)</li><li>시점 회전: 오른쪽 화면 밀기 (PC: ←/→)</li><li>던지기: 빨간 조준선을 적에게 맞추고 던져요. 꾹 누르면 더 세고 빠르게 날아가고, 누른 채 밀면 조준이 움직여요. 위로 조준하면 머리 위로 넘어가고, 아래로 조준하면 바닥에 먼저 떨어져요. (PC: 스페이스)</li><li>패스: 공을 들면 아래에 팀원 원이 떠요. 파랑=내야, 주황=외야. 원을 누르면 그 사람에게, 패스 버튼은 하얀 링의 팀원에게 가요. (PC: E)</li><li>잡기 (PC: F), 점프 (PC: Q)</li><li>확대/축소: 오른쪽 화면에서 두 손가락 모으기/벌리기 (PC: 마우스 휠). 끝까지 확대하면 1인칭이에요.</li><li>감정표현: 오른쪽 위 😊 버튼 (PC: 숫자 1~8)</li></ul>"+
+"<ul data-p='1'><li>이동: 왼쪽 화면을 누르고 밀기 (PC: WASD)</li><li>시점 회전: 오른쪽 화면 밀기 (PC: ←/→)</li><li>던지기: 빨간 조준선을 적에게 맞추고 던져요. 꾹 누르면 더 세고 빠르게 날아가고, 누른 채 밀면 조준이 움직여요. 위로 조준하면 머리 위로 넘어가고, 아래로 조준하면 바닥에 먼저 떨어져요. (PC: 스페이스 또는 마우스 왼쪽 클릭)</li><li>패스: 공을 들면 아래에 팀원 원이 떠요. 파랑=내야, 주황=외야. 원을 누르면 그 사람에게, 패스 버튼은 하얀 링의 팀원에게 가요. (PC: E)</li><li>잡기 (PC: F), 점프 (PC: Q)</li><li>확대/축소: 오른쪽 화면에서 두 손가락 모으기/벌리기 (PC: 마우스 휠). 끝까지 확대하면 1인칭이에요.</li><li>감정표현: 오른쪽 위 😊 버튼 (PC: 숫자 1~8)</li></ul>"+
 "<ul data-p='2'><li>팀 인원은 1:1부터 6:6까지예요. AI 버튼으로 AI를 끌 수 있어요(친구와 방을 만들었을 때만, 양 팀에 친구가 있어야 해요).</li><li>라운드: 1, 3, 5, 7판 중에 골라요. 먼저 과반을 이기면 승리예요.</li><li>왕 피구: 팀마다 한 명이 왕관을 써요(상대에게는 안 보여요). 왕이 맞으면 그 팀이 져요.</li><li>짐볼 피구: 공이 3배로 크고, 든 사람은 느려지고, 던지는 속도도 느려져요.</li><li>공 2개 피구: 공이 두 개예요. 공 버튼은 첫 번째 공, 공2 버튼은 두 번째 공이고, 이 모드에서만 짐볼을 고를 수 있어요. 점프볼에서 진 팀은 두 번째 공으로 시작해요. 한 사람이 공 두 개를 양손에 들 수 있고, 두 개를 든 채 던지면 느려요. 짐볼은 다른 공과 같이 못 들어요.</li><li>방에 들어온 친구는 준비하기 전에 팀 바꾸기 버튼으로 팀을 옮길 수 있어요. 대기 화면에서 두 팀의 이름과 준비 상태(✓)를 볼 수 있어요.</li><li>공이 3초 넘게 바닥에 방치되면 화면에 노란 화살표가 떠서 공 방향을 알려 줘요.</li><li>게임 중에는 왼쪽 위 나가기 버튼을 두 번 눌러 로비로 돌아갈 수 있어요.</li></ul>";
 const sz=document.createElement("div");sz.id="sz";
 sz.innerHTML='팀 인원 <button id="szm" aria-label="인원 줄이기">−</button> <b id="szv">3</b> <button id="szp" aria-label="인원 늘리기">+</button> 명씩 <button id="aib">AI 켜짐</button>';
