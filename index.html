@@ -180,7 +180,13 @@ canvas{display:block;position:fixed;inset:0}
 #ldg{position:fixed;inset:0;z-index:50;background:var(--bg);color:var(--ink);display:flex;align-items:center;justify-content:center;font-size:20px}
 #ov>p:empty{display:none}
 .bar{position:fixed;z-index:14;display:none;pointer-events:none;font-size:34px;line-height:1;color:var(--acc);text-shadow:0 2px 8px rgba(0,0,0,.8)}
-#upb,#tub{border:2px solid var(--acc);background:transparent;color:inherit;border-radius:999px;font:inherit;font-size:15px;padding:8px 16px}
+#upb,#tub,#qb{border:2px solid var(--acc);background:transparent;color:inherit;border-radius:999px;font:inherit;font-size:15px;padding:8px 16px}
+#qm{position:fixed;inset:0;z-index:60;display:none;align-items:center;justify-content:center;background:rgba(0,0,0,.6)}
+#qm .upc{width:min(360px,92vw);box-sizing:border-box;background:#14263a;border-radius:16px;padding:16px 18px;text-align:left;font-family:"Apple SD Gothic Neo","Noto Sans KR",sans-serif;font-size:14px;line-height:1.5;color:var(--ink)}
+#qm h2{margin:0 0 4px;font-size:18px;color:var(--acc)}#qm p{margin:0 0 10px;font-size:13px;opacity:.7}
+#qm textarea{display:block;width:100%;box-sizing:border-box;height:140px;resize:none;font:inherit;font-size:16px;padding:10px;border-radius:12px;border:2px solid #fff;background:transparent;color:inherit}
+#qm .qr{display:flex;gap:8px;margin-top:12px;justify-content:flex-end;align-items:center}#qm .qr span{flex:1;font-size:13px}
+#qm button{border:0;border-radius:999px;background:var(--acc);color:#10243a;font:inherit;font-size:15px;padding:10px 22px}#qm button.o{background:transparent;border:2px solid var(--acc);color:inherit;padding:8px 18px}#qm button:disabled{opacity:.5}
 #upm{position:fixed;inset:0;z-index:60;display:none;align-items:center;justify-content:center;background:rgba(0,0,0,.6)}
 #upm .upc{width:min(360px,92vw);max-height:82vh;display:flex;flex-direction:column;overflow:hidden;box-sizing:border-box;background:#14263a;border-radius:16px;padding:16px 18px;text-align:left;font-family:"Apple SD Gothic Neo","Noto Sans KR",sans-serif;font-size:14px;line-height:1.5;color:var(--ink)}
 #upm .upl{flex:1;min-height:0;overflow-y:auto}
@@ -206,7 +212,8 @@ canvas{display:block;position:fixed;inset:0}
 #ov{overflow-x:hidden;overflow-x:clip;touch-action:pan-y;overscroll-behavior:contain}
 body.nr #pad,body.nr #cam,body.nr #jb,body.nr #jk,body.nr #pss,body.nr #ctc,body.nr #jmp,body.nr #vw,body.nr #zi,body.nr #zo,body.nr #em,body.nr #thr,body.nr #pcs,body.nr #cdn,body.nr #kb{visibility:hidden}
 html,body{-webkit-text-size-adjust:100%}
-.tl #tub,.tl #hb,.tl #lsb,.tl #upb{padding:8px 12px;font-size:14px}
+.tl{gap:8px}.tl #tub,.tl #hb,.tl #lsb,.tl #upb{padding:8px 12px;font-size:14px}
+#qb{position:fixed;z-index:20;top:calc(10px + env(safe-area-inset-top,0px));left:calc(12px + env(safe-area-inset-left,0px));padding:6px 14px;font-size:14px;background:rgba(10,24,38,.7);display:none}
 </style></head><body><div id="ldg">불러오는 중…</div><script>setTimeout(function(){var d=document.getElementById("ldg");if(d&&d.style.display!=="none"&&d.textContent.indexOf("돌아가는")<0){d.innerHTML="인터넷 연결이 느리거나 끊겼어요.<br>연결을 확인하고 다시 불러와 주세요.<br><button onclick='location.reload()' style='margin-top:16px;border:0;border-radius:999px;padding:12px 22px;font:inherit;font-size:16px'>새로고침</button>";d.style.textAlign="center";d.style.flexDirection="column"}},8000)</script>
 <div id="hud"><span id="hp"></span><span id="rm"></span><span id="en"></span></div>
 <div id="rsc"><div class="rp" id="rsLeft"><small>우리</small> <b id="rsLn">0</b></div><div id="rsMid"></div><div class="rp" id="rsRight"><small>적</small> <b id="rsRn">0</b></div></div><div id="rbn"></div>
@@ -554,9 +561,10 @@ function nextRound(){if(RW<0)return;RI++;RW=-1;net.e=0;if(net.mode==="host"){net
 function end(win){sfxEnd(win);emp.style.display="none";run=false;net.e=win?1:2;ov.style.display="flex";lb.style.display=net.mode==="solo"?"flex":"none";if(net.mode==="host"){net.rdy={};upd()}else ms.textContent="";if(net.mode==="guest"){net.rd=0;rd.textContent="준비하기";rd.style.display="inline-block"}lob.style.display="block";if(net.mode==="solo")[hs,js,lsb,cmb,hb,upb,tub,sz,nk,rc,tm,how,cdMe].forEach(e=>e.style.display="none");ov.querySelector("h1").textContent=(win?"승리!":"패배")+(RN>1?" "+SC[P.team===1?1:0]+" : "+SC[P.team===1?0:1]:"");ov.querySelector("h1").style.color=win?"#5dff9a":"#ff6b7a";ov.querySelector("p").style.display="none";go.textContent="다시 하기"}
 const W=(el,k,v)=>{const c=el._c||(el._c={});if(c[k]!==v){c[k]=v;if(k==="t")el.textContent=v;else el.style[k]=v}};
 /* 업데이트 내용(문장은 "~ 추가/가능/불가/수정/표시" 명사형 한 가지 말투로 통일): 새 버전은 UPD 맨 앞에(새 버전이면 처음 들어올 때 자동으로 한 번 뜸) {v:"3.1",d:"날짜 시간",s:[{h:"소제목",t:["요점",...]}]} 으로 추가 */
-const UPD=[{v:"3.1",d:"2026.11.11 21:00",s:[
+const UPD=[{v:"3.1",d:"2026.11.11 21:45",s:[
 {h:"튜토리얼",t:["로비에 튜토리얼 추가","이동, 시점, 확대·축소, 던지기, 패스, 점프, 잡기 7단계 안내"]},
 {h:"방",t:["라운드 종료 시 승리·패배 및 점수 표시","방 코드 입력칸 옆에 참가 버튼 추가","접속에 실패해도 입력한 방 코드 유지"]},
+{h:"문의",t:["개발자에게 문의 보내기 추가","로비, 방 대기, 게임 종료 화면 왼쪽 위에서 이용 가능"]},
 {h:"화면",t:["나가기 버튼과 점수가 겹치는 문제 수정","확대·축소 버튼 삭제 (두 손가락 벌리기·모으기로 조절)","아이폰에서 화면이 확대되는 문제 수정"]}
 ]},{v:"3.0",d:"2026.11.11 02:27",s:[
 {h:"새 모드",t:["공 2개 피구 추가","공을 양손에 하나씩 들기 가능","공 두 개를 들고 던지면 속도 감소","공2 버튼으로 두 번째 공 종류 선택 가능"]},
@@ -566,6 +574,8 @@ const UPD=[{v:"3.1",d:"2026.11.11 21:00",s:[
 {h:"친구와 하기",t:["방에서 팀 바꾸기 가능","대기 화면에 팀 목록, 닉네임, 준비 ✓ 표시","방 대기 화면 정리, 로비로 돌아가기 추가","게임 중 나가기 버튼 추가"]},
 {h:"화면",t:["로비 카드 정리, 게임 설명 탭 추가","공이 없으면 던지기·패스 버튼 흐리게 표시","내 닉네임 숨김, 다른 사람 조준선 숨김","공이 3초 넘게 방치되면 화살표 표시","로딩 실패 안내 추가, 로비 좌우 흔들림 수정"]}
 ]}];
+const qb=document.createElement("button"),qm=document.createElement("div");qb.id="qb";qb.textContent="문의";qm.id="qm";document.body.appendChild(qm);document.body.appendChild(qb);setInterval(()=>{const v=ov.style.display!=="none"&&!document.body.classList.contains("cmo")&&ldg.style.display==="none"?"block":"none";if(qb.style.display!==v)qb.style.display=v},200);
+qb.onclick=()=>{qm.innerHTML="<div class='upc'><h2>문의하기</h2><p>불편한 점이나 건의 사항을 개발자에게 보내요</p><textarea id='qt' maxlength='500' placeholder='내용을 적어 주세요'></textarea><div class='qr'><span id='qs'></span><button class='o' id='qc'>닫기</button><button id='qg'>보내기</button></div></div>";qm.style.display="flex";const t=qm.querySelector("#qt"),g=qm.querySelector("#qg"),m=qm.querySelector("#qs");qm.querySelector("#qc").onclick=()=>{qm.style.display="none"};g.onclick=()=>{const v=t.value.trim();if(!v){m.textContent="내용을 적어 주세요.";return}g.disabled=true;m.textContent="보내는 중...";const nm=(nk.value||"").trim(),f=new URLSearchParams();f.set("entry.857298243",(nm?"["+nm+"] ":"")+v);fetch("https://docs.google.com/forms/d/e/1FAIpQLSdlZBakjlK0zwChvP48DP5U9pynlH4MT1kpf1ybkH9YeOxQiA/formResponse",{method:"POST",mode:"no-cors",body:f}).then(()=>{m.textContent="보냈어요. 고마워요!";t.value="";setTimeout(()=>{qm.style.display="none"},1200)}).catch(()=>{m.textContent="보내지 못했어요. 잠시 뒤 다시 해 주세요.";g.disabled=false})}};
 const upb=document.createElement("button"),upm=document.createElement("div");upb.id="upb";upb.textContent="업데이트";upm.id="upm";document.body.appendChild(upm);
 upb.onclick=()=>{upm.innerHTML="<div class='upc'><div class='upl'>"+UPD.map(u=>"<h2>"+u.v+" 버전 업데이트<small>"+(u.d||"")+"</small></h2>"+u.s.map(g=>"<h3>"+g.h+"</h3><ul>"+g.t.map(x=>"<li>"+x+"</li>").join("")+"</ul>").join("")).join("")+"</div><button id='upx'>닫기</button></div>";upm.style.display="flex";upm.querySelector("#upx").onclick=closeUp};
 function closeUp(){upm.style.display="none";try{localStorage.setItem("pgUpSeen",UPD[0].v)}catch(e){}}
@@ -792,7 +802,7 @@ function closeCm(){cmOn=0;document.body.classList.remove("cmo");pvg.visible=fals
 function cmCam(now){pvc.rotation.y=Math.PI+Math.sin(now/900)*.9;if(innerWidth>innerHeight){C.position.set(82.6,1.05,4.4);C.lookAt(82.6,.95,0)}else{C.position.set(80,1.2,4.3);C.lookAt(80,-.3,0)}}
 mdb.onclick=()=>{gmode=(gmode+1)%GMODES.length;mdb.textContent="모드: "+GMODES[gmode];b2b.style.display=gmode===3?"":"none";if(gmode!==3){if(curBall===3)applyBall(0,1);if(curBall2===3)applyBall2(1,1)}};const rnTxt=()=>"라운드: "+RN+(RN>1?" ("+Math.ceil(RN/2)+"선승)":"");function setRn(v,sv){RN=v;rnb.textContent=rnTxt();if(sv)try{localStorage.setItem("pgRn",v)}catch(e){}}rnb.onclick=()=>setRn(RNS[(RNS.indexOf(RN)+1)%RNS.length],1);setRn(RN);cmb.onclick=openCm;mpb.onclick=()=>applyMap((curMap+1)%MAPS.length,1);applyMap(curMap);blb.onclick=()=>applyBall((curBall+1)%(gmode===3?BN.length:3),1);if(curBall===3)curBall=0;if(curBall2===3)curBall2=1;applyBall(curBall);b2b.onclick=()=>applyBall2((curBall2+1)%(gmode===3?BN.length:3),1);applyBall2(curBall2);
 {const el=(t,c,id)=>{const d=document.createElement(t);if(c)d.className=c;if(id)d.id=id;return d},card=(id,t)=>{const d=el("div","card",id);if(t){const h=el("h2");h.textContent=t;d.appendChild(h)}return d};
-rc.placeholder="방 코드 (친구 방에 참가할 때 입력)";{let v="";try{v=localStorage.getItem("pgRc")||""}catch(e){}if(!v&&/^pgRc:/.test(window.name))v=window.name.slice(5);if(v)rc.value=v}
+rc.placeholder="친구 방 코드 입력";{let v="";try{v=localStorage.getItem("pgRc")||""}catch(e){}if(!v&&/^pgRc:/.test(window.name))v=window.name.slice(5);if(v)rc.value=v}
 const c1=card("cdSt"),c2=card("cdSet","게임 설정"),c3=card("cdMe","내 캐릭터"),tl=el("div","tl"),og=el("div","og"),rw=el("div","rw");
 [c1,c2,c3,tl].forEach(x=>ov.insertBefore(x,ms));
 const cr=el("div","rw"),jsb=js,rcb=rc;jsb.textContent="참가";cr.append(rcb,jsb);c1.append(cr,lb);const jr=el("div","jr");jr.append(tm);lb.append(jr);rcb.addEventListener("keydown",e=>{if(e.key==="Enter")jsb.click()});
