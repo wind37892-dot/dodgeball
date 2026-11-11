@@ -198,7 +198,7 @@ canvas{display:block;position:fixed;inset:0}
 #tut{position:fixed;z-index:15;left:50%;top:calc(6px + env(safe-area-inset-top,0px));left:calc(80px + env(safe-area-inset-left,0px));transform:none;width:calc(100vw - 160px);max-width:300px;box-sizing:border-box;background:rgba(8,21,34,.86);border-radius:14px;padding:10px 14px;text-align:center;color:#fff;font-family:"Apple SD Gothic Neo","Noto Sans KR",sans-serif;line-height:1.4}
 #tut small{display:block;font-size:12px;opacity:.6}
 #tut b{display:block;font-size:17px;margin:2px 0}#tut b.td{color:var(--acc)}
-@keyframes hlp{0%,100%{box-shadow:0 0 0 3px #fff,0 0 0 8px rgba(255,255,255,.35)}50%{box-shadow:0 0 0 5px #fff,0 0 0 16px rgba(255,255,255,.12)}}
+@keyframes hlp{0%,100%{box-shadow:0 0 0 4px #ff3b5c;transform:scale(1)}50%{box-shadow:0 0 0 7px rgba(255,59,92,.55);transform:scale(1.05)}}
 .hl{animation:hlp 1s ease-in-out infinite;z-index:12}
 #tut span{display:block;font-size:13px;opacity:.85;white-space:pre-line;word-break:keep-all;line-height:1.6}
 #tut button{margin-top:8px;border:0;border-radius:999px;background:rgba(255,255,255,.16);color:#fff;font:inherit;font-size:12px;padding:5px 12px}
@@ -592,7 +592,8 @@ const tub=document.createElement("button");tub.id="tub";tub.textContent="튜토�
 const tut=document.createElement("div");tut.id="tut";tut.style.display="none";document.body.appendChild(tut);
 let tS=0,tNext=0,tRel=0,tY0=0,tZ0=1,tP0={x:0,z:0};
 const angd=(a,b)=>Math.abs(Math.atan2(Math.sin(a-b),Math.cos(a-b)));
-function tLaunch(){if(!T.some(c=>c.team===1&&!c.out)){const en=T.filter(c=>c.team===1);en.forEach((c,i)=>{c.out=0;const x=(i-(en.length-1)/2)*Math.min(7,10/en.length);c.m.position.set(x,0,-6);c.tx=x;c.tz=-6;c.cd=1})}const e=T.find(c=>c.team===1&&!c.out);if(!e)return;selB(0);give(e);shoot(e,P,9,0);tRel=performance.now()}
+function tRev(){if(!T.some(c=>c.team===1&&!c.out)){const en=T.filter(c=>c.team===1);en.forEach((c,i)=>{c.out=0;const x=(i-(en.length-1)/2)*Math.min(7,10/en.length);c.m.position.set(x,0,-6);c.tx=x;c.tz=-6;c.cd=1})}}
+function tLaunch(){tRev();const e=T.find(c=>c.team===1&&!c.out);if(!e)return;selB(0);give(e);shoot(e,P,9,0);tRel=performance.now()}
 const TSP=[
 {t:"이동해 보세요",hl:"jb",s:"왼쪽 화면을 누른 채 밀어요 (PC: WASD)",ok:()=>Math.hypot(P.m.position.x-tP0.x,P.m.position.z-tP0.z)>3},
 {t:"시점을 돌려 보세요",s:"오른쪽 화면을 좌우, 위아래로 돌려요 (PC: ←/→ 좌우, ↑/↓ 위아래)",ok:()=>angd(yaw,tY0)>.6},
@@ -600,7 +601,7 @@ const TSP=[
 {t:"공을 던져 보세요",np:1,hl:"thr",s:"빨간 조준선을 상대에게 맞추고 던지기 버튼! 꾹 누르면 더 세게 날아가요 (PC: 스페이스 또는 마우스 왼쪽 클릭)",in:()=>{selB(0);give(P)},ok:()=>B.st==="fly"&&B.thr===P},
 {t:"패스해 보세요",nt:1,hl:"pss",s:"원이 표시된 팀원에게 가요. 패스 버튼을 누르면 공이 넘어가요 (PC: E)",in:()=>{selB(0);give(P)},ok:()=>B.st==="fly"&&B.kind==="p"},
 {t:"점프해 보세요",hl:"jmp",s:"점프 버튼! 낮게 날아오는 공을 뛰어넘어 피해요 (PC: Q)",ok:()=>P.jc>0},
-{t:"공을 잡아 보세요",hl:"ctc",s:"연습용 공이 날아와요. 타이밍 맞춰 잡기 버튼! (PC: F)",in:tLaunch,ok:()=>{const n=performance.now();const hp=hk(P)>=0;if(hp&&(P.cw>0||P.ct>0)){tPend=0;return true}if(tPend){if(n>=tPend){tPend=0;tLaunch();tTxt(TSP[tS].s)}else tTxt("못 잡았어요! "+Math.ceil((tPend-n)/1000)+"초 뒤에 다시 날아와요");return false}if(n-tRel>700&&P.cc<=0&&(B.st==="loose"||hp||(B.st==="held"&&B.h!==P)))tPend=n+3000;return false}}
+{t:"공을 잡아 보세요",hl:"ctc",s:"연습용 공이 날아와요. 타이밍 맞춰 잡기 버튼! (PC: F)",in:tLaunch,ok:()=>{const n=performance.now();const hp=hk(P)>=0;if(hp&&(P.cw>0||P.ct>0)){tPend=0;return true}if(tPend){if(n>=tPend){tPend=0;tLaunch();tTxt(TSP[tS].s)}else tTxt("못 잡았어요! "+Math.ceil((tPend-n)/1000)+"초 뒤에 다시 날아와요");return false}if(n-tRel>700&&(B.st==="loose"||hp||(B.st==="held"&&B.h!==P))){tRev();const e=T.find(c=>c.team===1&&!c.out);if(e&&B.h!==e){selB(0);give(e)}tPend=n+3000+Math.max(0,P.cc)*1000}return false}}
 ];
 function tRender(done){const st=TSP[tS];document.querySelectorAll(".hl").forEach(e=>e.classList.remove("hl"));if(st&&!done&&st.hl){const e=document.getElementById(st.hl);if(e)e.classList.add("hl")}tut.style.display="block";if(!st){tut.innerHTML="<b class='td'>튜토리얼 완료!</b><span>이제 로비에서 게임을 시작해 보세요</span><button id='tx'>로비로</button>"}else tut.innerHTML="<small>"+(tS+1)+" / "+TSP.length+"</small><b"+(done?" class='td'":"")+">"+(done?"✓ 좋아요!":st.t)+"</b><span>"+tf(st.s)+"</span><button id='tx'>끝내기</button>";tut.querySelector("#tx").onclick=()=>lob.onclick()}
 const tf=x=>x.replace(/ (버튼)/g,"\u00a0$1").replace(/([.!?])\s+/g,"$1\n").replace(/\s*(\(PC:)/g,"\n$1");let tPend=0;function tTxt(m){m=tf(m);const x=tut.querySelector("span");if(x&&x.textContent!==m)x.textContent=m}
