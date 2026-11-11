@@ -17,7 +17,7 @@
 - 캐릭터 필드: m(3D 그룹), team, out, pl(사람이 조종하는지), cw/cc(잡기 창/쿨다운), rx/rz(원격 입력), seen(마지막 입력 시각), mk(이름표와 모자).
 - B = 공 상태. B.st: held(들고 있음, B.h) / fly(B.kind: t=던짐, p=패스) / loose(굴러감, B.rv) / jump(점프볼 중). 공 메시는 bm.
 - J = 점프볼 상태(카운트다운 cd, 경과 t, 누른 시각 tb/tr, 결과 문구 res).
-- 카메라: yaw(오른쪽 화면 드래그 또는 ←/→ 키로 회전), zoom(확대/축소: 우측 상단 ＋/－ 버튼, 오른쪽 화면 핀치, 마우스 휠, +/- 키), wide(넓은 시점, 버튼을 없애서 항상 0). 이동 입력은 카메라 기준(inp()).
+- 카메라: yaw(오른쪽 화면 드래그 또는 ←/→ 키로 회전), zoom(확대/축소: ＋/－ 버튼은 CSS로 숨김, 오른쪽 화면 핀치, 마우스 휠, +/- 키), wide(넓은 시점, 버튼을 없애서 항상 0). 이동 입력은 카메라 기준(inp()).
 
 ■ 멀티플레이(방장 권한 방식)
 - 방장 기기가 시뮬레이션을 전부 계산. 친구는 입력만 보내고 상태를 받아 그림. 친구는 방장 팀의 AI 자리(인덱스 1..N-1) 또는 상대 팀 자리(N..2N-1)를 골라 맡음(참가 시 metadata.team). 상대 팀 점프볼 대표도 사람이 될 수 있음.
@@ -57,7 +57,7 @@
 - 한 줄이 긴 압축된 코드 스타일이라, 이어서 개발하기 전에 포맷을 정리하면 편함.
 -->
 <html lang="ko"><head><meta charset="utf-8">
-<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
 <title>온라인 피구</title>
 <style>
 :root{--bg:#10243a;--ink:#f4f7fa;--acc:#ffb703;--panel:rgba(8,20,34,.82);box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
@@ -110,6 +110,7 @@ canvas{display:block;position:fixed;inset:0}
 .cr .nm{flex:1;text-align:center;font-size:15px}
 #cmp .bt{display:flex;gap:8px}#cmp .bt button{flex:1;border:0;border-radius:999px;background:var(--acc);color:#10243a;font:inherit;font-size:16px;padding:10px 0}#cmp .bt button.o{background:transparent;border:2px solid var(--acc);color:inherit}
 @media (orientation:landscape){#cmp{left:auto;top:0;width:48%;max-height:none;border-radius:18px 0 0 18px}}
+#vw{display:none!important}
 .cmo #kb,.cmo #hud,.cmo #pad,.cmo #cam,.cmo #cdn,.cmo #jb,.cmo #jk,.cmo #pss,.cmo #ctc,.cmo #jmp,.cmo #vw,.cmo #zi,.cmo #zo,.cmo #em,.cmo #emp,.cmo #thr,.cmo #pcs,.cmo #rd{display:none!important}
 #hb{border:2px solid var(--acc);border-radius:999px;background:transparent;color:inherit;font:inherit;font-size:14px;padding:8px 16px}
 #lob{border:2px solid var(--acc);border-radius:999px;background:transparent;color:inherit;font:inherit;font-size:15px;padding:12px 18px}
@@ -140,8 +141,9 @@ canvas{display:block;position:fixed;inset:0}
 #rsc .rp small{font-size:12px;opacity:.85}#rsc .rp b{font-size:20px}
 #rsLeft small{color:#4dc3ff}#rsRight small{color:#ff9aa8}
 #rsMid{align-self:center;font-size:13px;color:var(--acc);text-shadow:0 2px 8px rgba(0,0,0,.8)}
-#rbn{position:fixed;left:0;right:0;top:34%;text-align:center;font-size:38px;font-weight:800;color:var(--acc);text-shadow:0 4px 20px rgba(0,0,0,.6);display:none;pointer-events:none}
-@media (orientation:landscape){#rbn{top:26%;font-size:30px}}
+#rbn b{display:block;font-size:60px;line-height:1.1}#rbn b.w{color:#5dff9a}#rbn b.l{color:#ff6b7a}#rbn small{display:block;margin-top:4px;font-size:20px;color:#fff;font-weight:700}
+#rbn{position:fixed;left:0;right:0;top:30%;text-align:center;font-size:38px;font-weight:800;color:var(--acc);text-shadow:0 4px 20px rgba(0,0,0,.6);display:none;pointer-events:none}
+@media (orientation:landscape){#rbn{top:20%}#rbn b{font-size:46px}}
 #ob #aib.off{background:transparent;border:2px solid var(--acc);color:inherit}
 #mi{color:#fff;opacity:.85;font-size:14px}
 .cmo #rsc,.cmo #rbn{display:none!important}
@@ -149,7 +151,7 @@ canvas{display:block;position:fixed;inset:0}
 .card{width:min(360px,92vw);box-sizing:border-box;background:rgba(255,255,255,.08);border-radius:16px;padding:12px 14px;display:flex;flex-direction:column;gap:10px;align-items:center}
 .card h2{margin:0;align-self:flex-start;font:700 13px "Apple SD Gothic Neo","Noto Sans KR",sans-serif;opacity:.75}
 .card #rc,.card #nk{width:100%;box-sizing:border-box}
-.rw{display:flex;gap:8px;width:100%}.rw #nk{width:auto;flex:1;min-width:0}
+.rw{display:flex;gap:8px;width:100%}.rw #nk,.rw #rc{width:auto;flex:1;min-width:0}.rw #js{flex:none;font:inherit;font-weight:700;font-size:16px;padding:10px 20px;white-space:nowrap;border-radius:999px;background:var(--acc);border:2px solid var(--acc);color:#10243a}
 .og{display:grid;grid-template-columns:1fr 1fr;gap:8px;width:100%}
 .opt{border:0;border-radius:12px;background:rgba(255,255,255,.14);color:inherit;font:inherit;font-size:14px;padding:12px 8px;text-align:center;line-height:1.25}
 .opt:active{transform:scale(.97)}
@@ -178,7 +180,7 @@ canvas{display:block;position:fixed;inset:0}
 #ldg{position:fixed;inset:0;z-index:50;background:var(--bg);color:var(--ink);display:flex;align-items:center;justify-content:center;font-size:20px}
 #ov>p:empty{display:none}
 .bar{position:fixed;z-index:14;display:none;pointer-events:none;font-size:34px;line-height:1;color:var(--acc);text-shadow:0 2px 8px rgba(0,0,0,.8)}
-#upb{border:2px solid var(--acc);background:transparent;color:inherit;border-radius:999px;font:inherit;font-size:15px;padding:8px 16px}
+#upb,#tub{border:2px solid var(--acc);background:transparent;color:inherit;border-radius:999px;font:inherit;font-size:15px;padding:8px 16px}
 #upm{position:fixed;inset:0;z-index:60;display:none;align-items:center;justify-content:center;background:rgba(0,0,0,.6)}
 #upm .upc{width:min(360px,92vw);max-height:82vh;display:flex;flex-direction:column;overflow:hidden;box-sizing:border-box;background:#14263a;border-radius:16px;padding:16px 18px;text-align:left;font-family:"Apple SD Gothic Neo","Noto Sans KR",sans-serif;font-size:14px;line-height:1.5;color:var(--ink)}
 #upm .upl{flex:1;min-height:0;overflow-y:auto}
@@ -187,7 +189,13 @@ canvas{display:block;position:fixed;inset:0}
 #upm h3{margin:14px 0 4px;font-size:15px;font-weight:700;color:#fff}
 #upm ul{margin:0;padding-left:18px}#upm li{margin-bottom:3px;opacity:.85}
 #upm #upx{display:block;flex:none;margin:12px auto 0;border:0;border-radius:999px;background:var(--acc);color:#10243a;font:inherit;font-size:15px;padding:10px 28px}
-#ex{position:fixed;z-index:15;left:calc(10px + env(safe-area-inset-left,0px));top:calc(10px + env(safe-area-inset-top,0px));display:none;border:0;border-radius:999px;background:rgba(0,0,0,.4);color:#fff;font:inherit;font-size:13px;padding:7px 12px}
+#tut{position:fixed;z-index:15;left:50%;top:calc(6px + env(safe-area-inset-top,0px));left:calc(80px + env(safe-area-inset-left,0px));transform:none;width:calc(100vw - 160px);max-width:300px;box-sizing:border-box;background:rgba(8,21,34,.86);border-radius:14px;padding:10px 14px;text-align:center;color:#fff;font-family:"Apple SD Gothic Neo","Noto Sans KR",sans-serif;line-height:1.4}
+#tut small{display:block;font-size:12px;opacity:.6}
+#tut b{display:block;font-size:17px;margin:2px 0}#tut b.td{color:var(--acc)}
+#tut span{display:block;font-size:13px;opacity:.85}
+#tut button{margin-top:8px;border:0;border-radius:999px;background:rgba(255,255,255,.16);color:#fff;font:inherit;font-size:12px;padding:5px 12px}
+@media (orientation:landscape){#tut{top:calc(8px + env(safe-area-inset-top,0px));width:min(300px,46vw);max-width:none;left:auto;right:calc(110px + env(safe-area-inset-right,0px));transform:none}}
+#ex{position:fixed;z-index:15;left:calc(10px + env(safe-area-inset-left,0px));top:calc(54px + env(safe-area-inset-top,0px));display:none;border:0;border-radius:999px;background:rgba(0,0,0,.4);color:#fff;font:inherit;font-size:13px;padding:7px 12px}
 #ros{display:none;gap:10px;width:min(360px,92vw);box-sizing:border-box;background:rgba(255,255,255,.08);border-radius:16px;padding:10px 14px;margin:6px auto}
 #ros>div{flex:1;min-width:0}
 #ros h3{margin:0 0 4px;font:700 12px "Apple SD Gothic Neo","Noto Sans KR",sans-serif;opacity:.75}
@@ -197,6 +205,8 @@ canvas{display:block;position:fixed;inset:0}
 #ov{background:rgba(8,20,34,.72)}
 #ov{overflow-x:hidden;overflow-x:clip;touch-action:pan-y;overscroll-behavior:contain}
 body.nr #pad,body.nr #cam,body.nr #jb,body.nr #jk,body.nr #pss,body.nr #ctc,body.nr #jmp,body.nr #vw,body.nr #zi,body.nr #zo,body.nr #em,body.nr #thr,body.nr #pcs,body.nr #cdn,body.nr #kb{visibility:hidden}
+html,body{-webkit-text-size-adjust:100%}
+.tl #tub,.tl #hb,.tl #lsb,.tl #upb{padding:8px 12px;font-size:14px}
 </style></head><body><div id="ldg">불러오는 중…</div><script>setTimeout(function(){var d=document.getElementById("ldg");if(d&&d.style.display!=="none"&&d.textContent.indexOf("돌아가는")<0){d.innerHTML="인터넷 연결이 느리거나 끊겼어요.<br>연결을 확인하고 다시 불러와 주세요.<br><button onclick='location.reload()' style='margin-top:16px;border:0;border-radius:999px;padding:12px 22px;font:inherit;font-size:16px'>새로고침</button>";d.style.textAlign="center";d.style.flexDirection="column"}},8000)</script>
 <div id="hud"><span id="hp"></span><span id="rm"></span><span id="en"></span></div>
 <div id="rsc"><div class="rp" id="rsLeft"><small>우리</small> <b id="rsLn">0</b></div><div id="rsMid"></div><div class="rp" id="rsRight"><small>적</small> <b id="rsRn">0</b></div></div><div id="rbn"></div>
@@ -222,7 +232,7 @@ flat(22,32,0,0,0x17405a,-.02);flat(12,20,0,0,0x2f7f86,0);
 flat(12,.12,0,0,0xffffff,.01);flat(12,.12,0,10,0xffffff,.01);flat(12,.12,0,-10,0xffffff,.01);flat(.12,20,6,0,0xffffff,.01);flat(.12,20,-6,0,0xffffff,.01);
 const g0=new THREE.Group();S.children.filter(o=>o.isMesh).forEach(o=>g0.add(o));S.add(g0);
 const GMODES=["일반 피구","왕 피구","짐볼 피구","공 2개 피구"];
-const RNS=[1,3,5,7];let RN=1,SC=[0,0],RI=1,RW=-1;try{const v=+localStorage.getItem("pgRn");if(RNS.includes(v))RN=v}catch(e){}
+let TUT=0;const RNS=[1,3,5,7];let RN=1,SC=[0,0],RI=1,RW=-1;try{const v=+localStorage.getItem("pgRn");if(RNS.includes(v))RN=v}catch(e){}
 const MAPS=["기본 코트","학교 운동장","체육관"];let curMap=0;try{curMap=Math.min(MAPS.length-1,+localStorage.getItem("pgMap")||0)}catch(e){}
 function cvTex(w,h,fn,rep){const c=document.createElement("canvas");c.width=w;c.height=h;fn(c.getContext("2d"),w,h);const t=new THREE.CanvasTexture(c);if(rep){t.wrapS=t.wrapT=THREE.RepeatWrapping;t.repeat.set(rep[0],rep[1])}return t}
 function buildYard(){const g=new THREE.Group(),P=Math.PI,add=(m,x,y,z)=>{m.position.set(x,y,z);g.add(m);return m};
@@ -478,18 +488,18 @@ B.st="fly";B.kind="t";B.thr=c;B.in=0;B.team=c.team;B.h=null;B.t=0;bm.position.se
 B.v.set(q.x+(t.vx||0)*tm*.7+(Math.random()-.5)*j-p.x,0,q.z+(t.vz||0)*tm*.7-p.z).normalize().multiplyScalar(sp*(big(B)?.8:1)*(tw?.6:1));}
 function shootDir(c,dx,dz,sp,pt=0){const tw=two(c);if(big(B)&&sp>18)sp=18+(sp-18)*.5;const p=c.m.position,l=Math.hypot(dx,dz)||1;c.fy=Math.atan2(-dx,-dz);c.fh=.9;B.st="fly";B.kind="t";B.thr=c;B.in=0;B.team=c.team;B.h=null;B.t=0;bm.position.set(p.x,1.1,p.z);{const k=(big(B)?.8:1)*(tw?.6:1),cp=Math.cos(pt);B.v.set(dx/l*sp*k*cp,Math.sin(pt)*sp*k,dz/l*sp*k*cp)}}
 function pass(c,m){B.jp=0;const p=c.m.position;c.fy=Math.atan2(p.x-m.m.position.x,p.z-m.m.position.z);c.fh=.9;B.st="fly";B.kind="p";B.tt=[];B.team=c.team;B.tgt=m;B.h=null;B.t=0;bm.position.set(p.x,1.1,p.z)}
-function out(c){c.out=1;sfxHit();sfxAt=performance.now();net.bt=0;if(!c.pl)setEm(c,2);if(c===P)yaw=0;BL.forEach((b,k)=>{if(b.st==="held"&&b.h===c){b.st="loose";b.h=null;b.rv.set(0,0,0);const m=BMS[k];m.position.set(c.m.position.x,.24*m.scale.x,c.m.position.z)}});const p=c.m.position;p.z=c.team?12:-12;p.x=cl(p.x,-5,5);c.tz=p.z;
+function out(c){if(TUT&&c===P)return;c.out=1;sfxHit();sfxAt=performance.now();net.bt=0;if(!c.pl)setEm(c,2);if(c===P)yaw=0;BL.forEach((b,k)=>{if(b.st==="held"&&b.h===c){b.st="loose";b.h=null;b.rv.set(0,0,0);const m=BMS[k];m.position.set(c.m.position.x,.24*m.scale.x,c.m.position.z)}});const p=c.m.position;p.z=c.team?12:-12;p.x=cl(p.x,-5,5);c.tz=p.z;
 if(gmode===1&&KG[c.team]===T.indexOf(c))roundEnd(c.team===1);else if(!inn(1).length)roundEnd(true);else if(!inn(0).length)roundEnd(false)}
 let aiOn=true;try{aiOn=localStorage.getItem("pgAi")!=="0"}catch(e){}
 function goneSet(c){c.gone=1;c.team=-1;c.out=1;c.m.visible=false;c.m.position.set(0,-50,0)}
-function reset(){T.forEach(c=>S.remove(c.m));T=[];
+function reset(){ov.querySelector("h1").style.color="";T.forEach(c=>S.remove(c.m));T=[];
 const add=(team,x,z,pl)=>{const m=mk(pl?0x00c2ff:team?0xef476f:0x3a86ff);m.position.set(x,0,z);const c={m,team,out:0,pl,cd:1,tx:x,tz:z,wt:0,vx:0,vz:0,cw:0,cc:0,seen:0,rx:0,rz:0};T.push(c);return c};
 P=add(0,0,7,1);P.cw=0;P.cc=0;{const xs=n=>Array.from({length:n},(_,i)=>(i-(n-1)/2)*Math.min(7,10/n));xs(N-1).forEach(x=>add(0,x,6,0));xs(N).forEach(x=>add(1,x,-6,0))}
 for(const k in net.slots){const c=T[net.slots[k]];if(c){c.pl=1;c.seen=performance.now()}}if(net.nicks)for(const i in net.nicks)if(T[i]&&(i==0||net.slots["s"+i]))mark(T[i],+i,net.nicks[i]);T.forEach((c,i)=>applyAv(c.m,avFor(i)));if(net.mode==="host"&&!aiOn)T.forEach(c=>{if(!c.pl)goneSet(c)});KG=gmode===1?[0,1].map(t=>{const a=T.map((c,i)=>i).filter(i=>(i<N?0:1)===t&&!T[i].gone);return a.length?a[Math.random()*a.length|0]:-1}):[-1,-1];T.forEach(c=>{c.kc=kingCrown();c.kc.visible=false;c.m.add(c.kc)});B2.st="off";B2.h=null;bm2.position.set(0,-50,0);startJump()}
 let cw0=0;
 function chargeStart(){if(cw0||!run)return;if(hk(P)<0)return;cw0=performance.now()}
 function chargeEnd(){if(!cw0)return;const pw=Math.min(1,Math.max(0,(performance.now()-cw0-150)/1000));cw0=0;doThrow(pw)}
-function doThrow(pw=0){if(!run)return;if(net.mode==="guest")return act("t",-1,lookA(),pw,pitch);if(J.on)return;const k=hk(P);if(k<0)return;selB(k);const a=lookA();shootDir(P,-Math.sin(a),-Math.cos(a),18+14*pw,pitch);selB(0)}
+function doThrow(pw=0){if(!run||(TUT&&TSP[tS]&&TSP[tS].nt))return;if(net.mode==="guest")return act("t",-1,lookA(),pw,pitch);if(J.on)return;const k=hk(P);if(k<0)return;selB(k);const a=lookA();shootDir(P,-Math.sin(a),-Math.cos(a),18+14*pw,pitch);selB(0)}
 const lookA=()=>((P.team===1)!==!!P.out?Math.PI:0)+yaw;
 function pcands(){const a=lookA(),sn=Math.sin(a),cs=Math.cos(a),p=P.m.position;return T.filter(c=>c.team===P.team&&c!==P).map(c=>{const dx=c.m.position.x-p.x,dz=c.m.position.z-p.z;return{c,ang:Math.atan2(dx*cs-dz*sn,-dx*sn-dz*cs)}}).sort((u,v)=>u.ang-v.ang)}
 const aimOf=l=>l.reduce((m,u)=>Math.abs(u.ang)<Math.abs(m.ang)?u:m,l[0]);
@@ -520,7 +530,7 @@ if(!blk(q,o))return o;
 const y=s*11.4,A=[-7.4,y],D=[7.4,y];let best=null,bd=1e9;
 for(const[a,b]of[[A,D],[D,A]]){if(dd(q,a)<.3||blk(q,a))continue;const d=!blk(a,o)?dd(q,a)+dd(a,o):!blk(b,o)?dd(q,a)+dd(a,b)+dd(b,o):1e9;if(d<bd){bd=d;best=a}}
 return best||o}
-function startJump(){if(net.mode==="guest"){J.on=0;return}T.forEach(c=>c.m.position.y=0);const hb=T.filter(c=>c.team===0&&(c===T[0]||c.pl)),hr=T.filter(c=>c.team===1&&c.pl),k=(net.jc||1)-1;const bj=hb[k%hb.length],rj=hr.length?hr[k%hr.length]:T[N+(N>>1)];bj.m.position.set(0,0,-1.2);rj.m.position.set(0,0,1.2);bj.fa=bj.m.rotation.y=Math.PI;rj.fa=rj.m.rotation.y=0;
+function startJump(){if(TUT){J.on=0;J.done=1;return}if(net.mode==="guest"){J.on=0;return}T.forEach(c=>c.m.position.y=0);const hb=T.filter(c=>c.team===0&&(c===T[0]||c.pl)),hr=T.filter(c=>c.team===1&&c.pl),k=(net.jc||1)-1;const bj=hb[k%hb.length],rj=hr.length?hr[k%hr.length]:T[N+(N>>1)];bj.m.position.set(0,0,-1.2);rj.m.position.set(0,0,1.2);bj.fa=bj.m.rotation.y=Math.PI;rj.fa=rj.m.rotation.y=0;
 apx.visible=true;J={on:1,done:0,t:0,cd:3,bj,rj,tb:-1,tr:-1,aiT:.84+(Math.random()-.5)*.7,until:0};selB(1);B.st="off";B.h=null;bm.position.set(0,-50,0);selB(0);B.st="jump";B.h=null;bm.position.set(0,1.5,0);fl=0}
 function jumpStep(dt){selB(0);if(J.cd>0){J.cd-=dt;cdn.textContent=J.cd>0?Math.ceil(J.cd):"";return}cdn.textContent="";const b=J.bj,r=J.rj,pk=.84,tR=1.1,q=bm.position,t=(J.t+=dt);
 if(!J.done)q.set(0,1.5+8.2*t-4.9*t*t,0);
@@ -539,12 +549,16 @@ W(mi,"t","맵 "+MAPS[curMap]+" · 모드 "+GMODES[gmode]+" · 공 "+BN[curBall]+
 function glerp(dt){const k=Math.min(1,dt*14);T.forEach(c=>{if(c.gx===undefined)return;const p=c.m.position;p.x+=(c.gx-p.x)*k;p.z+=(c.gz-p.z)*k;p.y+=((c.gy||0)-p.y)*k});
 [[B,bm,net.b],[B2,bm2,net.b2]].forEach(a=>{if(a[2]&&a[0].st!=="held"&&a[0].st!=="off"){const q=a[1].position;q.x+=(a[2][2]-q.x)*k;q.y=a[2][3];q.z+=(a[2][4]-q.z)*k}})}
 go.onclick=()=>{if(net.mode==="host")return startHost();if(!aiOn){ms.textContent="AI를 끄면 친구와 함께 하는 방에서만 할 수 있어요.";return}net.mode="solo";SC=[0,0];RI=1;RW=-1;net.jc=(net.jc||0)+1;reset();run=true;ov.style.display="none"};
-function roundEnd(w0){if(RN<=1){end(w0);return}if(!run||RW>=0)return;SC[w0?0:1]++;const need=Math.ceil(RN/2);if(SC[0]>=need||SC[1]>=need||RI>=RN){end(SC[0]>SC[1]);return}RW=w0?0:1;run=false;setTimeout(nextRound,2600)}
+function roundEnd(w0){if(TUT)return;if(RN<=1){end(w0);return}if(!run||RW>=0)return;SC[w0?0:1]++;const need=Math.ceil(RN/2);if(SC[0]>=need||SC[1]>=need||RI>=RN){end(SC[0]>SC[1]);return}RW=w0?0:1;run=false;setTimeout(nextRound,2600)}
 function nextRound(){if(RW<0)return;RI++;RW=-1;net.e=0;if(net.mode==="host"){net.g++;net.rdy={}}net.jc=(net.jc||0)+1;reset();run=true;ov.style.display="none"}
-function end(win){sfxEnd(win);emp.style.display="none";run=false;net.e=win?1:2;ov.style.display="flex";lb.style.display=net.mode==="solo"?"flex":"none";if(net.mode==="host"){net.rdy={};upd()}else ms.textContent="";if(net.mode==="guest"){net.rd=0;rd.textContent="준비하기";rd.style.display="inline-block"}lob.style.display="block";if(net.mode==="solo")[hs,js,lsb,cmb,hb,upb,sz,nk,rc,tm,how,cdMe].forEach(e=>e.style.display="none");ov.querySelector("h1").textContent=(win?"승리!":"패배")+(RN>1?" "+SC[P.team===1?1:0]+" : "+SC[P.team===1?0:1]:"");ov.querySelector("p").style.display="none";go.textContent="다시 하기"}
+function end(win){sfxEnd(win);emp.style.display="none";run=false;net.e=win?1:2;ov.style.display="flex";lb.style.display=net.mode==="solo"?"flex":"none";if(net.mode==="host"){net.rdy={};upd()}else ms.textContent="";if(net.mode==="guest"){net.rd=0;rd.textContent="준비하기";rd.style.display="inline-block"}lob.style.display="block";if(net.mode==="solo")[hs,js,lsb,cmb,hb,upb,tub,sz,nk,rc,tm,how,cdMe].forEach(e=>e.style.display="none");ov.querySelector("h1").textContent=(win?"승리!":"패배")+(RN>1?" "+SC[P.team===1?1:0]+" : "+SC[P.team===1?0:1]:"");ov.querySelector("h1").style.color=win?"#5dff9a":"#ff6b7a";ov.querySelector("p").style.display="none";go.textContent="다시 하기"}
 const W=(el,k,v)=>{const c=el._c||(el._c={});if(c[k]!==v){c[k]=v;if(k==="t")el.textContent=v;else el.style[k]=v}};
 /* 업데이트 내용(문장은 "~ 추가/가능/불가/수정/표시" 명사형 한 가지 말투로 통일): 새 버전은 UPD 맨 앞에(새 버전이면 처음 들어올 때 자동으로 한 번 뜸) {v:"3.1",d:"날짜 시간",s:[{h:"소제목",t:["요점",...]}]} 으로 추가 */
-const UPD=[{v:"3.0",d:"2026.11.11 02:27",s:[
+const UPD=[{v:"3.1",d:"2026.11.11 21:00",s:[
+{h:"튜토리얼",t:["로비에 튜토리얼 추가","이동, 시점, 확대·축소, 던지기, 패스, 점프, 잡기 7단계 안내"]},
+{h:"방",t:["라운드 종료 시 승리·패배 및 점수 표시","방 코드 입력칸 옆에 참가 버튼 추가","접속에 실패해도 입력한 방 코드 유지"]},
+{h:"화면",t:["나가기 버튼과 점수가 겹치는 문제 수정","확대·축소 버튼 삭제 (두 손가락 벌리기·모으기로 조절)","아이폰에서 화면이 확대되는 문제 수정"]}
+]},{v:"3.0",d:"2026.11.11 02:27",s:[
 {h:"새 모드",t:["공 2개 피구 추가","공을 양손에 하나씩 들기 가능","공 두 개를 들고 던지면 속도 감소","공2 버튼으로 두 번째 공 종류 선택 가능"]},
 {h:"짐볼",t:["공 2개 피구에서만 선택 가능","다른 공과 함께 들기 불가","점프로 피하기 불가"]},
 {h:"점프",t:["쿨타임 1.2초로 단축, 버튼에 시계 표시 추가","외야에서도 점프 가능","점프가 안 되던 버그 수정"]},
@@ -556,8 +570,30 @@ const upb=document.createElement("button"),upm=document.createElement("div");upb
 upb.onclick=()=>{upm.innerHTML="<div class='upc'><div class='upl'>"+UPD.map(u=>"<h2>"+u.v+" 버전 업데이트<small>"+(u.d||"")+"</small></h2>"+u.s.map(g=>"<h3>"+g.h+"</h3><ul>"+g.t.map(x=>"<li>"+x+"</li>").join("")+"</ul>").join("")).join("")+"</div><button id='upx'>닫기</button></div>";upm.style.display="flex";upm.querySelector("#upx").onclick=closeUp};
 function closeUp(){upm.style.display="none";try{localStorage.setItem("pgUpSeen",UPD[0].v)}catch(e){}}
 upm.addEventListener("click",e=>{if(e.target===upm)closeUp()});
+["gesturestart","gesturechange","gestureend"].forEach(t=>document.addEventListener(t,e=>e.preventDefault()));
+{let ltt=0;document.addEventListener("touchend",e=>{const n=Date.now();if(run&&n-ltt<350&&!e.target.closest("button,input,.b,#ov,#upm"))e.preventDefault();ltt=n},{passive:false})}
 const ex=document.createElement("button");ex.id="ex";ex.textContent="나가기";document.body.appendChild(ex);
 ex.addEventListener("pointerdown",e=>{e.preventDefault();e.stopPropagation();if(ex.dataset.c){lob.onclick();return}ex.dataset.c=1;ex.textContent="한 번 더 누르면 나가요";setTimeout(()=>{delete ex.dataset.c;ex.textContent="나가기"},3000)});
+const tub=document.createElement("button");tub.id="tub";tub.textContent="튜토리얼";
+const tut=document.createElement("div");tut.id="tut";tut.style.display="none";document.body.appendChild(tut);
+let tS=0,tNext=0,tRel=0,tY0=0,tZ0=1,tP0={x:0,z:0};
+const angd=(a,b)=>Math.abs(Math.atan2(Math.sin(a-b),Math.cos(a-b)));
+function tLaunch(){const e=T.find(c=>c.team===1&&!c.out);if(!e)return;selB(0);give(e);shoot(e,P,9,0);tRel=performance.now()}
+const TSP=[
+{t:"이동해 보세요",s:"왼쪽 화면을 누른 채 밀어요 (PC: WASD)",ok:()=>Math.hypot(P.m.position.x-tP0.x,P.m.position.z-tP0.z)>3},
+{t:"시점을 돌려 보세요",s:"오른쪽 화면을 밀어요 (PC: ← →)",ok:()=>angd(yaw,tY0)>.6},
+{t:"확대·축소해 보세요",s:"오른쪽 화면에서 두 손가락을 벌리거나 모아요 (PC: 마우스 휠, +/-)",ok:()=>Math.abs(Math.log(zoom/tZ0))>.3},
+{t:"공을 던져 보세요",s:"빨간 조준선을 상대에게 맞추고 던지기 버튼! 꾹 누르면 더 세게 날아가요 (PC: 스페이스)",in:()=>{selB(0);give(P)},ok:()=>B.st==="fly"&&B.thr===P},
+{t:"패스해 보세요",nt:1,s:"원이 표시된 팀원에게 가요. 패스 버튼을 누르면 공이 넘어가요 (PC: E)",in:()=>{selB(0);give(P)},ok:()=>B.st==="fly"&&B.kind==="p"},
+{t:"점프해 보세요",s:"점프 버튼! 낮게 날아오는 공을 뛰어넘어 피해요 (PC: Q)",ok:()=>P.jc>0},
+{t:"공을 잡아 보세요",s:"연습용 공이 날아와요. 타이밍 맞춰 잡기 버튼! (PC: F)",in:tLaunch,ok:()=>{const n=performance.now();const hp=hk(P)>=0;if(hp&&(P.cw>0||P.ct>0)){tPend=0;return true}if(tPend){if(n>=tPend){tPend=0;tLaunch();tTxt(TSP[tS].s)}else tTxt("못 잡았어요! "+Math.ceil((tPend-n)/1000)+"초 뒤에 다시 날아와요");return false}if(n-tRel>700&&P.cc<=0&&(B.st==="loose"||hp||(B.st==="held"&&B.h!==P)))tPend=n+3000;return false}}
+];
+function tRender(done){const st=TSP[tS];tut.style.display="block";if(!st){tut.innerHTML="<b class='td'>튜토리얼 완료!</b><span>이제 로비에서 게임을 시작해 보세요</span><button id='tx'>로비로</button>"}else tut.innerHTML="<small>"+(tS+1)+" / "+TSP.length+"</small><b"+(done?" class='td'":"")+">"+(done?"✓ 좋아요!":st.t)+"</b><span>"+st.s+"</span><button id='tx'>끝내기</button>";tut.querySelector("#tx").onclick=()=>lob.onclick()}
+let tPend=0;function tTxt(m){const x=tut.querySelector("span");if(x&&x.textContent!==m)x.textContent=m}
+function tHint(m){const x=tut.querySelector("span");if(x){x.textContent=m;setTimeout(()=>{if(TUT&&TSP[tS]&&TSP[tS].t==="공을 잡아 보세요"&&!tNext){const y=tut.querySelector("span");if(y)y.textContent=TSP[tS].s}},1500)}}
+function tEnter(){const st=TSP[tS];tPend=0;tP0={x:P.m.position.x,z:P.m.position.z};tY0=yaw;tZ0=zoom;if(st&&st.in)st.in();tRender(0)}
+function tutTick(){if(!TUT){tut.style.display="none";return}const st=TSP[tS];if(!st)return;if(tNext){if(performance.now()>=tNext){tNext=0;tS++;tEnter()}return}if(st.ok()){tNext=performance.now()+1000;tRender(1)}}
+tub.onclick=()=>{TUT=1;gmode=0;RN=1;N=3;net.mode="solo";SC=[0,0];RI=1;RW=-1;net.jc=(net.jc||0)+1;reset();run=true;ov.style.display="none";selB(0);give(P);tS=0;tNext=0;tEnter()};
 const ros=document.createElement("div");ros.id="ros";ms.before(ros);
 function renderRo(d){if(!d)return;const nm=i=>(d.n&&d.n[i])||(i===0?"방장":"친구"+i),oc=i=>i===0||(d.s||[]).includes(i),col=(a,b,t)=>{let h="<div><h3>"+t+"</h3>";for(let i=a;i<b;i++){const o=oc(i),r=i===0||(d.r&&d.r[i]);h+="<p class='"+(o?"":"ai")+"'>"+(o?nm(i):"AI")+(o&&r?" <i>✓</i>":"")+"</p>"}return h+"</div>"};
 ros.innerHTML=col(0,N,"방장 팀")+col(N,N*2,"상대 팀");ros.dataset.on=1}
@@ -567,7 +603,7 @@ function ballArrows(){const now=performance.now();for(let k=0;k<2;k++){const b=B
 _av.copy(BMS[k].position).project(C);let x=_av.x,y=_av.y;const beh=_av.z>1;if(beh){x=-x;y=-y}
 let px,py,rot;if(!beh&&Math.abs(x)<.92&&Math.abs(y)<.92){px=(x+1)/2*innerWidth;py=(1-y)/2*innerHeight-44;rot=180}else{const sc=.88/Math.max(Math.abs(x),Math.abs(y),1e-3);x*=sc;y*=sc;px=(x+1)/2*innerWidth;py=(1-y)/2*innerHeight;rot=Math.atan2(x,y)*180/Math.PI}
 W(a,"display","block");a.style.left=px+"px";a.style.top=py+"px";a.style.transform="translate(-50%,-50%) rotate("+rot+"deg)"}}
-function ui(){ballArrows();if(P&&P.mk)P.mk.g.visible=false;document.body.classList.toggle("nr",!run);if(!run)apx.visible=false;W(ex,"display",run?"block":"none");W(ros,"display",!run&&ros.dataset.on&&(net.mode==="host"||(net.mode==="guest"&&net.slot!==undefined))?"flex":"none");W(tsw,"display",net.mode==="guest"&&net.slot!==undefined&&!run?"inline-block":"none");W(tsw,"t","팀 바꾸기 (지금 "+(net.slot<N?"방장 팀":"상대 팀")+")");{const on=RN>1&&(run||RW>=0)&&P;W(rsc,"display",on?"flex":"none");if(on){const mt=P.team===1?1:0,sa=SC[mt],sb=SC[1-mt];W(rsLn,"t",sa);W(rsRn,"t",sb);W(rsMid,"t","라운드 "+RI+" / "+RN);W(rm,"display","none");const bt=RW>=0?"라운드 "+RI+(RW===mt?" 승리!":" 패배")+"  "+sa+" : "+sb:"";W(rbn,"t",bt);W(rbn,"display",bt?"block":"none")}else{W(rbn,"display","none");W(rm,"display","")}}
+function ui(){tutTick();ballArrows();if(P&&P.mk)P.mk.g.visible=false;document.body.classList.toggle("nr",!run);if(!run)apx.visible=false;W(ex,"display",run?"block":"none");W(ros,"display",!run&&ros.dataset.on&&(net.mode==="host"||(net.mode==="guest"&&net.slot!==undefined))?"flex":"none");W(tsw,"display",net.mode==="guest"&&net.slot!==undefined&&!run?"inline-block":"none");W(tsw,"t","팀 바꾸기 (지금 "+(net.slot<N?"방장 팀":"상대 팀")+")");{const on=RN>1&&(run||RW>=0)&&P;W(rsc,"display",on?"flex":"none");if(on){const mt=P.team===1?1:0,sa=SC[mt],sb=SC[1-mt];W(rsLn,"t",sa);W(rsRn,"t",sb);W(rsMid,"t","라운드 "+RI+" / "+RN);W(rm,"display","none");const bt=RW>=0?(RW===mt?"w":"l")+RI+"|"+sa+":"+sb:"";if(rbn._b!==bt){rbn._b=bt;rbn.innerHTML=bt?"<b class='"+(RW===mt?"w":"l")+"'>"+(RW===mt?"승리!":"패배")+"</b><small>라운드 "+RI+" · "+sa+" : "+sb+"</small>":""}W(rbn,"display",bt?"block":"none")}else{W(rbn,"display","none");W(rm,"display","")}}
 const h=B.st==="held"?B.h:null;W(hp,"t",(performance.now()<J.until?J.res+" · ":"")+(P.out?"외야 · ":"")+"공: "+(B.st==="fly"?"날아가는 중":B.st==="loose"?"바닥":!h?"…":h===P?"내 손!":h.team!==P.team?"상대 팀":"우리 팀"));W(en,"t","우리 "+inn(P.team).length+" · 적 "+inn(1-P.team).length)}
 const ag=new THREE.Group();{const mt=new THREE.MeshBasicMaterial({color:0xff4d4d,transparent:true,opacity:.75,side:2,depthWrite:false}),l=new THREE.Mesh(new THREE.PlaneGeometry(.14,9),mt),t=new THREE.Mesh(new THREE.ConeGeometry(.32,.8,12),mt);l.rotation.x=-Math.PI/2;l.position.set(0,.08,-4.9);t.rotation.x=-Math.PI/2;t.position.set(0,.1,-9.6);ag.add(l,t)}ag.visible=false;S.add(ag);
 const apm=new THREE.Mesh(new THREE.SphereGeometry(.18,12,10),new THREE.MeshBasicMaterial({color:0xff4d4d,depthTest:false,transparent:true,opacity:.95}));apm.renderOrder=7;apm.visible=false;S.add(apm);const apst=new THREE.Mesh(new THREE.CylinderGeometry(.02,.02,1,6),new THREE.MeshBasicMaterial({color:0xff4d4d,transparent:true,opacity:.45}));apst.visible=false;S.add(apst);
@@ -593,7 +629,7 @@ if(c.wt<=0){c.wt=1+Math.random()*1.2;c.tx=(Math.random()-.5)*10;if(c.out){const 
 for(let bk=0;bk<NB();bk++){const B=BL[bk],q=BMS[bk].position;const ic=Math.abs(q.x)<=5.9&&Math.abs(q.z)<=9.9;if(!c.out&&ic&&B.st==="loose"&&(c.team?q.z<0:q.z>0)&&near(q,inn(c.team).filter(k=>canH(k,B)))===c){c.tx=q.x;c.tz=q.z}
 if(c.out&&!ic&&B.st==="loose"&&(c.team?q.z>0:q.z<0)){const a=T.filter(k=>k.team===c.team&&k.out&&!k.pl&&canH(k,B));if(near(q,a)===c){c.tx=q.x;c.tz=q.z}}}
 const[gx,gz]=c.out?way(p,c.tx,c.tz,c.team?1:-1):[c.tx,c.tz],dx=gx-p.x,dz=gz-p.z,d=Math.hypot(dx,dz);if(d>.05){const s=Math.min(d,3.8*(hbig(c)?.7:1)*dt);p.x+=dx/d*s;p.z+=dz/d*s}
-if(hk(c)>=0){selB(hk(c));c.cd-=dt;if(c.cd<=0){const e=inn(1-c.team),m=T.filter(k=>k.team===c.team&&k!==c);
+if(hk(c)>=0){selB(hk(c));c.cd-=dt;if(c.cd<=0&&!TUT){const e=inn(1-c.team),m=T.filter(k=>k.team===c.team&&k!==c);
 if(e.length){const hm=m.filter(k=>k.pl||k===P);if(hm.length&&Math.random()<.5)pass(c,hm[Math.random()*hm.length|0]);else if(Math.random()<.25&&m.length)pass(c,m[Math.random()*m.length|0]);else shoot(c,e[Math.random()*e.length|0],c.out?18:c.team?12+Math.random()*2:14,1.2)}c.cd=.9+Math.random()}selB(0)}}
 if(c.out)clampOut(c);c.vx=(p.x-ox)/dt;c.vz=(p.z-oz)/dt});
 for(let bk=0;bk<NB();bk++){selB(bk);const q=bm.position;
@@ -607,7 +643,7 @@ if(hit){if(hit.pl?hit.cw>0:Math.random()<.2){give(hit)}else{if(hit===P)fl=.25;dr
 if(run&&net.mode!=="guest"&&J.on)jumpStep(dt);
 if(net.mode==="host"&&net.room)bcast(now);else if(net.mode==="guest"){glerp(dt);T.forEach(c=>{c.cw-=dt});P.cc-=dt;if(P.jc>0)P.jc-=dt}
 animChars(dt);
-const pp=P.m.position,px=pp.x*.8;ring.position.set(pp.x,.03,pp.z);ring.material.color.setHex(P.cw>0?0xffffff:0xffd166);ring.scale.setScalar(P.cw>0?1.8:1);W(ctc,"t",P.cc>0&&!P.out?P.cc.toFixed(1):"잡기");W(ctc,"opacity",P.cc>0?.45:1);W(thr,"t","던지기");W(thr,"opacity",hk(P)>=0?1:.35);W(pss,"opacity",hk(P)>=0?1:.35);W(jmp,"t",P.jc>0?P.jc.toFixed(1):"점프");W(jmp,"opacity",P.jc>0?.8:1);W(jmp,"background",P.jc>0?"conic-gradient(rgba(0,0,0,.55) "+(Math.min(1,P.jc/1.2)*360|0)+"deg,transparent 0),#9b5de5":"");W(jmp,"boxShadow",apx.visible&&jids().includes(T.indexOf(P))?"0 0 0 8px rgba(255,214,102,.75)":"");{const pw=cw0?Math.min(1,Math.max(0,(now-cw0-150)/1000)):0;W(thr,"boxShadow",cw0?"0 0 0 "+(6+pw*16)+"px rgba(255,"+(183-pw*130|0)+",3,.55)":"")}
+const pp=P.m.position,px=pp.x*.8;ring.position.set(pp.x,.03,pp.z);ring.material.color.setHex(P.cw>0?0xffffff:0xffd166);ring.scale.setScalar(P.cw>0?1.8:1);W(ctc,"t",P.cc>0&&!P.out?P.cc.toFixed(1):"잡기");W(ctc,"opacity",P.cc>0?.45:1);W(thr,"t","던지기");W(thr,"opacity",hk(P)>=0&&!(TUT&&TSP[tS]&&TSP[tS].nt)?1:.35);W(pss,"opacity",hk(P)>=0?1:.35);W(jmp,"t",P.jc>0?P.jc.toFixed(1):"점프");W(jmp,"opacity",P.jc>0?.8:1);W(jmp,"background",P.jc>0?"conic-gradient(rgba(0,0,0,.55) "+(Math.min(1,P.jc/1.2)*360|0)+"deg,transparent 0),#9b5de5":"");W(jmp,"boxShadow",apx.visible&&jids().includes(T.indexOf(P))?"0 0 0 8px rgba(255,214,102,.75)":"");{const pw=cw0?Math.min(1,Math.max(0,(now-cw0-150)/1000)):0;W(thr,"boxShadow",cw0?"0 0 0 "+(6+pw*16)+"px rgba(255,"+(183-pw*130|0)+",3,.55)":"")}
 const yw=((P.team===1)!==!!P.out?Math.PI:0)+yaw,sn=Math.sin(yw),cs=Math.cos(yw);let cx=px,cz=pp.z,dz=Math.max(6.5,15.5-Math.abs(pp.z)),dy=4.6,fw=5,ly=.8;if(P.out){dz=6;dy=3.4;fw=6;ly=1}
 const fpv=zoom<=.14;P.m.visible=!fpv;
 if(fpv){C.position.set(pp.x-sn*.12,1.58,pp.z-cs*.12);C.lookAt(pp.x-sn*6,1.45+6*Math.tan(pitch),pp.z-cs*6)}else{dz*=zoom;dy=ly+(dy-ly)*zoom;C.position.set(cx+sn*dz,dy,cz+cs*dz);C.lookAt(cx-sn*fw,ly+fw*Math.tan(pitch),cz-cs*fw)}
@@ -618,7 +654,7 @@ cam.addEventListener("pointerdown",e=>{if(cid===null){cid=e.pointerId;cx0=e.clie
 cam.addEventListener("pointermove",e=>{if(e.pointerId===cid){pp1=[e.clientX,e.clientY];if(cid2===null){yaw-=(e.clientX-cx0)*.008;pitch=Math.max(-.45,Math.min(.7,pitch-(e.clientY-cy0)*.006))}cx0=e.clientX;cy0=e.clientY}else if(e.pointerId===cid2)pp2=[e.clientX,e.clientY];else return;if(cid2!==null)zoom=Math.max(.08,Math.min(1.9,pz*pd/(Math.hypot(pp1[0]-pp2[0],pp1[1]-pp2[1])||1)))});
 const cu=e=>{if(e.pointerId===cid){cid=cid2;pp1=pp2;cx0=pp2?pp2[0]:0;cy0=pp2?pp2[1]:0;cid2=null}else if(e.pointerId===cid2)cid2=null};cam.addEventListener("pointerup",cu);cam.addEventListener("pointercancel",cu);
 const send=(dc,o)=>dc&&(dc.open||dc.readyState==="open")&&dc.send(o);
-function openPanel(){upb.style.display="none";lb.style.display="none";rc.style.display="none";hb.style.display=how.style.display=sz.style.display=nk.style.display=tm.style.display=ov.querySelector("p").style.display="none";cdSt.style.display=cdSet.style.display=cdMe.style.display="none";nw.style.display="flex";lob.style.display="block"}
+function openPanel(){upb.style.display=tub.style.display="none";lb.style.display="none";rc.style.display="none";hb.style.display=how.style.display=sz.style.display=nk.style.display=tm.style.display=ov.querySelector("p").style.display="none";cdSt.style.display=cdSet.style.display=cdMe.style.display="none";nw.style.display="flex";lob.style.display="block"}
 function act(a,i,y,w,pt){send(net.gdc,{t:"act",d:{a,i,y,w,pt}})}
 function bcast(now){if(now-(net.bt||0)<70)return;net.bt=now;const q=bm.position,r=v=>Math.round(v*100)/100;const o={t:"st",d:{gn:T.map(c=>c.gone?1:0),gm:gmode,mp:curMap,bl:curBall,bl2:curBall2,rs:[RN,SC[0],SC[1],RI,RW],em:T.map(c=>c.ei||0),g:net.g,s:N,nm:net.nicks,av:net.avs,j:J.on&&!J.done?[T.indexOf(J.bj),T.indexOf(J.rj)]:0,ya:Math.round((B.st==="held"&&B.h?(B.h===P?lookA():(B.h.ya||0)):0)*100)/100,hh:B.st==="held"&&B.h&&(B.h===P||B.h.pl)?1:0,n:J.on&&J.cd>0?Math.ceil(J.cd):0,e:run?0:net.e||0,t:T.map(c=>[r(c.m.position.x),r(c.m.position.z),c.out,r(c.m.position.y),c.cw>0?1:0,r(c.fa||0)]),b:[B.st==="held"?0:B.st==="fly"?1:2,B.h?T.indexOf(B.h):-1,r(q.x),r(q.y),r(q.z),B.kind==="t"?1:0],b2:(gmode===3&&B2.st!=="off")?[B2.st==="held"?0:B2.st==="fly"?1:2,B2.h?T.indexOf(B2.h):-1,r(bm2.position.x),r(bm2.position.y),r(bm2.position.z),B2.kind==="t"?1:0]:0}};net.dcs.forEach((dc,k)=>send(dc,{t:"st",d:{...o.d,k:gmode===1?KG[k>=N?1:0]:-1}}))}
 function hostMsg(k,s){let o=s;if(typeof s==="string"){try{o=JSON.parse(s)}catch(e){return}}if(!o)return;const d=o.d,c=T[k];if(!d||!c)return;c.seen=performance.now();
@@ -633,7 +669,7 @@ setInterval(()=>{if(net.mode!=="guest"||net.slot===undefined)return;const[x,z]=i
 const how=document.createElement("div");how.id="how";
 how.innerHTML="<div class='tbs'><button data-t='0' class='on'>규칙</button><button data-t='1'>조작</button><button data-t='2'>모드·설정</button></div>"+
 "<ul class='on' data-p='0'><li>상대 팀을 모두 외야로 보내면 승리!</li><li>시작은 점프볼: 공이 꼭대기일 때 점프 버튼을 눌러요. 타이밍이 좋을수록 높이 뛰어요.</li><li>공을 잡으면 던지기로 적을 맞히거나 패스로 팀원에게 넘겨요.</li><li>맞으면 상대 코트 뒤와 옆의 외야로 나가요(들고 있던 공은 그 자리에 떨어져요). 코트 밖으로 나간 공은 외야가 줍고, 외야가 없으면 내야가 가져가요.</li><li>잡기: 날아오는 공이나 패스를 타이밍 맞춰 받아낼 수 있어요(패스 가로채기). 상대 패스가 몸에 맞으면 그 사람도 아웃이에요. 점프로 뛰어넘으면 피해요. 점프볼 직후 첫 패스는 맞아도 아웃이 아니에요.</li><li>점프: 낮게 날아오는 공을 뛰어넘어 피할 수 있어요(짐볼은 못 피해요). 한 번 뛰면 1.2초 뒤에 다시 뛸 수 있어요.</li></ul>"+
-"<ul data-p='1'><li>이동: 왼쪽 화면을 누르고 밀기 (PC: WASD)</li><li>시점 회전: 오른쪽 화면 밀기 (PC: ←/→)</li><li>던지기: 빨간 조준선을 적에게 맞추고 던져요. 꾹 누르면 더 세고 빠르게 날아가고, 누른 채 밀면 조준이 움직여요. 위로 조준하면 머리 위로 넘어가고, 아래로 조준하면 바닥에 먼저 떨어져요. (PC: 스페이스)</li><li>패스: 공을 들면 아래에 팀원 원이 떠요. 파랑=내야, 주황=외야. 원을 누르면 그 사람에게, 패스 버튼은 하얀 링의 팀원에게 가요. (PC: E)</li><li>잡기 (PC: F), 점프 (PC: Q)</li><li>확대/축소: 오른쪽 위 ＋/－ 버튼, 두 손가락 모으기/벌리기, 마우스 휠. 끝까지 확대하면 1인칭이에요.</li><li>감정표현: 오른쪽 위 😊 버튼 (PC: 숫자 1~8)</li></ul>"+
+"<ul data-p='1'><li>이동: 왼쪽 화면을 누르고 밀기 (PC: WASD)</li><li>시점 회전: 오른쪽 화면 밀기 (PC: ←/→)</li><li>던지기: 빨간 조준선을 적에게 맞추고 던져요. 꾹 누르면 더 세고 빠르게 날아가고, 누른 채 밀면 조준이 움직여요. 위로 조준하면 머리 위로 넘어가고, 아래로 조준하면 바닥에 먼저 떨어져요. (PC: 스페이스)</li><li>패스: 공을 들면 아래에 팀원 원이 떠요. 파랑=내야, 주황=외야. 원을 누르면 그 사람에게, 패스 버튼은 하얀 링의 팀원에게 가요. (PC: E)</li><li>잡기 (PC: F), 점프 (PC: Q)</li><li>확대/축소: 오른쪽 화면에서 두 손가락 모으기/벌리기 (PC: 마우스 휠). 끝까지 확대하면 1인칭이에요.</li><li>감정표현: 오른쪽 위 😊 버튼 (PC: 숫자 1~8)</li></ul>"+
 "<ul data-p='2'><li>팀 인원은 1:1부터 6:6까지예요. AI 버튼으로 AI를 끌 수 있어요(친구와 방을 만들었을 때만, 양 팀에 친구가 있어야 해요).</li><li>라운드: 1, 3, 5, 7판 중에 골라요. 먼저 과반을 이기면 승리예요.</li><li>왕 피구: 팀마다 한 명이 왕관을 써요(상대에게는 안 보여요). 왕이 맞으면 그 팀이 져요.</li><li>짐볼 피구: 공이 3배로 크고, 든 사람은 느려지고, 던지는 속도도 느려져요.</li><li>공 2개 피구: 공이 두 개예요. 공 버튼은 첫 번째 공, 공2 버튼은 두 번째 공이고, 이 모드에서만 짐볼을 고를 수 있어요. 점프볼에서 진 팀은 두 번째 공으로 시작해요. 한 사람이 공 두 개를 양손에 들 수 있고, 두 개를 든 채 던지면 느려요. 짐볼은 다른 공과 같이 못 들어요.</li><li>방에 들어온 친구는 준비하기 전에 팀 바꾸기 버튼으로 팀을 옮길 수 있어요. 대기 화면에서 두 팀의 이름과 준비 상태(✓)를 볼 수 있어요.</li><li>공이 3초 넘게 바닥에 방치되면 화면에 노란 화살표가 떠서 공 방향을 알려 줘요.</li><li>게임 중에는 왼쪽 위 나가기 버튼을 두 번 눌러 로비로 돌아갈 수 있어요.</li></ul>";
 const sz=document.createElement("div");sz.id="sz";
 sz.innerHTML='팀 인원 <button id="szm" aria-label="인원 줄이기">−</button> <b id="szv">3</b> <button id="szp" aria-label="인원 늘리기">+</button> 명씩 <button id="aib">AI 켜짐</button>';
@@ -680,10 +716,10 @@ pr.on("error",e=>{if(up){setTimeout(()=>{if(pr.disconnected)pr.reconnect()},1500
 document.addEventListener("visibilitychange",()=>{if(!document.hidden&&net.peer&&net.peer.disconnected)net.peer.reconnect()});tryOpen(cleanCode()||mkRoom(),0)};
 js.onclick=()=>{const code=cleanCode();if(!code){const q=ov.querySelector("p");q.textContent="방 코드를 입력해 주세요.";q.style.display="";q.style.color="var(--acc)";return}
 if(typeof Peer==="undefined"){ms.textContent="연결 서비스를 불러오지 못했어요. 인터넷을 확인해 주세요.";return}
-net.mode="guest";net.slot=undefined;reset();openPanel();nb.style.display="none";rmc.style.display="none";ms.textContent="연결 중…";
+try{localStorage.setItem("pgRc",rc.value)}catch(e){}window.name="pgRc:"+rc.value;net.mode="guest";net.slot=undefined;reset();openPanel();nb.style.display="none";rmc.style.display="none";ms.textContent="연결 중…";
 const pr=new Peer();
 pr.on("open",()=>{const conn=pr.connect("pgdodge-"+code,{serialization:"json",reliable:true,metadata:{team:net.want||0}});net.gdc=conn;rm.textContent="방 "+code;
-conn.on("data",o=>{if(o.t==="assign"){net.slot=o.d.slot;P=T[net.slot];net.rd=0;rd.textContent="준비하기";net.gdc.send({t:"nick",d:{n:(nk.value.trim().slice(0,6)||"친구"+net.slot),a:myAv.join(",")}});nw.style.display="none";rd.style.display="inline-block";ms.textContent="연결됐어요! 준비하기를 눌러 주세요."}else if(o.t==="full"){ms.textContent="방이 가득 찼어요."}else if(o.t==="tfull"){ms.textContent="그 팀은 자리가 없어요."}else if(o.t==="ro"){renderRo(o.d)}else if(o.t==="st"&&net.slot!==undefined)netApply(o.d)});
+conn.on("data",o=>{if(o.t==="assign"){try{localStorage.removeItem("pgRc")}catch(e){}window.name="";net.slot=o.d.slot;P=T[net.slot];net.rd=0;rd.textContent="준비하기";net.gdc.send({t:"nick",d:{n:(nk.value.trim().slice(0,6)||"친구"+net.slot),a:myAv.join(",")}});nw.style.display="none";rd.style.display="inline-block";ms.textContent="연결됐어요! 준비하기를 눌러 주세요."}else if(o.t==="full"){ms.textContent="방이 가득 찼어요."}else if(o.t==="tfull"){ms.textContent="그 팀은 자리가 없어요."}else if(o.t==="ro"){renderRo(o.d)}else if(o.t==="st"&&net.slot!==undefined)netApply(o.d)});
 conn.on("close",()=>{run=false;ov.style.display="flex";ms.textContent="방장과 연결이 끊겼어요. 새로고침해 주세요.";lob.style.display="block"});
 setTimeout(()=>{if(net.slot===undefined&&!conn.open)ms.textContent="방을 찾지 못했어요. 코드를 확인해 주세요."},9000)});
 pr.on("error",e=>{ms.textContent=e.type==="peer-unavailable"?"그 방 코드를 찾지 못했어요.":"연결 오류("+e.type+")"})};
@@ -756,13 +792,13 @@ function closeCm(){cmOn=0;document.body.classList.remove("cmo");pvg.visible=fals
 function cmCam(now){pvc.rotation.y=Math.PI+Math.sin(now/900)*.9;if(innerWidth>innerHeight){C.position.set(82.6,1.05,4.4);C.lookAt(82.6,.95,0)}else{C.position.set(80,1.2,4.3);C.lookAt(80,-.3,0)}}
 mdb.onclick=()=>{gmode=(gmode+1)%GMODES.length;mdb.textContent="모드: "+GMODES[gmode];b2b.style.display=gmode===3?"":"none";if(gmode!==3){if(curBall===3)applyBall(0,1);if(curBall2===3)applyBall2(1,1)}};const rnTxt=()=>"라운드: "+RN+(RN>1?" ("+Math.ceil(RN/2)+"선승)":"");function setRn(v,sv){RN=v;rnb.textContent=rnTxt();if(sv)try{localStorage.setItem("pgRn",v)}catch(e){}}rnb.onclick=()=>setRn(RNS[(RNS.indexOf(RN)+1)%RNS.length],1);setRn(RN);cmb.onclick=openCm;mpb.onclick=()=>applyMap((curMap+1)%MAPS.length,1);applyMap(curMap);blb.onclick=()=>applyBall((curBall+1)%(gmode===3?BN.length:3),1);if(curBall===3)curBall=0;if(curBall2===3)curBall2=1;applyBall(curBall);b2b.onclick=()=>applyBall2((curBall2+1)%(gmode===3?BN.length:3),1);applyBall2(curBall2);
 {const el=(t,c,id)=>{const d=document.createElement(t);if(c)d.className=c;if(id)d.id=id;return d},card=(id,t)=>{const d=el("div","card",id);if(t){const h=el("h2");h.textContent=t;d.appendChild(h)}return d};
-rc.placeholder="방 코드 (친구 방에 참가할 때 입력)";
+rc.placeholder="방 코드 (친구 방에 참가할 때 입력)";{let v="";try{v=localStorage.getItem("pgRc")||""}catch(e){}if(!v&&/^pgRc:/.test(window.name))v=window.name.slice(5);if(v)rc.value=v}
 const c1=card("cdSt"),c2=card("cdSet","게임 설정"),c3=card("cdMe","내 캐릭터"),tl=el("div","tl"),og=el("div","og"),rw=el("div","rw");
 [c1,c2,c3,tl].forEach(x=>ov.insertBefore(x,ms));
-c1.append(rc,lb);const jr=el("div","jr");jr.append(js,tm);lb.append(jr);
+const cr=el("div","rw"),jsb=js,rcb=rc;jsb.textContent="참가";cr.append(rcb,jsb);c1.append(cr,lb);const jr=el("div","jr");jr.append(tm);lb.append(jr);rcb.addEventListener("keydown",e=>{if(e.key==="Enter")jsb.click()});
 [mdb,rnb,mpb,blb,b2b].forEach(b=>b.classList.add("opt"));og.append(mdb,rnb,mpb,blb,b2b);c2.append(sz,og);
 cmb.classList.add("opt");rw.append(nk,cmb);c3.append(rw);
-tl.append(hb,lsb,upb);
+tl.append(tub,hb,lsb,upb);
 ov.insertBefore(how,ms);ov.addEventListener("scroll",()=>{if(ov.scrollLeft)ov.scrollLeft=0});nw.after(lob);rc.addEventListener("input",()=>{ov.querySelector("p").textContent=""});
 how.addEventListener("click",e=>{const b=e.target.closest("[data-t]");if(!b)return;how.querySelectorAll("[data-t]").forEach(x=>x.classList.toggle("on",x===b));how.querySelectorAll("[data-p]").forEach(u=>u.classList.toggle("on",u.dataset.p===b.dataset.t))})}
 ov.classList.remove("ld");ldg.style.display="none";reset();{let sn="";try{sn=localStorage.getItem("pgUpSeen")}catch(e){}if(sn!==UPD[0].v)upb.onclick()}requestAnimationFrame(loop);
