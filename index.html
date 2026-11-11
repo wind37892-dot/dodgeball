@@ -198,7 +198,7 @@ canvas{display:block;position:fixed;inset:0}
 #tut{position:fixed;z-index:15;left:50%;top:calc(6px + env(safe-area-inset-top,0px));left:calc(80px + env(safe-area-inset-left,0px));transform:none;width:calc(100vw - 160px);max-width:300px;box-sizing:border-box;background:rgba(8,21,34,.86);border-radius:14px;padding:10px 14px;text-align:center;color:#fff;font-family:"Apple SD Gothic Neo","Noto Sans KR",sans-serif;line-height:1.4}
 #tut small{display:block;font-size:12px;opacity:.6}
 #tut b{display:block;font-size:17px;margin:2px 0}#tut b.td{color:var(--acc)}
-#tut span{display:block;font-size:13px;opacity:.85;white-space:pre-line;line-height:1.6}
+#tut span{display:block;font-size:13px;opacity:.85;white-space:pre-line;word-break:keep-all;line-height:1.6}
 #tut button{margin-top:8px;border:0;border-radius:999px;background:rgba(255,255,255,.16);color:#fff;font:inherit;font-size:12px;padding:5px 12px}
 @media (orientation:landscape){#tut{top:calc(8px + env(safe-area-inset-top,0px));width:min(300px,46vw);max-width:none;left:auto;right:calc(110px + env(safe-area-inset-right,0px));transform:none}}
 #ex{position:fixed;z-index:15;left:calc(10px + env(safe-area-inset-left,0px));top:calc(54px + env(safe-area-inset-top,0px));display:none;border:0;border-radius:999px;background:rgba(0,0,0,.4);color:#fff;font:inherit;font-size:13px;padding:7px 12px}
@@ -510,7 +510,7 @@ function doThrow(pw=0){if(!run||(TUT&&TSP[tS]&&TSP[tS].nt))return;if(net.mode===
 const lookA=()=>((P.team===1)!==!!P.out?Math.PI:0)+yaw;
 function pcands(){const a=lookA(),sn=Math.sin(a),cs=Math.cos(a),p=P.m.position;return T.filter(c=>c.team===P.team&&c!==P).map(c=>{const dx=c.m.position.x-p.x,dz=c.m.position.z-p.z;return{c,ang:Math.atan2(dx*cs-dz*sn,-dx*sn-dz*cs)}}).sort((u,v)=>u.ang-v.ang)}
 const aimOf=l=>l.reduce((m,u)=>Math.abs(u.ang)<Math.abs(m.ang)?u:m,l[0]);
-function doPass(t){if(!run||hk(P)<0)return;const l=pcands();if(!l.length)return;const c=l.some(u=>u.c===t)?t:aimOf(l).c;if(net.mode==="guest")return act("p",T.indexOf(c));selB(hk(P));pass(P,c);selB(0)}
+function doPass(t){if(!run||hk(P)<0||(TUT&&TSP[tS]&&TSP[tS].np))return;const l=pcands();if(!l.length)return;const c=l.some(u=>u.c===t)?t:aimOf(l).c;if(net.mode==="guest")return act("p",T.indexOf(c));selB(hk(P));pass(P,c);selB(0)}
 function startJmp(c){if(J.on){if(run&&J.cd<=0&&!J.done){if(c===J.bj&&J.tb<0)J.tb=J.t;else if(c===J.rj&&J.tr<0)J.tr=J.t}return}if(!run||c.jt>0||c.jc>0)return;c.jt=.0001;c.jc=1.2}
 function jmpStep(c,dt){if(c.jc>0)c.jc-=dt;if(c.jt>0){c.jt+=dt;const u=Math.min(1,c.jt/.7);c.m.position.y=1.1*Math.sin(Math.PI*u);if(u>=1){c.jt=0;c.m.position.y=0}}}
 function doJump(){if(!run)return;if(net.mode==="guest"){if(!J.on&&P.jc<=0)P.jc=1.2;act("j");return}startJmp(P)}
@@ -591,15 +591,15 @@ const angd=(a,b)=>Math.abs(Math.atan2(Math.sin(a-b),Math.cos(a-b)));
 function tLaunch(){if(!T.some(c=>c.team===1&&!c.out)){const en=T.filter(c=>c.team===1);en.forEach((c,i)=>{c.out=0;const x=(i-(en.length-1)/2)*Math.min(7,10/en.length);c.m.position.set(x,0,-6);c.tx=x;c.tz=-6;c.cd=1})}const e=T.find(c=>c.team===1&&!c.out);if(!e)return;selB(0);give(e);shoot(e,P,9,0);tRel=performance.now()}
 const TSP=[
 {t:"이동해 보세요",s:"왼쪽 화면을 누른 채 밀어요 (PC: WASD)",ok:()=>Math.hypot(P.m.position.x-tP0.x,P.m.position.z-tP0.z)>3},
-{t:"시점을 돌려 보세요",s:"오른쪽 화면을 밀어요 (PC: ← →)",ok:()=>angd(yaw,tY0)>.6},
+{t:"시점을 돌려 보세요",s:"오른쪽 화면을 좌우로 돌려요 (PC: ← →)",ok:()=>angd(yaw,tY0)>.6},
 {t:"확대·축소해 보세요",s:"오른쪽 화면에서 두 손가락을 벌리거나 모아요 (PC: 마우스 휠, +/-)",ok:()=>Math.abs(Math.log(zoom/tZ0))>.3},
-{t:"공을 던져 보세요",s:"빨간 조준선을 상대에게 맞추고 던지기 버튼! 꾹 누르면 더 세게 날아가요 (PC: 스페이스)",in:()=>{selB(0);give(P)},ok:()=>B.st==="fly"&&B.thr===P},
+{t:"공을 던져 보세요",np:1,s:"빨간 조준선을 상대에게 맞추고 던지기 버튼! 꾹 누르면 더 세게 날아가요 (PC: 스페이스)",in:()=>{selB(0);give(P)},ok:()=>B.st==="fly"&&B.thr===P},
 {t:"패스해 보세요",nt:1,s:"원이 표시된 팀원에게 가요. 패스 버튼을 누르면 공이 넘어가요 (PC: E)",in:()=>{selB(0);give(P)},ok:()=>B.st==="fly"&&B.kind==="p"},
 {t:"점프해 보세요",s:"점프 버튼! 낮게 날아오는 공을 뛰어넘어 피해요 (PC: Q)",ok:()=>P.jc>0},
 {t:"공을 잡아 보세요",s:"연습용 공이 날아와요. 타이밍 맞춰 잡기 버튼! (PC: F)",in:tLaunch,ok:()=>{const n=performance.now();const hp=hk(P)>=0;if(hp&&(P.cw>0||P.ct>0)){tPend=0;return true}if(tPend){if(n>=tPend){tPend=0;tLaunch();tTxt(TSP[tS].s)}else tTxt("못 잡았어요! "+Math.ceil((tPend-n)/1000)+"초 뒤에 다시 날아와요");return false}if(n-tRel>700&&P.cc<=0&&(B.st==="loose"||hp||(B.st==="held"&&B.h!==P)))tPend=n+3000;return false}}
 ];
 function tRender(done){const st=TSP[tS];tut.style.display="block";if(!st){tut.innerHTML="<b class='td'>튜토리얼 완료!</b><span>이제 로비에서 게임을 시작해 보세요</span><button id='tx'>로비로</button>"}else tut.innerHTML="<small>"+(tS+1)+" / "+TSP.length+"</small><b"+(done?" class='td'":"")+">"+(done?"✓ 좋아요!":st.t)+"</b><span>"+tf(st.s)+"</span><button id='tx'>끝내기</button>";tut.querySelector("#tx").onclick=()=>lob.onclick()}
-const tf=x=>x.replace(/([.!?])\s+/g,"$1\n");let tPend=0;function tTxt(m){m=tf(m);const x=tut.querySelector("span");if(x&&x.textContent!==m)x.textContent=m}
+const tf=x=>x.replace(/ (버튼)/g,"\u00a0$1").replace(/([.!?])\s+/g,"$1\n").replace(/\s*(\(PC:)/g,"\n$1");let tPend=0;function tTxt(m){m=tf(m);const x=tut.querySelector("span");if(x&&x.textContent!==m)x.textContent=m}
 function tHint(m){const x=tut.querySelector("span");if(x){x.textContent=m;setTimeout(()=>{if(TUT&&TSP[tS]&&TSP[tS].t==="공을 잡아 보세요"&&!tNext){const y=tut.querySelector("span");if(y)y.textContent=TSP[tS].s}},1500)}}
 function tEnter(){const st=TSP[tS];tPend=0;tP0={x:P.m.position.x,z:P.m.position.z};tY0=yaw;tZ0=zoom;if(st&&st.in)st.in();tRender(0)}
 function tutTick(){if(!TUT){tut.style.display="none";return}const st=TSP[tS];if(!st)return;if(tNext){if(performance.now()>=tNext){tNext=0;tS++;tEnter()}return}if(st.ok()){tNext=performance.now()+1000;tRender(1)}}
@@ -653,7 +653,7 @@ if(hit){if(hit.pl?hit.cw>0:Math.random()<.2){give(hit)}else{if(hit===P)fl=.25;dr
 if(run&&net.mode!=="guest"&&J.on)jumpStep(dt);
 if(net.mode==="host"&&net.room)bcast(now);else if(net.mode==="guest"){glerp(dt);T.forEach(c=>{c.cw-=dt});P.cc-=dt;if(P.jc>0)P.jc-=dt}
 animChars(dt);
-const pp=P.m.position,px=pp.x*.8;ring.position.set(pp.x,.03,pp.z);ring.material.color.setHex(P.cw>0?0xffffff:0xffd166);ring.scale.setScalar(P.cw>0?1.8:1);W(ctc,"t",P.cc>0&&!P.out?P.cc.toFixed(1):"잡기");W(ctc,"opacity",P.cc>0?.45:1);W(thr,"t","던지기");W(thr,"opacity",hk(P)>=0&&!(TUT&&TSP[tS]&&TSP[tS].nt)?1:.35);W(pss,"opacity",hk(P)>=0?1:.35);W(jmp,"t",P.jc>0?P.jc.toFixed(1):"점프");W(jmp,"opacity",P.jc>0?.8:1);W(jmp,"background",P.jc>0?"conic-gradient(rgba(0,0,0,.55) "+(Math.min(1,P.jc/1.2)*360|0)+"deg,transparent 0),#9b5de5":"");W(jmp,"boxShadow",apx.visible&&jids().includes(T.indexOf(P))?"0 0 0 8px rgba(255,214,102,.75)":"");{const pw=cw0?Math.min(1,Math.max(0,(now-cw0-150)/1000)):0;W(thr,"boxShadow",cw0?"0 0 0 "+(6+pw*16)+"px rgba(255,"+(183-pw*130|0)+",3,.55)":"")}
+const pp=P.m.position,px=pp.x*.8;ring.position.set(pp.x,.03,pp.z);ring.material.color.setHex(P.cw>0?0xffffff:0xffd166);ring.scale.setScalar(P.cw>0?1.8:1);W(ctc,"t",P.cc>0&&!P.out?P.cc.toFixed(1):"잡기");W(ctc,"opacity",P.cc>0?.45:1);W(thr,"t","던지기");W(thr,"opacity",hk(P)>=0&&!(TUT&&TSP[tS]&&TSP[tS].nt)?1:.35);W(pss,"opacity",hk(P)>=0&&!(TUT&&TSP[tS]&&TSP[tS].np)?1:.35);W(jmp,"t",P.jc>0?P.jc.toFixed(1):"점프");W(jmp,"opacity",P.jc>0?.8:1);W(jmp,"background",P.jc>0?"conic-gradient(rgba(0,0,0,.55) "+(Math.min(1,P.jc/1.2)*360|0)+"deg,transparent 0),#9b5de5":"");W(jmp,"boxShadow",apx.visible&&jids().includes(T.indexOf(P))?"0 0 0 8px rgba(255,214,102,.75)":"");{const pw=cw0?Math.min(1,Math.max(0,(now-cw0-150)/1000)):0;W(thr,"boxShadow",cw0?"0 0 0 "+(6+pw*16)+"px rgba(255,"+(183-pw*130|0)+",3,.55)":"")}
 const yw=((P.team===1)!==!!P.out?Math.PI:0)+yaw,sn=Math.sin(yw),cs=Math.cos(yw);let cx=px,cz=pp.z,dz=Math.max(6.5,15.5-Math.abs(pp.z)),dy=4.6,fw=5,ly=.8;if(P.out){dz=6;dy=3.4;fw=6;ly=1}
 const fpv=zoom<=.14;P.m.visible=!fpv;
 if(fpv){C.position.set(pp.x-sn*.12,1.58,pp.z-cs*.12);C.lookAt(pp.x-sn*6,1.45+6*Math.tan(pitch),pp.z-cs*6)}else{dz*=zoom;dy=ly+(dy-ly)*zoom;C.position.set(cx+sn*dz,dy,cz+cs*dz);C.lookAt(cx-sn*fw,ly+fw*Math.tan(pitch),cz-cs*fw)}
