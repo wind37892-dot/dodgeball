@@ -588,7 +588,7 @@ const tub=document.createElement("button");tub.id="tub";tub.textContent="튜토�
 const tut=document.createElement("div");tut.id="tut";tut.style.display="none";document.body.appendChild(tut);
 let tS=0,tNext=0,tRel=0,tY0=0,tZ0=1,tP0={x:0,z:0};
 const angd=(a,b)=>Math.abs(Math.atan2(Math.sin(a-b),Math.cos(a-b)));
-function tLaunch(){const e=T.find(c=>c.team===1&&!c.out);if(!e)return;selB(0);give(e);shoot(e,P,9,0);tRel=performance.now()}
+function tLaunch(){if(!T.some(c=>c.team===1&&!c.out)){const en=T.filter(c=>c.team===1);en.forEach((c,i)=>{c.out=0;const x=(i-(en.length-1)/2)*Math.min(7,10/en.length);c.m.position.set(x,0,-6);c.tx=x;c.tz=-6;c.cd=1})}const e=T.find(c=>c.team===1&&!c.out);if(!e)return;selB(0);give(e);shoot(e,P,9,0);tRel=performance.now()}
 const TSP=[
 {t:"이동해 보세요",s:"왼쪽 화면을 누른 채 밀어요 (PC: WASD)",ok:()=>Math.hypot(P.m.position.x-tP0.x,P.m.position.z-tP0.z)>3},
 {t:"시점을 돌려 보세요",s:"오른쪽 화면을 밀어요 (PC: ← →)",ok:()=>angd(yaw,tY0)>.6},
