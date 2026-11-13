@@ -2326,12 +2326,12 @@ if(mt)pring.position.set(mt.m.position.x,.03,mt.m.position.z)}
 ring.material.color.setHex(P.cw>0?0xffffff:0xffd166);
 ring.scale.setScalar(P.cw>0?1.8:1);
 W(ctc,"t",P.cc>0&&!P.out?P.cc.toFixed(1):"잡기");
-W(ctc,"opacity",P.cc>0?.45:1);
+W(ctc,"opacity",P.cc>0||lockd(P)?.35:1);
 W(thr,"t","던지기");
-W(thr,"opacity",(hk(P)>=0||(SPm()&&P.ef&&P.ef.bers>0))&&!(TUT&&TSP[tS]&&TSP[tS].nt)?1:.35);
-W(pss,"opacity",hk(P)>=0&&gmode!==4&&!(TUT&&TSP[tS]&&TSP[tS].np)?1:.35);
+W(thr,"opacity",!lockd(P)&&(hk(P)>=0||(SPm()&&P.ef&&P.ef.bers>0))&&!(TUT&&TSP[tS]&&TSP[tS].nt)?1:.35);
+W(pss,"opacity",!lockd(P)&&hk(P)>=0&&gmode!==4&&!(TUT&&TSP[tS]&&TSP[tS].np)?1:.35);
 W(jmp,"t",P.jc>0?P.jc.toFixed(1):"점프");
-W(jmp,"opacity",P.jc>0?.8:1);
+W(jmp,"opacity",lockd(P)?.35:P.jc>0?.8:1);
 W(jmp,"background",P.jc>0?"conic-gradient(rgba(0,0,0,.55) "+(Math.min(1,P.jc/1.2)*360|0)+"deg,transparent 0),#9b5de5":"");
 W(jmp,"boxShadow",apx.visible&&jids().includes(T.indexOf(P))?"0 0 0 8px rgba(255,214,102,.75)":"");
 {const pw=cw0?Math.min(1,Math.max(0,(now-cw0-150)/1000)):0;
