@@ -1184,18 +1184,22 @@ const AB=[{n:"시간 멈추는 자",e:"⏸️",d:"3초 동안 나 빼고 모두 
 {n:"3초 무적",e:"🛡️",d:"3초 동안 공에 맞지 않아요",cd:18},
 {n:"그림자분신",e:"👥",d:"나와 똑같은 분신이 나와 10초 동안 돌아다녀요",cd:20},
 {n:"속도 감속",e:"🐢",d:"상대 팀 전원이 5초 동안 느려져요",cd:20},
-{n:"소인국",e:"🐜",d:"8초 동안 몸이 작아져서 맞히기 어려워요",cd:18}];
+{n:"소인국",e:"🐜",d:"8초 동안 몸이 작아져서 맞히기 어려워요",cd:18},
+{n:"외톨이",e:"🐺",d:"패시브. 우리 팀에서 나 혼자 남으면 이동 속도가 빨라져요",cd:0,ps:1},
+{n:"짐볼 수호자",e:"🏐",d:"짐볼을 들고 시작해요. 능력 버튼을 누르면 3초 동안 날아오는 공을 튕겨 막아요. 공이 없을 때 짐볼 버튼을 누르면 짐볼을 던져 상대를 아웃시키지만, 던진 나도 아웃돼요. 짐볼은 한 번 던지면 사라져요",cd:0}];
 let spLot=0,TS={by:null,t:0},PJ=[],DC=[],dcN=0,SPX=[0,-1,0,0],spSeen=-1;
 const tsOn=()=>TS.t>0&&!!TS.by,lockd=c=>SPm()&&!!c.ef&&c.ef.lock>0;
-function spf(c){if(!SPm()||!c.ef)return 1;return(c.ef.quick>0?2.1:1)*(c.ef.slow>0?.45:1)}
-const EFK=["lock","rev","quick","bers","inv","small","slow"];
-function efNew(){return{lock:0,rev:0,quick:0,bers:0,inv:0,small:0,slow:0}}
+function spf(c){if(!SPm()||!c.ef)return 1;return(c.ef.quick>0?2.1:1)*(c.ef.slow>0?.45:1)*(lone(c)?1.6:1)}
+const EFK=["lock","rev","quick","bers","inv","small","slow","guard"];
+function efNew(){return{lock:0,rev:0,quick:0,bers:0,inv:0,small:0,slow:0,guard:0}}
+const lone=c=>SPm()&&c.ab===10&&!c.out&&!c.gone&&T.some(k=>k!==c&&k.team===c.team)&&!T.some(k=>k!==c&&k.team===c.team&&!k.out&&!k.gone);
 function spReset(){PJ.forEach(o=>S.remove(o.m));
 PJ=[];
 DC.forEach(d=>S.remove(d.m));
 DC=[];
 TS={by:null,t:0};
 T.forEach(c=>{c.ef=efNew();
+c.gym=0;
 c.acd=0;
 c.life=0;
 if(c.m.scale.x!==1)c.m.scale.setScalar(1)});
@@ -1204,7 +1208,7 @@ if(net.mode!=="guest"){{const bag=AB.map((_,i)=>i);
 for(let i=bag.length-1;i>0;i--){const j=Math.random()*(i+1)|0;
 [bag[i],bag[j]]=[bag[j],bag[i]]}
 T.forEach((c,i)=>{c.ab=bag[i%bag.length];
-c.acd=3+Math.random()*4})}
+c.acd=3+Math.random()*4;c.gym=c.ab===11?1:0})}
 spLot=1}}
 function spToast(c,a,v){SPX=[SPX[0]+1,T.indexOf(c),a,v|0];spShowX(SPX)}
 function spShowX(x){const c=T[x[1]],a=AB[x[2]];
@@ -1214,8 +1218,8 @@ spt.textContent=a.e+" "+who+" "+a.n+(x[2]===5?" · "+x[3]+"개!":"")+" 사용!";
 spt.style.display="block";
 clearTimeout(spt._t);
 spt._t=setTimeout(()=>{spt.style.display="none"},1800)}
-function useAb(c){if(!SPm()||!run||c.aused||c.out||c.gone||(J.on&&!J.done)||(c.acd||0)>0||(tsOn()&&TS.by!==c))return;const a=c.ab|0,en=T.filter(k=>k.team!==c.team&&!k.gone);if(!c.ef)c.ef=efNew();
-if(a===4){if(c.life<60||c.ef.bers>0||c.bused)return;c.bused=1;c.ef.bers=5}
+function useAb(c){if(!SPm()||!run||c.aused||c.out||c.gone||(J.on&&!J.done)||(c.acd||0)>0||(tsOn()&&TS.by!==c))return;const a=c.ab|0,en=T.filter(k=>k.team!==c.team&&!k.gone);if(a===10)return;if(!c.ef)c.ef=efNew();
+if(a===11)c.ef.guard=3;else if(a===4){if(c.life<60||c.ef.bers>0||c.bused)return;c.bused=1;c.ef.bers=5}
 else if(a===0)TS={by:c,t:3};else if(a===1)en.forEach(k=>{k.ef.lock=4});else if(a===2)en.forEach(k=>{k.ef.rev=5});else if(a===3)c.ef.quick=5;else if(a===6)c.ef.inv=3;else if(a===8)en.forEach(k=>{k.ef.slow=5});else if(a===9)c.ef.small=8;else if(a===7)dcSpawn(c);
 let v=0;if(a===5){v=1+(Math.random()*6|0);spFan(c,v)}c.aused=1;c.acd=0;spToast(c,a,v)}
 function aimFor(c){if(c===P)return lookA();
@@ -1228,10 +1232,12 @@ function spFire(c,a,pt){const n=performance.now();if(n-(c.lf||0)<220)return;c.lf
 function spFan(c,n){const a0=aimFor(c);for(let i=0;i<n;i++)pjAdd(c,a0+(i-(n-1)/2)*.13,0);c.fy=a0;c.fh=.6}
 const pjG=new THREE.SphereGeometry(.22,16,12);
 function pjMesh(){const m=new THREE.Mesh(pjG,new THREE.MeshLambertMaterial({map:BT[curBall]||BT[0],emissive:0x331100}));S.add(m);return m}
-function pjAdd(c,a,pt){const p=c.m.position,m=pjMesh(),sp=20;
+function pjGym(o,g){if(!!o.g!==!!g){o.g=g?1:0;o.m.material.map=g?GYM:(BT[curBall]||BT[0]);o.m.material.needsUpdate=true;o.m.scale.setScalar(g?2.8:1)}}
+function gymThrow(c,a){if(!SPm()||!run||!c.gym||c.out||c.gone||lockd(c)||hk(c)>=0||(J.on&&!J.done)||(tsOn()&&TS.by!==c))return;c.gym=0;pjAdd(c,a,0,1);c.fy=a;c.fh=.5;out(c)}
+function pjAdd(c,a,pt,g){const p=c.m.position,m=pjMesh(),sp=g?16:20;
 m.position.set(p.x,1.1,p.z);
-PJ.push({m,team:c.team,thr:c,t:0,v:new THREE.Vector3(-Math.sin(a)*sp*Math.cos(pt),Math.sin(pt)*sp,-Math.cos(a)*sp*Math.cos(pt))});
-sfxThrow()}
+PJ.push({m,g:0,team:c.team,thr:c,t:0,v:new THREE.Vector3(-Math.sin(a)*sp*Math.cos(pt),Math.sin(pt)*sp,-Math.cos(a)*sp*Math.cos(pt))});
+if(g)pjGym(PJ[PJ.length-1],1);sfxThrow()}
 function dcSpawn(c){const i=T.indexOf(c),m=mk(c.m.userData.col);
 applyAv(m,avFor(i));
 const p=c.m.position;
@@ -1249,7 +1255,7 @@ if(c.out){c.ef.bers=0;c.ef.small=0;c.ef.inv=0}
 if(c.bused&&c.ef.bers<=0&&!c.bdone&&!c.out){c.bdone=1;out(c)}
 if(c.ef.bers>0&&!c.out&&!fz){if(!c.pl){c.bt=(c.bt||0)-dt;if(c.bt<=0){c.bt=.35;spFire(c,aimFor(c),0)}}}
 if(!c.pl&&!c.gone&&!c.aused&&!fz&&run&&!(J.on&&!J.done)&&(c.acd||0)<=0){const a=c.ab|0;
-if(a===4){if(!c.out&&c.life>=60&&!c.bused&&Math.random()<dt*.08)useAb(c)}else if(Math.random()<dt*.12)useAb(c)}});
+if(a===4){if(!c.out&&c.life>=60&&!c.bused&&Math.random()<dt*.08)useAb(c)}else if(a!==10&&Math.random()<dt*.12)useAb(c)}});
 for(const o of PJ.slice()){if(ts&&o.thr!==TS.by)continue;
 o.t+=dt;
 const q=o.m.position;
@@ -1257,11 +1263,11 @@ q.addScaledVector(o.v,dt);
 o.m.rotation.x+=dt*12;
 let hit=null;
 inn(1-o.team).forEach(c=>{const sm=c.ef&&c.ef.small>0;
-if(!hit&&!(c.ef&&c.ef.inv>0)&&Math.hypot(q.x-c.m.position.x,q.z-c.m.position.z)<(sm?.45:.7)&&c.m.position.y<.45&&q.y<(sm?1.05:2.05))hit=c});
+if(!hit&&!(c.ef&&c.ef.inv>0)&&Math.hypot(q.x-c.m.position.x,q.z-c.m.position.z)<(o.g?1.1:sm?.45:.7)&&(o.g||c.m.position.y<.45)&&q.y<(sm?1.05:2.05))hit=c});
 const dd=!hit&&dcHit(q,o.team,.7);
-let gone=o.t>1.8||Math.abs(q.x)>11||Math.abs(q.z)>16||q.y<.1;
+let gone=o.t>(o.g?2.4:1.8)||Math.abs(q.x)>11||Math.abs(q.z)>16||q.y<.1;
 if(hit){gone=1;
-if(!(hit.pl&&hit.cw>0&&!lockd(hit)&&!(ts&&hit!==TS.by))){if(hit===P)fl=.25;
+if(!(hit.ef&&hit.ef.guard>0)&&(o.g||!(hit.pl&&hit.cw>0&&!lockd(hit)&&!(ts&&hit!==TS.by)))){if(hit===P)fl=.25;
 out(hit)}}else if(dd){gone=1;
 dcKill(dd)}
 if(gone){S.remove(o.m);
@@ -1286,19 +1292,20 @@ d.vx=dx/(l||1)*4;
 d.vz=dz/(l||1)*4;
 if(!d.own.out){p.x=cl(p.x,-5.6,5.6);
 p.z=d.team?cl(p.z,-9.6,-.8):cl(p.z,.8,9.6)}}}
-function spFlags(c){let f=0;if(c.ef)EFK.forEach((k,i)=>{if(c.ef[k]>0)f|=1<<i});if(c.ab===4&&(c.life||0)>=60&&!c.bused)f|=128;if(c.aused)f|=256;return f}
+function spFlags(c){let f=0;if(c.ef)EFK.forEach((k,i)=>{if(c.ef[k]>0)f|=1<<i});if(c.ab===4&&(c.life||0)>=60&&!c.bused)f|=512;if(c.aused)f|=1024;if(c.gym)f|=2048;return f}
 function spPack(){const r=v=>Math.round(v*100)/100;
-return{ab:T.map(c=>c.ab|0),cd:T.map(c=>Math.max(0,Math.ceil(c.acd||0))),f:T.map(spFlags),lf:T.map(c=>Math.floor(c.life||0)),ts:tsOn()?T.indexOf(TS.by):-1,pj:PJ.map(o=>[r(o.m.position.x),r(o.m.position.y),r(o.m.position.z)]),dc:DC.map(d=>[d.id,r(d.m.position.x),r(d.m.position.z),T.indexOf(d.own),r(d.m.rotation.y)]),x:SPX}}
+return{ab:T.map(c=>c.ab|0),cd:T.map(c=>Math.max(0,Math.ceil(c.acd||0))),f:T.map(spFlags),lf:T.map(c=>Math.floor(c.life||0)),ts:tsOn()?T.indexOf(TS.by):-1,pj:PJ.map(o=>[r(o.m.position.x),r(o.m.position.y),r(o.m.position.z),o.g?1:0]),dc:DC.map(d=>[d.id,r(d.m.position.x),r(d.m.position.z),T.indexOf(d.own),r(d.m.rotation.y)]),x:SPX}}
 function spApply(d){T.forEach((c,i)=>{c.ab=d.ab[i]|0;
 c.acd=d.cd[i]|0;
 c.life=d.lf?d.lf[i]|0:0;
 const f=d.f[i]|0;
 if(!c.ef)c.ef=efNew();
 EFK.forEach((k,j)=>{c.ef[k]=f&(1<<j)?1:0});
-c.bok=!!(f&128);
-c.aused=!!(f&256)});
+c.bok=!!(f&512);
+c.aused=!!(f&1024);
+c.gym=f&2048?1:0});
 TS={by:d.ts>=0?T[d.ts]:null,t:d.ts>=0?1:0};
-while(PJ.length<d.pj.length)PJ.push({m:pjMesh()});while(PJ.length>d.pj.length)S.remove(PJ.pop().m);d.pj.forEach((a,i)=>PJ[i].m.position.set(a[0],a[1],a[2]));
+while(PJ.length<d.pj.length)PJ.push({m:pjMesh()});while(PJ.length>d.pj.length)S.remove(PJ.pop().m);d.pj.forEach((a,i)=>{PJ[i].m.position.set(a[0],a[1],a[2]);pjGym(PJ[i],a[3])});
 const ids=d.dc.map(a=>a[0]);
 DC.filter(k=>!ids.includes(k.id)).forEach(k=>S.remove(k.m));
 DC=DC.filter(k=>ids.includes(k.id));
@@ -1335,13 +1342,14 @@ u.lL.rotation.x=-w}
 return}});
 DC.forEach(d=>{const u=d.m.userData;if(u.lR){const w=Math.sin(performance.now()/90)*.7;u.lR.rotation.x=w;u.lL.rotation.x=-w;u.aR.rotation.x=-w*.6;u.aL.rotation.x=w*.6}});
 T.forEach(c=>{const e=c.ef;const sm=on&&e&&e.small>0,sc=sm?.55:1;if(Math.abs(c.m.scale.x-sc)>.01)c.m.scale.setScalar(c.m.scale.x+(sc-c.m.scale.x)*Math.min(1,dt*10));
-const inv=on&&e&&e.inv>0,bs=on&&e&&e.bers>0;
-if(inv||bs||c.shm){if(!c.shm){c.shm=new THREE.Mesh(shG,new THREE.MeshBasicMaterial({color:0xffd54a,transparent:true,opacity:.22,depthWrite:false}));
+const inv=on&&e&&e.inv>0,bs=on&&e&&e.bers>0,gd=on&&e&&e.guard>0;
+const gy=on&&!!c.gym&&!c.out&&!c.gone;if(gy&&!c.gym3){c.gym3=new THREE.Mesh(new THREE.SphereGeometry(.5,18,12),new THREE.MeshLambertMaterial({map:GYM}));c.gym3.position.set(0,1,-.6);c.m.add(c.gym3)}if(c.gym3)c.gym3.visible=gy;
+if(inv||bs||gd||c.shm){if(!c.shm){c.shm=new THREE.Mesh(shG,new THREE.MeshBasicMaterial({color:0xffd54a,transparent:true,opacity:.22,depthWrite:false}));
 c.shm.position.y=1;
 c.m.add(c.shm)}
-c.shm.visible=inv||bs;
-if(c.shm.visible)c.shm.material.color.setHex(bs?0xff3b3b:0xffd54a)}
-let em="";if(on&&e){if(e.lock>0)em="🔒";else if(e.rev>0)em="🔄";else if(e.slow>0)em="🐢";else if(e.bers>0)em="🔥";else if(e.quick>0)em="⚡";else if(e.inv>0)em="🛡️"}
+c.shm.visible=inv||bs||gd;
+if(c.shm.visible)c.shm.material.color.setHex(bs?0xff3b3b:gd?0x4ad0ff:0xffd54a)}
+let em="";if(on&&e){if(e.lock>0)em="🔒";else if(e.rev>0)em="🔄";else if(e.slow>0)em="🐢";else if(e.bers>0)em="🔥";else if(e.quick>0)em="⚡";else if(e.inv>0)em="🛡️";else if(e.guard>0)em="🏐";else if(lone(c))em="💨"}
 if(em||c.esp){if(!c.esp){c.esp=new THREE.Sprite(new THREE.SpriteMaterial({depthTest:false,transparent:true}));
 c.esp.scale.set(.7,.7,1);
 c.esp.position.y=2.75;
@@ -1352,11 +1360,11 @@ c.esp.material.needsUpdate=true}}});
 W(tso,"display",on&&tsOn()?"block":"none");if(on&&tsOn())W(tsoT,"t","⏸ 시간 정지"+(TS.by===P?" · 나만 움직여요!":""));
 W(abl,"display",on&&!P.out&&lot.style.display!=="flex"?"flex":"none");
 if(on){const A=AB[P.ab|0]||AB[0],cdv=Math.ceil(P.acd||0),br=(P.ab|0)===4,bok=net.mode==="guest"?P.bok:(P.life||0)>=60&&!P.bused,act=br&&P.ef&&P.ef.bers>0;
-let st=act?"던지기 연타!":P.aused?"사용함":br?(bok?"사용 가능":Math.max(0,60-Math.floor(P.life||0))+"초 뒤"):cdv>0?cdv+"초":"";
+let st=act?"던지기 연타!":A.ps?(lone(P)?"발동 중":"패시브"):P.aused?"사용함":br?(bok?"사용 가능":Math.max(0,60-Math.floor(P.life||0))+"초 뒤"):cdv>0?cdv+"초":"";
 W(abl,"t","");
 if(abl._k!==A.e+st){abl._k=A.e+st;
-abl.innerHTML="<b>"+A.e+"</b><span>"+(st||A.n)+"</span><small class='pk'>R</small>"}
-W(abl,"opacity",(act||(!P.aused&&(br?bok:cdv<=0)))&&!(J.on&&!J.done)&&!(tsOn()&&TS.by!==P)?1:.45);
+abl.innerHTML="<b>"+A.e+"</b><span>"+(st||A.n)+"</span>"+(A.ps?"":"<small class='pk'>R</small>")}
+W(abl,"opacity",!A.ps&&(act||(!P.aused&&(br?bok:cdv<=0)))&&!(J.on&&!J.done)&&!(tsOn()&&TS.by!==P)?1:.45);
 const e=P.ef||{},ls=[];
 if(e.lock>0)ls.push("🔒 키 잠김");
 if(e.rev>0)ls.push("🔄 방향 반대");
@@ -1365,6 +1373,9 @@ if(e.quick>0)ls.push("⚡ 빨라짐");
 if(e.inv>0)ls.push("🛡️ 무적");
 if(e.small>0)ls.push("🐜 작아짐");
 if(e.bers>0)ls.push("🔥 버서커");
+if(e.guard>0)ls.push("🏐 공 튕기기");
+if(lone(P))ls.push("💨 외톨이 질주");
+if(P.gym)ls.push("🏐 짐볼 보유");
 W(spb,"t",ls.join("\n"))}else W(spb,"t","")}
 function lottery(a){const A=AB[a|0];
 if(!A)return;
@@ -1635,7 +1646,7 @@ if(gmode===4)return[];
 return T.filter(c=>c.team===P.team&&c!==P&&!(BRm()&&(c.out||c.gone))).map(c=>{const dx=c.m.position.x-p.x,dz=c.m.position.z-p.z;
 return{c,ang:Math.atan2(dx*cs-dz*sn,-dx*sn-dz*cs)}}).sort((u,v)=>u.ang-v.ang)}
 const aimOf=l=>l.reduce((m,u)=>Math.abs(u.ang)<Math.abs(m.ang)?u:m,l[0]);
-function doPass(t){if(!run||hk(P)<0||gmode===4||(SPm()&&(lockd(P)||(tsOn()&&TS.by!==P)))||(TUT&&TSP[tS]&&TSP[tS].np))return;
+function doPass(t){if(SPm()&&run&&P.gym&&hk(P)<0&&!P.out&&!lockd(P)&&!(tsOn()&&TS.by!==P)&&!(J.on&&!J.done)){if(net.mode==="guest")act("g",0,lookA());else gymThrow(P,lookA());return}if(!run||hk(P)<0||gmode===4||(SPm()&&(lockd(P)||(tsOn()&&TS.by!==P)))||(TUT&&TSP[tS]&&TSP[tS].np))return;
 const l=pcands();
 if(!l.length)return;
 const c=l.some(u=>u.c===t)?t:aimOf(l).c;
@@ -2295,7 +2306,7 @@ if(!hit&&SPm()){const dd=dcHit(q,B.team,.7);
 if(dd){dcKill(dd);
 drop();
 continue}}
-if(hit){if(!(SPm()&&tsOn()&&hit!==TS.by)&&canH(hit,B)&&!lockd(hit)&&(hit.pl?hit.cw>0:Math.random()<.2)){give(hit)}else{if(hit===P)fl=.25;
+if(hit){if(SPm()&&hit.ef&&hit.ef.guard>0){B.v.multiplyScalar(-1);drop();sfxHit()}else if(!(SPm()&&tsOn()&&hit!==TS.by)&&canH(hit,B)&&!lockd(hit)&&(hit.pl?hit.cw>0:Math.random()<.2)){give(hit)}else{if(hit===P)fl=.25;
 drop();
 out(hit)}}else{const ic=Math.abs(q.x)<=6.2&&Math.abs(q.z)<=10.2;
 if(ic)B.in=1;
@@ -2329,7 +2340,7 @@ W(ctc,"t",P.cc>0&&!P.out?P.cc.toFixed(1):"잡기");
 W(ctc,"opacity",P.cc>0||lockd(P)?.35:1);
 W(thr,"t","던지기");
 W(thr,"opacity",!lockd(P)&&(hk(P)>=0||(SPm()&&P.ef&&P.ef.bers>0))&&!(TUT&&TSP[tS]&&TSP[tS].nt)?1:.35);
-W(pss,"opacity",!lockd(P)&&hk(P)>=0&&gmode!==4&&!(TUT&&TSP[tS]&&TSP[tS].np)?1:.35);
+const gyb=SPm()&&!!P.gym&&hk(P)<0&&!P.out;W(pss,"t",gyb?"짐볼":"패스");W(pss,"opacity",!lockd(P)&&(gyb||hk(P)>=0&&gmode!==4)&&!(TUT&&TSP[tS]&&TSP[tS].np)?1:.35);
 W(jmp,"t",P.jc>0?P.jc.toFixed(1):"점프");
 W(jmp,"opacity",lockd(P)?.35:P.jc>0?.8:1);
 W(jmp,"background",P.jc>0?"conic-gradient(rgba(0,0,0,.55) "+(Math.min(1,P.jc/1.2)*360|0)+"deg,transparent 0),#9b5de5":"");
@@ -2403,7 +2414,8 @@ c.ya=+d.ya||0;c.pi=+d.pi||0}
 else if(o.t==="act"&&run){if(SPm()){if(d.a==="a"){useAb(c);
 return}
 if((tsOn()&&TS.by!==c)&&d.a!=="e")return;
-if(lockd(c)&&(d.a==="t"||d.a==="p"||d.a==="j"||d.a==="c"))return;
+if(lockd(c)&&(d.a==="t"||d.a==="p"||d.a==="j"||d.a==="c"||d.a==="g"))return;
+if(d.a==="g"){gymThrow(c,+d.y||0);return}
 if(d.a==="t"&&c.ef&&c.ef.bers>0){spFire(c,+d.y||0,Math.max(-.45,Math.min(.7,+d.pt||0)));
 return}}
 const hi=hk(c),h=hi>=0;
@@ -2431,7 +2443,7 @@ const how=document.createElement("div");how.id="how";
 how.innerHTML="<div class='tbs'><button data-t='0' class='on'>규칙</button><button data-t='1'>조작</button><button data-t='2'>모드·설정</button></div>"+
 "<ul class='on' data-p='0'><li>상대 팀을 모두 외야로 보내면 승리!</li><li>시작은 점프볼: 공이 꼭대기일 때 점프 버튼을 눌러요. 타이밍이 좋을수록 높이 뛰어요.</li><li>공을 잡으면 던지기로 적을 맞히거나 패스로 팀원에게 넘겨요.</li><li>맞으면 상대 코트 뒤와 옆의 외야로 나가요(들고 있던 공은 그 자리에 떨어져요). 코트 밖으로 나간 공은 외야가 줍고, 외야가 없으면 내야가 가져가요.</li><li>잡기: 날아오는 공이나 패스를 타이밍 맞춰 받아낼 수 있어요(패스 가로채기). 상대 패스가 몸에 맞으면 그 사람도 아웃이에요. 점프로 뛰어넘으면 피해요. 점프볼 직후 첫 패스는 맞아도 아웃이 아니에요.</li><li>점프: 낮게 날아오는 공을 뛰어넘어 피할 수 있어요(짐볼은 못 피해요). 한 번 뛰면 1.2초 뒤에 다시 뛸 수 있어요.</li></ul>"+
 "<ul data-p='1'><li>이동: 왼쪽 화면을 누르고 밀기 (PC: WASD)</li><li>시점 회전: 오른쪽 화면 밀기 (PC: ←/→)</li><li>던지기: 빨간 조준선을 적에게 맞추고 던져요. 꾹 누르면 더 세고 빠르게 날아가고, 누른 채 밀면 조준이 움직여요. 위로 조준하면 머리 위로 넘어가고, 아래로 조준하면 바닥에 먼저 떨어져요. (PC: 스페이스 또는 마우스 왼쪽 클릭)</li><li>패스: 공을 들면 아래에 팀원 원이 떠요. 파랑=내야, 주황=외야. 원을 누르면 그 사람에게, 패스 버튼은 하얀 링의 팀원에게 가요. (PC: E)</li><li>잡기 (PC: F), 점프 (PC: Q)</li><li>확대/축소: 오른쪽 화면에서 두 손가락 모으기/벌리기 (PC: 마우스 휠). 끝까지 확대하면 1인칭이에요.</li><li>감정표현: 오른쪽 위 😊 버튼 (PC: 숫자 1~8)</li></ul>"+
-"<ul data-p='2'><li>팀 인원은 1:1부터 6:6까지예요. AI 버튼으로 AI를 끌 수 있어요(친구와 방을 만들었을 때만, 양 팀에 친구가 있어야 해요).</li><li>라운드: 1, 3, 5, 7판 중에 골라요. 먼저 과반을 이기면 승리예요.</li><li>왕 피구: 팀마다 한 명이 왕관을 써요(상대에게는 안 보여요). 왕이 맞으면 그 팀이 져요.</li><li>짐볼 피구: 공이 3배로 크고, 든 사람은 느려지고, 던지는 속도도 느려져요.</li><li>공 2개 피구: 공이 두 개예요. 공 버튼은 첫 번째 공, 공2 버튼은 두 번째 공이고, 이 모드에서만 짐볼을 고를 수 있어요. 점프볼에서 진 팀은 두 번째 공으로 시작해요. 한 사람이 공 두 개를 양손에 들 수 있고, 두 개를 든 채 던지면 느려요. 짐볼은 다른 공과 같이 못 들어요.</li><li class='devm'>초능력 피구: 시작할 때 제비뽑기로 능력을 하나씩 받아요(AI도 받아요). 능력 버튼(PC: R)으로 쓰고, 한 판(라운드)에 한 번만 쓸 수 있어요. 시간 멈추는 자, 키 잠금, 방향키 반대, 퀵실버, 버서커(1분 버티면 사용 가능, 5초 동안 무제한으로 던지고 끝나면 아웃), 다이서, 3초 무적, 그림자분신, 속도 감속, 소인국.</li><li class='devm'>배틀로얄: 넓은 맵에서 최대 20명이 마지막까지 살아남기를 겨뤄요. 맞으면 바로 탈락이고, 장애물 뒤에 숨어 공을 피할 수 있어요. 공은 5개예요. 탈락하면 ◀ ▶ 버튼(PC: ←/→)으로 남은 플레이어를 바꿔 가며 그 사람 시점으로 관전해요. 솔로는 모두가 적이고 패스를 못 해요. 듀오는 두 명이 한 팀이고 팀원 발밑에 파란 원이 보여요.</li><li>방에 들어온 친구는 준비하기 전에 팀 바꾸기 버튼으로 팀을 옮길 수 있어요. 대기 화면에서 두 팀의 이름과 준비 상태(✓)를 볼 수 있어요.</li><li>공이 3초 넘게 바닥에 방치되면 화면에 노란 화살표가 떠서 공 방향을 알려 줘요.</li><li>게임 중에는 왼쪽 위 나가기 버튼을 두 번 눌러 로비로 돌아갈 수 있어요.</li></ul>";
+"<ul data-p='2'><li>팀 인원은 1:1부터 6:6까지예요. AI 버튼으로 AI를 끌 수 있어요(친구와 방을 만들었을 때만, 양 팀에 친구가 있어야 해요).</li><li>라운드: 1, 3, 5, 7판 중에 골라요. 먼저 과반을 이기면 승리예요.</li><li>왕 피구: 팀마다 한 명이 왕관을 써요(상대에게는 안 보여요). 왕이 맞으면 그 팀이 져요.</li><li>짐볼 피구: 공이 3배로 크고, 든 사람은 느려지고, 던지는 속도도 느려져요.</li><li>공 2개 피구: 공이 두 개예요. 공 버튼은 첫 번째 공, 공2 버튼은 두 번째 공이고, 이 모드에서만 짐볼을 고를 수 있어요. 점프볼에서 진 팀은 두 번째 공으로 시작해요. 한 사람이 공 두 개를 양손에 들 수 있고, 두 개를 든 채 던지면 느려요. 짐볼은 다른 공과 같이 못 들어요.</li><li class='devm'>초능력 피구: 시작할 때 제비뽑기로 능력을 하나씩 받아요(AI도 받아요). 능력 버튼(PC: R)으로 쓰고, 한 판(라운드)에 한 번만 쓸 수 있어요. 시간 멈추는 자, 키 잠금, 방향키 반대, 퀵실버, 버서커(1분 버티면 사용 가능, 5초 동안 무제한으로 던지고 끝나면 아웃), 다이서, 3초 무적, 그림자분신, 속도 감속, 소인국, 외톨이(패시브: 팀에 혼자 남으면 빨라져요), 짐볼 수호자(짐볼을 들고 시작. 능력 버튼으로 3초 동안 공을 튕기고, 공이 없을 때 짐볼 버튼으로 짐볼을 던지면 상대 1명을 아웃시키지만 나도 아웃).</li><li class='devm'>배틀로얄: 넓은 맵에서 최대 20명이 마지막까지 살아남기를 겨뤄요. 맞으면 바로 탈락이고, 장애물 뒤에 숨어 공을 피할 수 있어요. 공은 5개예요. 탈락하면 ◀ ▶ 버튼(PC: ←/→)으로 남은 플레이어를 바꿔 가며 그 사람 시점으로 관전해요. 솔로는 모두가 적이고 패스를 못 해요. 듀오는 두 명이 한 팀이고 팀원 발밑에 파란 원이 보여요.</li><li>방에 들어온 친구는 준비하기 전에 팀 바꾸기 버튼으로 팀을 옮길 수 있어요. 대기 화면에서 두 팀의 이름과 준비 상태(✓)를 볼 수 있어요.</li><li>공이 3초 넘게 바닥에 방치되면 화면에 노란 화살표가 떠서 공 방향을 알려 줘요.</li><li>게임 중에는 왼쪽 위 나가기 버튼을 두 번 눌러 로비로 돌아갈 수 있어요.</li></ul>";
 const sz=document.createElement("div");sz.id="sz";
 sz.innerHTML='팀 인원 <button id="szm" aria-label="인원 줄이기">−</button> <b id="szv">3</b> <button id="szp" aria-label="인원 늘리기">+</button> 명씩 <button id="aib">AI 켜짐</button>';
 how.style.display="none";
