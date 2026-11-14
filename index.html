@@ -115,7 +115,7 @@ canvas{display:block;position:fixed;inset:0}
 #zwn b{margin-top:-30vh;padding:8px 16px;border-radius:12px;background:rgba(80,20,160,.75);color:#fff;font-size:17px}
 body.nr #brh,body.nr #kfb,body.nr #zwn{visibility:hidden}
 #abl{right:30px;bottom:calc(236px + env(safe-area-inset-bottom,0px));width:76px;height:76px;background:linear-gradient(135deg,#ff6bd6,#7b5cff);color:#fff;font-size:12px;flex-direction:column;line-height:1.15;text-align:center;box-shadow:0 0 0 4px rgba(255,255,255,.18);display:none}
-#abl b{font-size:24px;line-height:1}#ov:not(.dd)>#spk,#ov:not(.dd)>#spx2{display:none}#ov.dd>*:not(h1):not(#spk):not(#spx2){display:none!important}#ov.dd{z-index:60}#spk,#spx2{min-width:180px;height:48px;border:0;border-radius:14px;font-size:17px;font-weight:800;color:#fff}#spk{background:#4361ee}#spx2{background:rgba(255,255,255,.16)}#spc{position:fixed;left:50%;bottom:calc(10px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);z-index:30;display:none;align-items:center;gap:10px;background:rgba(10,14,24,.78);color:#fff;border-radius:16px;padding:6px 8px;text-align:center}body.spx #thr,body.spx #pss,body.spx #jmp,body.spx #ctc,body.spx #jb,body.spx #jk,body.spx #abl{display:none!important}#spc button{width:44px;height:44px;border:0;border-radius:12px;background:rgba(255,255,255,.16);color:#fff;font-size:18px}#spc div{display:flex;flex-direction:column;min-width:110px}#spc small{font-size:11px;opacity:.75}#spc b{font-size:16px}#abl span{font-weight:700;padding:0 4px}#abl .pk{display:none;position:absolute;top:-6px;right:-6px;min-width:20px;height:20px;line-height:20px;border-radius:6px;background:#fff;color:#7b5cff;font-size:12px;font-weight:900;box-shadow:0 2px 6px rgba(0,0,0,.3)}@media (hover:hover) and (pointer:fine){#abl .pk{display:block}}
+#abl b{font-size:24px;line-height:1}#abg{width:min(420px,92vw);box-sizing:border-box;background:rgba(255,255,255,.1);border-radius:14px;padding:8px 12px;text-align:left;font-size:14px}#abg summary{cursor:pointer;font-weight:800;text-align:center;list-style:none}#abg summary::-webkit-details-marker{display:none}#abg[open] summary{margin-bottom:6px}#abg p{margin:0;padding:6px 0;border-top:1px solid rgba(255,255,255,.12);max-width:none;line-height:1.45;font-size:13px}#abg p b{display:block;font-size:14px}#abg p span{opacity:.85}#abg .abn{opacity:.7;font-size:12px}#abg{max-height:42vh;overflow-y:auto}#ov:not(.dd)>#spk,#ov:not(.dd)>#spx2{display:none}#ov.dd>*:not(h1):not(#spk):not(#spx2){display:none!important}#ov.dd{z-index:60}#spk,#spx2{min-width:180px;height:48px;border:0;border-radius:14px;font-size:17px;font-weight:800;color:#fff}#spk{background:#4361ee}#spx2{background:rgba(255,255,255,.16)}#spc{position:fixed;left:50%;bottom:calc(10px + env(safe-area-inset-bottom,0px));transform:translateX(-50%);z-index:30;display:none;align-items:center;gap:10px;background:rgba(10,14,24,.78);color:#fff;border-radius:16px;padding:6px 8px;text-align:center}body.spx #thr,body.spx #pss,body.spx #jmp,body.spx #ctc,body.spx #jb,body.spx #jk,body.spx #abl{display:none!important}#spc button{width:44px;height:44px;border:0;border-radius:12px;background:rgba(255,255,255,.16);color:#fff;font-size:18px}#spc div{display:flex;flex-direction:column;min-width:110px}#spc small{font-size:11px;opacity:.75}#spc b{font-size:16px}#abl span{font-weight:700;padding:0 4px}#abl .pk{display:none;position:absolute;top:-6px;right:-6px;min-width:20px;height:20px;line-height:20px;border-radius:6px;background:#fff;color:#7b5cff;font-size:12px;font-weight:900;box-shadow:0 2px 6px rgba(0,0,0,.3)}@media (hover:hover) and (pointer:fine){#abl .pk{display:block}}
 #spb{position:fixed;right:12px;bottom:calc(318px + env(safe-area-inset-bottom,0px));font-size:15px;color:#fff;text-shadow:0 2px 6px rgba(0,0,0,.8);pointer-events:none;text-align:right}
 #tso{position:fixed;inset:0;pointer-events:none;background:rgba(110,80,230,.22);display:none;z-index:4}
 #tso b{position:absolute;left:0;right:0;top:30%;text-align:center;font-size:34px;color:#fff;text-shadow:0 2px 12px rgba(40,0,120,.9)}
@@ -287,6 +287,7 @@ const g0=new THREE.Group();S.children.filter(o=>o.isMesh).forEach(o=>g0.add(o));
 const GMODES=["일반 피구","왕 피구","짐볼 피구","공 2개 피구","배틀로얄 솔로","배틀로얄 듀오","초능력 피구"];
 const BRm=()=>gmode===4||gmode===5,BRT=()=>20,SPm=()=>gmode===6,DEV=/[?&#]dev\b/.test(location.search+location.hash),HIDM=[];
 if(DEV)document.documentElement.classList.add("dev");
+let devAb=-1;const dab=document.createElement("button");dab.id="dab";dab.style.display="none";dab.textContent="능력: 랜덤";dab.onclick=()=>{devAb=devAb+1>=AB.length?-1:devAb+1;dab.textContent="능력: "+(devAb<0?"랜덤":AB[devAb].e+" "+AB[devAb].n)};
 let TUT=0;const RNS=[1,3,5,7];let RN=1,SC=[0,0],RI=1,RW=-1;try{const v=+localStorage.getItem("pgRn");if(RNS.includes(v))RN=v}catch(e){}
 const MAPS=["기본 코트","학교 운동장","체육관"];let curMap=0;try{curMap=Math.min(MAPS.length-1,+localStorage.getItem("pgMap")||0)}catch(e){}
 function cvTex(w,h,fn,rep){const c=document.createElement("canvas");
@@ -1209,7 +1210,8 @@ if(net.mode!=="guest"){{const bag=AB.map((_,i)=>i);
 for(let i=bag.length-1;i>0;i--){const j=Math.random()*(i+1)|0;
 [bag[i],bag[j]]=[bag[j],bag[i]]}
 T.forEach((c,i)=>{c.ab=bag[i%bag.length];
-c.acd=3+Math.random()*4;c.gym=c.ab===11?1:0})}
+c.acd=3+Math.random()*4;c.gym=c.ab===11?1:0});
+if(DEV&&devAb>=0){const j=T.findIndex(c=>c!==P&&c.ab===devAb);if(j>=0){T[j].ab=P.ab;T[j].gym=T[j].ab===11?1:0}P.ab=devAb;P.gym=P.ab===11?1:0}}
 spLot=1}}
 function spToast(c,a,v){SPX=[SPX[0]+1,T.indexOf(c),a,v|0];spShowX(SPX)}
 function spShowX(x){const c=T[x[1]],a=AB[x[2]];
@@ -2071,7 +2073,11 @@ if(st.ok()){tNext=performance.now()+1000;
 tRender(1)}}
 tub.onclick=()=>{TUT=1;gmode=0;RN=1;N=3;net.mode="solo";SC=[0,0];RI=1;RW=-1;net.jc=(net.jc||0)+1;reset();run=true;ov.style.display="none";selB(0);give(P);tS=0;tNext=0;tEnter()};
 const ros=document.createElement("div");ros.id="ros";ms.before(ros);
-function renderRo(d){if(!d)return;
+function abGuide(g){let el=document.getElementById("abg");if(g!==6){if(el)el.style.display="none";return}
+if(!el){el=document.createElement("details");el.id="abg";el.innerHTML="<summary>능력 설명 보기 ("+AB.length+"개)</summary>"+AB.map(a=>"<p><b>"+a.e+" "+a.n+"</b><span>"+a.d+"</span></p>").join("")+"<p class='abn'>시작할 때 제비뽑기로 능력이 정해지고, 능력은 한 판에 한 번만 쓸 수 있어요.</p>";if(typeof ros!=="undefined"&&ros.parentNode)ros.after(el);else nw.appendChild(el)}
+else if(typeof ros!=="undefined"&&ros.parentNode&&el.previousElementSibling!==ros)ros.after(el);
+el.style.display=""}
+function renderRo(d){if(!d)return;abGuide(d.g);
 const nm=i=>(d.n&&d.n[i])||(i===0?"방장":"친구"+i),oc=i=>i===0||(d.s||[]).includes(i),col=(a,b,t)=>{let h="<div><h3>"+t+"</h3>";
 for(let i=a;i<b;i++){const o=oc(i),r=i===0||(d.r&&d.r[i]);
 h+="<p class='"+(o?"":"ai")+"'>"+(o?nm(i):"AI")+(o&&r?" <i>✓</i>":"")+"</p>"}
@@ -2637,7 +2643,7 @@ net.slots={};
 net.dcs=[];
 net.rdy={};
 openPanel();
-ob.append(mdb,rnb,nsb,rtb,mpb,blb,b2b,aib);
+ob.append(mdb,rnb,nsb,rtb,mpb,blb,b2b,dab,aib);
 ob.style.display="grid";
 net.nicks={0:(nk.value.trim().slice(0,6)||"방장")};
 net.avs={0:myAv.join(",")};
@@ -2999,7 +3005,7 @@ szUp();
 if(!run&&T.length!==(BRm()?BRT():N*2))reset();
 if(net.mode==="host")upd();
 mdb.textContent="모드: "+GMODES[gmode];
-b2b.style.display=gmode===3?"":"none";blb.style.display=BRm()?"none":"";rnb.style.display=BRm()?"none":"";
+b2b.style.display=gmode===3?"":"none";blb.style.display=BRm()?"none":"";rnb.style.display=BRm()?"none":"";dab.style.display=DEV&&SPm()?"":"none";
 if(gmode!==3){if(curBall===3)applyBall(0,1);
 if(curBall2===3)applyBall2(1,1)}};
 const rnTxt=()=>"라운드: "+RN+(RN>1?" ("+Math.ceil(RN/2)+"선승)":"");
@@ -3037,7 +3043,7 @@ const jr=el("div","jr");
 jr.append(tm);
 lb.append(jr);
 rcb.addEventListener("keydown",e=>{if(e.key==="Enter")jsb.click()});
-[mdb,rnb,mpb,blb,b2b].forEach(b=>b.classList.add("opt"));og.append(mdb,rnb,mpb,blb,b2b);c2.append(sz,og);
+[mdb,rnb,mpb,blb,b2b,dab].forEach(b=>b.classList.add("opt"));og.append(mdb,rnb,mpb,blb,b2b,dab);c2.append(sz,og);
 cmb.classList.add("opt");rw.append(nk,cmb);c3.append(rw);
 tl.append(tub,hb,lsb,upb);
 ov.insertBefore(how,ms);ov.addEventListener("scroll",()=>{if(ov.scrollLeft)ov.scrollLeft=0});nw.after(lob);rc.addEventListener("input",()=>{ov.querySelector("p").textContent=""});
