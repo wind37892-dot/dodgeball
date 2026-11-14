@@ -1677,8 +1677,9 @@ addEventListener("pointerdown",e=>{if(e.pointerType==="mouse"&&e.button===0&&(e.
 e.preventDefault();
 chargeStart()}},true);
 let lmb=0;
-addEventListener("pointerdown",e=>{if(e.pointerType==="mouse"&&e.button===0)lmb=1},true);
-addEventListener("pointermove",e=>{if(e.pointerType!=="mouse"||!(e.buttons&1)||!run||jmine()||cid!==null)return;yaw-=e.movementX*.008;pitch=Math.max(-.45,Math.min(.7,pitch-e.movementY*.006))},true);
+let lsx=0,lsy=0,lmv=0;
+addEventListener("pointerdown",e=>{if(e.pointerType==="mouse"&&e.button===0){lmb=1;lsx=e.clientX;lsy=e.clientY;lmv=0}},true);
+addEventListener("pointermove",e=>{if(e.pointerType!=="mouse"||!(e.buttons&1)||!run||jmine()||cid!==null)return;if(!lmv){if(Math.hypot(e.clientX-lsx,e.clientY-lsy)<8)return;lmv=1;return}yaw-=e.movementX*.008;pitch=Math.max(-.45,Math.min(.7,pitch-e.movementY*.006))},true);
 addEventListener("contextmenu",e=>{if(run||lmb)e.preventDefault()});
 addEventListener("pointerup",e=>{if(e.pointerType==="mouse"&&e.button===0){lmb=0;chargeEnd()}},true);
 let jx=0,jz=0,ox=0,oy=0,pid=null;
