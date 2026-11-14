@@ -1727,7 +1727,7 @@ zo.addEventListener("pointerdown",e=>{e.preventDefault();
 zs(1/.8)});
 zi.addEventListener("keydown",e=>{if(e.key==="Enter")zs(.8)});
 zo.addEventListener("keydown",e=>{if(e.key==="Enter")zs(1/.8)});
-addEventListener("wheel",e=>{zs(e.deltaY>0?1.08:.93)},{passive:true});
+addEventListener("wheel",e=>{if(!run||e.target.closest&&e.target.closest("#ov,#upm,#qm,#dth,#lot,.card,.modal"))return;zs(e.deltaY>0?1.08:.93)},{passive:true});
 pss.addEventListener("keydown",e=>{if(e.key==="Enter")doPass()});
 const zs=f=>{zoom=Math.max(.08,Math.min(1.9,zoom*Math.pow(f,1.6)))};
 const jmine=()=>!!J.on&&!J.done&&jids().includes(T.indexOf(P)),jids=()=>net.mode==="guest"?(net.jj||[]):[T.indexOf(J.bj),T.indexOf(J.rj)];
