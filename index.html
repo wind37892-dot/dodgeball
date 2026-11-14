@@ -2176,7 +2176,7 @@ return sp})();
 let pk="";
 function pui(){{const on=run&&!(J.on&&!J.done)&&mine();
 ag.visible=on;
-if(on){const p=P.m.position,a=lookA(),th=pitch,L=th<0?Math.min(9.4,.85/Math.tan(-th)):9.4,my=th<0?.25:Math.min(6,1.1+L*Math.tan(th)),mx=p.x-Math.sin(a)*L,mz=p.z-Math.cos(a)*L;
+if(on){const p=P.m.position,a=lookA(),th=pitch,fx=-Math.sin(a),fz=-Math.cos(a);let D=9.4,bs=.35;T.forEach(c=>{if(c===P||c.out||c.gone||(c.team===P.team&&!BRm()))return;const dx=c.m.position.x-p.x,dz=c.m.position.z-p.z,al=dx*fx+dz*fz;if(al<1.5)return;const r=Math.abs(dx*fz-dz*fx)/al;if(r<bs){bs=r;D=Math.min(26,al)}});const L=th<0?Math.min(D,.85/Math.tan(-th)):D,my=th<0?.25:Math.min(6,1.1+L*Math.tan(th)),mx=p.x-Math.sin(a)*L,mz=p.z-Math.cos(a)*L;
 ag.position.set(p.x,0,p.z);
 ag.rotation.y=a;
 ag.scale.set(1,1,Math.max(.3,L/9.4));
@@ -2354,8 +2354,8 @@ W(jmp,"boxShadow",apx.visible&&jids().includes(T.indexOf(P))?"0 0 0 8px rgba(255
 W(thr,"boxShadow",cw0?"0 0 0 "+(6+pw*16)+"px rgba(255,"+(183-pw*130|0)+",3,.55)":"")}
 const yw=spV?P._sy:(flp()?Math.PI:0)+yaw,pch=spV?P._sp:pitch,sn=Math.sin(yw),cs=Math.cos(yw);let cx=px,cz=pp.z,dz=BRm()?8.5:Math.max(6.5,15.5-Math.abs(pp.z)),dy=4.6,fw=5,ly=.8;if(P.out&&!BRm()){dz=6;dy=3.4;fw=6;ly=1}
 const fpv=zoom<=.14&&(fo===P||spV);P.m.visible=!fpv&&!(BRm()&&P.out);
-if(fpv){C.position.set(pp.x-sn*.12,1.58,pp.z-cs*.12);
-C.lookAt(pp.x-sn*6,1.45+6*Math.tan(pch),pp.z-cs*6)}else{dz*=zoom;
+if(fpv){const jy=Math.max(0,fo.m.position.y);C.position.set(pp.x-sn*.12,1.58+jy,pp.z-cs*.12);
+C.lookAt(pp.x-sn*6,1.45+jy+6*Math.tan(pch),pp.z-cs*6)}else{dz*=zoom;
 dy=ly+(dy-ly)*zoom;
 C.position.set(cx+sn*dz,dy,cz+cs*dz);
 C.lookAt(cx-sn*fw,ly+fw*Math.tan(pch),cz-cs*fw)}
