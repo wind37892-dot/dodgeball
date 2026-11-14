@@ -1665,15 +1665,14 @@ function doCatch(){if(!run||(SPm()&&(lockd(P)||(tsOn()&&TS.by!==P))))return;if(n
 const K={};
 addEventListener("keydown",e=>{if(tyT(e))return;if(BRm()&&P&&P.out&&run&&(e.code==="ArrowLeft"||e.code==="ArrowRight")){if(!e.repeat)specMv(e.code==="ArrowLeft"?-1:1);return}K[e.code]=1;
 if(e.code==="Space"){e.preventDefault();
-if(!e.repeat)chargeStart()}
+if(!e.repeat)doJump()}
 if(e.code==="KeyE")doPass();
 if(e.code==="KeyF")doCatch();
-if(e.code==="KeyQ")doJump();
 if(/^Digit[1-8]$/.test(e.code))doEmote(+e.code.slice(5));
 if(e.code==="Equal"||e.code==="NumpadAdd")zs(.8);
 if(e.code==="Minus"||e.code==="NumpadSubtract")zs(1/.8)});
 addEventListener("keyup",e=>{if(tyT(e))return;K[e.code]=0;
-if(e.code==="Space")chargeEnd()});
+if(e.code==="Space")e.preventDefault()});
 addEventListener("pointerdown",e=>{if(e.pointerType==="mouse"&&e.button===0&&(e.target===pad||e.target===cam)){e.stopPropagation();
 e.preventDefault();
 chargeStart()}},true);
@@ -2011,9 +2010,9 @@ const TSP=[
 {t:"시점을 돌려 보세요",s:"오른쪽 화면을 좌우, 위아래로 돌려요 (PC: ←/→ 좌우, ↑/↓ 위아래)",ok:()=>angd(yaw,tY0)>.6},
 {t:"공 높이를 조절해 보세요",s:"오른쪽 화면을 위아래로 밀면 조준선이 올라가고 내려가요. 공도 그 높이로 날아가요 (PC: ↑/↓)",in:()=>{selB(0);give(P);tPit=pitch},ok:()=>Math.abs(pitch-tPit)>.25},
 {t:"확대·축소해 보세요",s:"오른쪽 화면에서 두 손가락을 벌리거나 모아요 (PC: 마우스 휠, +/-)",ok:()=>Math.abs(Math.log(zoom/tZ0))>.3},
-{t:"공을 던져 보세요",np:1,hl:"thr",s:"빨간 조준선을 상대에게 맞추고 던지기 버튼! 꾹 누르면 더 세게 날아가요 (PC: 스페이스 또는 마우스 왼쪽 클릭)",in:()=>{selB(0);give(P)},ok:()=>B.st==="fly"&&B.thr===P},
+{t:"공을 던져 보세요",np:1,hl:"thr",s:"빨간 조준선을 상대에게 맞추고 던지기 버튼! 꾹 누르면 더 세게 날아가요 (PC: 마우스 왼쪽 클릭)",in:()=>{selB(0);give(P)},ok:()=>B.st==="fly"&&B.thr===P},
 {t:"패스해 보세요",nt:1,hl:"pss",s:"원이 표시된 팀원에게 가요. 패스 버튼을 누르면 공이 넘어가요 (PC: E)",in:()=>{selB(0);give(P)},ok:()=>B.st==="fly"&&B.kind==="p"},
-{t:"점프해 보세요",hl:"jmp",s:"점프 버튼! 낮게 날아오는 공을 뛰어넘어 피해요 (PC: Q)",ok:()=>P.jc>0},
+{t:"점프해 보세요",hl:"jmp",s:"점프 버튼! 낮게 날아오는 공을 뛰어넘어 피해요 (PC: 스페이스)",ok:()=>P.jc>0},
 {t:"공을 잡아 보세요",hl:"ctc",s:"연습용 공이 날아와요. 타이밍 맞춰 잡기 버튼! (PC: F)",in:tLaunch,ok:()=>{const n=performance.now();
 const hp=hk(P)>=0;
 if(hp&&(P.cw>0||P.ct>0)){tPend=0;
@@ -2447,7 +2446,7 @@ setInterval(()=>{if(net.mode!=="guest"||net.slot===undefined)return;const[x,z]=i
 const how=document.createElement("div");how.id="how";
 how.innerHTML="<div class='tbs'><button data-t='0' class='on'>규칙</button><button data-t='1'>조작</button><button data-t='2'>모드·설정</button></div>"+
 "<ul class='on' data-p='0'><li>상대 팀을 모두 외야로 보내면 승리!</li><li>시작은 점프볼: 공이 꼭대기일 때 점프 버튼을 눌러요. 타이밍이 좋을수록 높이 뛰어요.</li><li>공을 잡으면 던지기로 적을 맞히거나 패스로 팀원에게 넘겨요.</li><li>맞으면 상대 코트 뒤와 옆의 외야로 나가요(들고 있던 공은 그 자리에 떨어져요). 코트 밖으로 나간 공은 외야가 줍고, 외야가 없으면 내야가 가져가요.</li><li>잡기: 날아오는 공이나 패스를 타이밍 맞춰 받아낼 수 있어요(패스 가로채기). 상대 패스가 몸에 맞으면 그 사람도 아웃이에요. 점프로 뛰어넘으면 피해요. 점프볼 직후 첫 패스는 맞아도 아웃이 아니에요.</li><li>점프: 낮게 날아오는 공을 뛰어넘어 피할 수 있어요(짐볼은 못 피해요). 한 번 뛰면 1.2초 뒤에 다시 뛸 수 있어요.</li></ul>"+
-"<ul data-p='1'><li>이동: 왼쪽 화면을 누르고 밀기 (PC: WASD)</li><li>시점 회전: 오른쪽 화면 밀기 (PC: ←/→)</li><li>던지기: 빨간 조준선을 적에게 맞추고 던져요. 꾹 누르면 더 세고 빠르게 날아가고, 누른 채 밀면 조준이 움직여요. 위로 조준하면 머리 위로 넘어가고, 아래로 조준하면 바닥에 먼저 떨어져요. (PC: 스페이스 또는 마우스 왼쪽 클릭)</li><li>패스: 공을 들면 아래에 팀원 원이 떠요. 파랑=내야, 주황=외야. 원을 누르면 그 사람에게, 패스 버튼은 하얀 링의 팀원에게 가요. (PC: E)</li><li>잡기 (PC: F), 점프 (PC: Q)</li><li>확대/축소: 오른쪽 화면에서 두 손가락 모으기/벌리기 (PC: 마우스 휠). 끝까지 확대하면 1인칭이에요.</li><li>감정표현: 오른쪽 위 😊 버튼 (PC: 숫자 1~8)</li></ul>"+
+"<ul data-p='1'><li>이동: 왼쪽 화면을 누르고 밀기 (PC: WASD)</li><li>시점 회전: 오른쪽 화면 밀기 (PC: ←/→)</li><li>던지기: 빨간 조준선을 적에게 맞추고 던져요. 꾹 누르면 더 세고 빠르게 날아가고, 누른 채 밀면 조준이 움직여요. 위로 조준하면 머리 위로 넘어가고, 아래로 조준하면 바닥에 먼저 떨어져요. (PC: 마우스 왼쪽 클릭)</li><li>패스: 공을 들면 아래에 팀원 원이 떠요. 파랑=내야, 주황=외야. 원을 누르면 그 사람에게, 패스 버튼은 하얀 링의 팀원에게 가요. (PC: E)</li><li>잡기 (PC: F), 점프 (PC: 스페이스)</li><li>확대/축소: 오른쪽 화면에서 두 손가락 모으기/벌리기 (PC: 마우스 휠). 끝까지 확대하면 1인칭이에요.</li><li>감정표현: 오른쪽 위 😊 버튼 (PC: 숫자 1~8)</li></ul>"+
 "<ul data-p='2'><li>팀 인원은 1:1부터 6:6까지예요. AI 버튼으로 AI를 끌 수 있어요(친구와 방을 만들었을 때만, 양 팀에 친구가 있어야 해요).</li><li>라운드: 1, 3, 5, 7판 중에 골라요. 먼저 과반을 이기면 승리예요.</li><li>왕 피구: 팀마다 한 명이 왕관을 써요(상대에게는 안 보여요). 왕이 맞으면 그 팀이 져요.</li><li>짐볼 피구: 공이 3배로 크고, 든 사람은 느려지고, 던지는 속도도 느려져요.</li><li>공 2개 피구: 공이 두 개예요. 공 버튼은 첫 번째 공, 공2 버튼은 두 번째 공이고, 이 모드에서만 짐볼을 고를 수 있어요. 점프볼에서 진 팀은 두 번째 공으로 시작해요. 한 사람이 공 두 개를 양손에 들 수 있고, 두 개를 든 채 던지면 느려요. 짐볼은 다른 공과 같이 못 들어요.</li><li class='devm'>초능력 피구: 시작할 때 제비뽑기로 능력을 하나씩 받아요(AI도 받아요). 능력 버튼(PC: R)으로 쓰고, 한 판(라운드)에 한 번만 쓸 수 있어요. 시간 멈추는 자, 키 잠금, 방향키 반대, 퀵실버, 버서커(1분 버티면 사용 가능, 5초 동안 무제한으로 던지고 끝나면 아웃), 다이서, 3초 무적, 그림자분신, 속도 감속, 소인국, 외톨이(패시브: 팀에 혼자 남으면 빨라져요), 짐볼 수호자(짐볼을 들고 시작. 능력 버튼으로 3초 동안 공을 튕기고, 공이 없을 때 짐볼 버튼으로 짐볼을 던지면 상대 1명을 아웃시키지만 나도 아웃).</li><li class='devm'>배틀로얄: 넓은 맵에서 최대 20명이 마지막까지 살아남기를 겨뤄요. 맞으면 바로 탈락이고, 장애물 뒤에 숨어 공을 피할 수 있어요. 공은 5개예요. 탈락하면 ◀ ▶ 버튼(PC: ←/→)으로 남은 플레이어를 바꿔 가며 그 사람 시점으로 관전해요. 솔로는 모두가 적이고 패스를 못 해요. 듀오는 두 명이 한 팀이고 팀원 발밑에 파란 원이 보여요.</li><li>방에 들어온 친구는 준비하기 전에 팀 바꾸기 버튼으로 팀을 옮길 수 있어요. 대기 화면에서 두 팀의 이름과 준비 상태(✓)를 볼 수 있어요.</li><li>공이 3초 넘게 바닥에 방치되면 화면에 노란 화살표가 떠서 공 방향을 알려 줘요.</li><li>게임 중에는 왼쪽 위 나가기 버튼을 두 번 눌러 로비로 돌아갈 수 있어요.</li></ul>";
 const sz=document.createElement("div");sz.id="sz";
 sz.innerHTML='팀 인원 <button id="szm" aria-label="인원 줄이기">−</button> <b id="szv">3</b> <button id="szp" aria-label="인원 늘리기">+</button> 명씩 <button id="aib">AI 켜짐</button>';
