@@ -60,6 +60,10 @@
 <link rel="preconnect" href="https://fonts.googleapis.com"><link href="https://fonts.googleapis.com/css2?family=Jua&display=swap" rel="stylesheet">
 <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover">
 <title>온라인 피구</title>
+<script>(function(){try{if(window.top!==window||/[?&]fr=1/.test(location.search)||navigator.webdriver||/iPhone|iPad|iPod/.test(navigator.userAgent)||!document.documentElement.requestFullscreen)return;
+window.stop();var mv=document.querySelector('meta[name=viewport]');if(mv)mv.content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no";
+var u=location.pathname+(location.search?location.search+"&fr=1":"?fr=1")+location.hash,st=document.createElement("style");st.textContent="html,body{margin:0;height:100%;overflow:hidden;background:#10243a}#gfr{position:fixed;inset:0;width:100%;height:100%;border:0;display:block}";document.head.appendChild(st);
+var b=document.body||document.documentElement.appendChild(document.createElement("body")),f=document.createElement("iframe");f.id="gfr";f.allow="fullscreen; autoplay; clipboard-write";f.setAttribute("allowfullscreen","");f.src=u;b.appendChild(f);f.addEventListener("load",function(){try{f.focus();f.contentWindow.focus()}catch(e){}});window.__wrap=1}catch(e){}})()</script>
 <style>
 :root{--bg:#10243a;--ink:#f4f7fa;--acc:#ffb703;--panel:rgba(8,20,34,.82);box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}
 @media (prefers-color-scheme: dark){:root:not([data-theme="light"]){--bg:#081522;--panel:rgba(4,12,22,.86)}}
@@ -339,6 +343,7 @@ const g0=new THREE.Group();S.children.filter(o=>o.isMesh).forEach(o=>g0.add(o));
 const GMODES=["일반 피구","왕 피구","짐볼 피구","공 2개 피구","배틀로얄 솔로","배틀로얄 듀오","초능력 피구"];
 const BRm=()=>gmode===4||gmode===5,BRT=()=>brN,SPm=()=>gmode===6,DEV=/[?&#]dev\b/.test(location.search+location.hash)||!/github\.io$/.test(location.hostname),HIDM=[];
 if(DEV)document.documentElement.classList.add("dev");
+const FW=(()=>{try{if(window.top!==window&&parent.document)return parent}catch(e){}return window})(),FS=()=>FW.document.documentElement.requestFullscreen(),FL=o=>FW.screen.orientation.lock(o);
 let devAb=-1;const dab=document.createElement("button");dab.id="dab";dab.style.display="none";dab.textContent="능력: 랜덤";dab.onclick=()=>{const w=document.createElement("div");w.style.cssText="position:fixed;inset:0;z-index:99998;background:rgba(0,0,0,.55);display:flex;align-items:center;justify-content:center;padding:16px";const bx=document.createElement("div");bx.style.cssText="background:#232733;color:#fff;border-radius:18px;padding:16px;width:min(420px,100%);max-height:86vh;overflow:auto;display:grid;grid-template-columns:1fr 1fr;gap:8px";const h=document.createElement("div");h.textContent="능력 선택";h.style.cssText="grid-column:1/3;font-weight:800;font-size:17px;text-align:center;margin-bottom:4px";bx.append(h);
 const mk=(i,t)=>{const b=document.createElement("button");b.className="opt";b.textContent=t;b.style.cssText="padding:12px 6px;font-size:15px;"+(i===devAb?"background:#3b82f6;font-weight:800":"");b.onclick=()=>{devAb=i;dab.textContent="능력: "+(i<0?"랜덤":AB[i].e+" "+AB[i].n);w.remove()};bx.append(b)};
 mk(-1,"🎲 랜덤");AB.forEach((a,i)=>mk(i,a.e+" "+a.n));w.append(bx);w.onclick=e=>{if(e.target===w)w.remove()};document.body.append(w)};
@@ -880,8 +885,8 @@ S.background.setHex(BGC[i]);
 S.fog.color.setHex(FGC[i]);
 mpb.textContent="맵: "+MAPS[i];
 if(sv)try{localStorage.setItem("pgMap",i)}catch(e){}}
-const SK=[0xffe0bd,0xf5c9a0,0xe0ac7a,0xc68642,0x8d5524,0x5c3a21],HC=[0x2b1d14,0x6b4423,0xe7c35b,0xc0392b,0x2f6fe4,0xff7eb6,0xeeeeee,0x2ecc71];
-const HSN=["짧은 머리","긴 머리","포니테일","삐죽 머리","아프로","민머리"],FEN=["기본","활짝 웃음","무표정","놀람","윙크","메롱"],HTN=["없음","야구모자","비니"],GLN=["없음","안경","선글라스"],OUN=["기본","체육복","하복","학잠"];
+const SK=[0xffe0bd,0xf5c9a0,0xe0ac7a,0xc68642,0x8d5524,0x5c3a21],HC=[0x2b1d14,0x6b4423,0xe7c35b,0xc0392b,0x2f6fe4,0xff7eb6,0xeeeeee,0x2ecc71,0x121212];
+const HSN=["짧은 머리","긴 머리","포니테일","삐죽 머리","아프로","민머리","5:5 가르마"],FEN=["기본","활짝 웃음","무표정","놀람","윙크","메롱"],HTN=["없음","야구모자","비니"],GLN=["없음","안경","선글라스","스포츠 선글라스"],OUN=["기본","체육복","하복","학잠"];
 const AVN=[SK.length,HC.length,HSN.length,FEN.length,HTN.length,GLN.length,OUN.length];
 function parseAv(s){const a=String(s||"").split(",").map(Number);return AVN.map((n,i)=>{const v=a[i]|0;return v>=0&&v<n?v:0})}
 let myAv=(()=>{try{const s=localStorage.getItem("pgAv");if(s)return parseAv(s)}catch(e){}return[0,0,0,0,0,0,0]})();
@@ -1023,8 +1028,10 @@ function applyAv(g,av){const u=g.userData,hg=u.hg;if(!hg)return;const c=u.col;u.
 const add=(geo,mt,x,y,z)=>{const o=new THREE.Mesh(geo,mt);o.position.set(x,y,z);hg.add(o);return o},sp=(r,a,b)=>new THREE.SphereGeometry(r,a||10,b||8);
 add(sp(.26,14,12),u.skM,0,0,0);
 const hm=M(HC[av[1]]),hs=av[2],ht=av[4],P_=Math.PI;
-if(ht===0){if(hs!==5&&hs!==4){const cp=add(new THREE.SphereGeometry(.275,12,8,0,P_*2,0,P_*.55),hm,0,0,0);cp.rotation.x=.25}
+if(ht===0){if(hs!==5&&hs!==4&&hs<6){const cp=add(new THREE.SphereGeometry(.275,12,8,0,P_*2,0,P_*.55),hm,0,0,0);cp.rotation.x=.25}
  if(hs===4)add(sp(.34,12,10),hm,0,.12,.1);
+ const P2=P_*1.5,sh=(r,p0,p1,tm,nu,nv)=>{const pos=[],idx=[];for(let i=0;i<=nu;i++){const ph=p0+(p1-p0)*i/nu,T=tm(ph);for(let j=0;j<=nv;j++){const th=T*j/nv;pos.push(-r*Math.cos(ph)*Math.sin(th),r*Math.cos(th),r*Math.sin(ph)*Math.sin(th))}}for(let i=0;i<nu;i++)for(let j=0;j<nv;j++){const a=i*(nv+1)+j,b=a+nv+1;idx.push(a,b,a+1,b,b+1,a+1)}const g=new THREE.BufferGeometry();g.setAttribute("position",new THREE.Float32BufferAttribute(pos,3));g.setIndex(idx);g.computeVertexNormals();return g},capF=()=>{const cp=add(sh(.285,P2+.9,P2-.9+P_*2,ph=>{let d=Math.abs(((ph-P2)%(P_*2)+P_*3)%(P_*2)-P_);return d<1.1?1.35+(d-.9)*1.2:d<P_/2?1.59+(d-1.1)/(P_/2-1.1)*.25:1.84+(d-P_/2)/(P_/2)*.22},22,10),hm,0,0,0);cp.scale.set(1.02,1.07,1.03)};
+ if(hs===6){hm.side=2;{const g2=sh(.285,P2+.9,P2-.9+P_*2,ph=>{const d=Math.abs(((ph-P2)%(P_*2)+P_*3)%(P_*2)-P_),w=Math.sin(ph*9)*.035*Math.min(1,Math.max(0,d-1.2));return d<1.1?1.35+(d-.9)*1.2:d<P_/2?1.59+(d-1.1)/(P_/2-1.1)*.3+w:1.89+(d-P_/2)/(P_/2)*.4+w},32,12),pa=g2.attributes.position;for(let i=0;i<pa.count;i++){const y=pa.getY(i);if(y<.08){const k=Math.min(1,(.08-y)/.26),f=1+.13*k*k;pa.setX(i,pa.getX(i)*f);pa.setZ(i,pa.getZ(i)*(pa.getZ(i)>0?1+.2*k*k:f))}}g2.computeVertexNormals();const cp=add(g2,hm,0,0,0);cp.scale.set(1.02,1.07,1.03)}const fr=add(sh(.3,P2-1.05,P2+1.05,ph=>{const a=Math.abs((ph-P2)/1.05),y=a<.15?.17:a<.55?.17-(a-.15)/.4*.075:.095+Math.max(0,a-.85)*.06;return Math.acos(Math.min(.99,y/.3))},40,10),hm,0,0,0);fr.scale.set(1.05,1.1,1.07)}
  if(hs===3)for(let k=0;k<5;k++){const a=k/5*P_*2,x=Math.sin(a)*.13,z=Math.cos(a)*.13,cn=add(new THREE.ConeGeometry(.07,.2,6),hm,x,.28,z);cn.rotation.set(z*2.5,0,-x*2.5)}}
 if(hs===1)add(new THREE.CylinderGeometry(.22,.17,.55,12),hm,0,-.2,.16);
 if(hs===2){add(sp(.06),M(0xff4d6d),0,.1,.27);add(new THREE.CylinderGeometry(.07,.03,.45,8),hm,0,-.12,.34)}
@@ -1041,6 +1048,10 @@ if(fe===5){add(new THREE.BoxGeometry(.08,.014,.014),dk,0,-.06,-.25);add(new THRE
 const gl=av[5];
 if(gl===1){[.085,-.085].forEach(x=>add(new THREE.TorusGeometry(.055,.009,6,16),eM,x,.04,-.252));add(new THREE.BoxGeometry(.05,.008,.008),eM,0,.045,-.252)}
 if(gl===2){[.085,-.085].forEach(x=>{const l=add(new THREE.CylinderGeometry(.06,.06,.012,12),eM,x,.04,-.254);l.rotation.x=P_/2});add(new THREE.BoxGeometry(.2,.012,.012),eM,0,.05,-.254)}
+if(gl===3){const tx=cvTex(128,32,(x,w,h)=>{const gr=x.createLinearGradient(0,0,w,h);gr.addColorStop(0,"#18a957");gr.addColorStop(.35,"#19b9cf");gr.addColorStop(.6,"#3048d8");gr.addColorStop(.8,"#19b9cf");gr.addColorStop(1,"#18a957");x.fillStyle=gr;x.fillRect(0,0,w,h);x.fillStyle="rgba(255,255,255,.35)";x.fillRect(0,h*.2,w,h*.12);x.fillStyle="rgba(0,0,0,.25)";x.fillRect(0,h*.75,w,h*.25)},[1,1]),lm=new THREE.MeshLambertMaterial({map:tx,emissive:0x0a3a2a,side:2}),fm=M(0x111111),y0=.045;
+ const sg0=new THREE.CylinderGeometry(.3,.29,.07,40,1,true,P_-1.05,2.1),pa=sg0.attributes.position;for(let i=0;i<pa.count;i++){if(pa.getY(i)>0)continue;const t=Math.abs(Math.atan2(pa.getX(i),-pa.getZ(i)));pa.setY(i,pa.getY(i)-.045*Math.max(0,Math.cos(Math.min(P_/2,Math.abs(t-.42)*2.6)))+(t<.12?.012:0))}sg0.computeVertexNormals();const sd=add(sg0,lm,0,y0,0);
+ const tf=add(new THREE.CylinderGeometry(.303,.303,.014,24,1,true,P_-1.08,2.16),fm,0,y0+.046,0);tf.material.side=2;
+ [1,-1].forEach(sg=>{const hx=.3*Math.sin(P_+1.05*sg),hz=.3*Math.cos(P_+1.05*sg),ex=.262*sg,ez=.04,dx=ex-hx,dz=ez-hz,L=Math.hypot(dx,dz),a=add(new THREE.BoxGeometry(.012,.014,L),fm,(hx+ex)/2,y0+.03,(hz+ez)/2);a.rotation.y=Math.atan2(dx,dz)})}
 if(ht===1){const cp=add(new THREE.SphereGeometry(.29,14,8,0,P_*2,0,P_*.38),M(c),0,0,0);cp.rotation.x=-.05;const br=add(new THREE.BoxGeometry(.3,.016,.17),M(c),0,.1,-.34);br.rotation.x=.1}
 if(ht===2){add(new THREE.SphereGeometry(.29,14,8,0,P_*2,0,P_*.4),M(c),0,0,0);add(sp(.06,8,8),M(0xffffff),0,.29,0)}
 }
@@ -2977,17 +2988,17 @@ const lsg=document.createElement("button");
 lsg.id="lsg";
 lsg.textContent="⟳ 가로";
 document.body.appendChild(lsg);
-try{if(sessionStorage.getItem("pgLand")){sessionStorage.removeItem("pgLand");const rl=async()=>{try{await document.documentElement.requestFullscreen()}catch(e){}try{await screen.orientation.lock("landscape")}catch(e){}};rl();const f=()=>{removeEventListener("pointerdown",f,true);rl()};addEventListener("pointerdown",f,true)}}catch(e){}
+try{if(sessionStorage.getItem("pgLand")){sessionStorage.removeItem("pgLand");const rl=async()=>{try{await FS()}catch(e){}try{await FL("landscape")}catch(e){}};rl();const f=()=>{removeEventListener("pointerdown",f,true);rl()};addEventListener("pointerdown",f,true)}}catch(e){}
 lsg.onclick=async()=>{const land=innerWidth>innerHeight;
-try{if(land){try{screen.orientation.unlock()}catch(e){}
-if(document.fullscreenElement)await document.exitFullscreen()}else{try{await document.documentElement.requestFullscreen()}catch(e){}
-await screen.orientation.lock("landscape")}}catch(e){spt.textContent=land?"폰을 세로로 돌려 주세요":"폰을 가로로 돌려 주세요";
+try{if(land){try{FW.screen.orientation.unlock()}catch(e){}
+if(FW.document.fullscreenElement)await FW.document.exitFullscreen()}else{try{await FS()}catch(e){}
+await FL("landscape")}}catch(e){spt.textContent=land?"폰을 세로로 돌려 주세요":"폰을 가로로 돌려 주세요";
 spt.style.display="block";
 clearTimeout(spt._t);
 spt._t=setTimeout(()=>{spt.style.display="none"},1800)}};
 addEventListener("resize",()=>{lsg.textContent=innerWidth>innerHeight?"⟳ 세로":"⟳ 가로"});
-lsb.onclick=async()=>{try{await document.documentElement.requestFullscreen()}catch(e){}
-try{await screen.orientation.lock("landscape");
+lsb.onclick=async()=>{try{await FS()}catch(e){}
+try{await FL("landscape");
 ms.textContent=""}catch(e){ms.textContent=innerWidth>innerHeight?"":"폰을 가로로 돌려서 해 주세요."}};
 lob.onclick=()=>{ldg.textContent="돌아가는 중…";ldg.style.display="flex";try{net.gdc&&net.gdc.close()}catch(e){}try{net.peer&&net.peer.destroy()}catch(e){}try{if(innerWidth>innerHeight)sessionStorage.setItem("pgLand","1")}catch(e){}try{sessionStorage.setItem("pgRs",JSON.stringify({g:gmode,n:BRm()?(net.N0||3):N,da:devAb}))}catch(e){}setTimeout(()=>location.reload(),150)};
 const EM=[["😄","웃음"],["😭","울기"],["😛","메롱"],["😡","화남"],["😎","멋짐"],["👍","좋아"],["😱","놀람"],["👏","박수"]],emTex={};
@@ -3268,7 +3279,7 @@ if(muStep2%16===0){auTone(t,.7,440,436,.05,"triangle",auT);
 auTone(t,.7,622,618,.05,"triangle",auT)}
 muNext2+=.2;
 muStep2++}}
-function muMix(){const t=auC.currentTime,k=STG.mu?1:0;auM.gain.setTargetAtTime(muTense?0:.8*k,t,.5);auT.gain.setTargetAtTime(muTense?.55*k:0,t,.5)}
+function muMix(){if(!auC)return;const t=auC.currentTime,k=STG.mu?1:0;auM.gain.setTargetAtTime(muTense?0:.8*k,t,.5);auT.gain.setTargetAtTime(muTense?.55*k:0,t,.5)}
 function muStart(){if(muOn||!auC)return;
 muOn=1;
 if(muTimer)clearInterval(muTimer);
