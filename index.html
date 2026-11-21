@@ -179,7 +179,7 @@ body.nr #abl,body.nr #spb{visibility:hidden}
 #jmp{right:calc(128px + env(safe-area-inset-right,0px));bottom:calc(122px + env(safe-area-inset-bottom,0px))}
 #vw{right:calc(16px + env(safe-area-inset-right,0px));flex-direction:column}
 #pcs{left:50%;transform:translateX(-50%)}
-#mm{left:calc(124px + env(safe-area-inset-left,0px));top:calc(62px + env(safe-area-inset-top,0px))}
+#mm{left:84px;top:calc(8px + env(safe-area-inset-top,0px))}
 #em{top:calc(54px + env(safe-area-inset-top,0px));right:calc(82px + env(safe-area-inset-right,0px))}
 #emp{grid-template-columns:repeat(8,38px);right:calc(148px + env(safe-area-inset-right,0px));top:calc(54px + env(safe-area-inset-top,0px))}
 #cdn{top:14%;font-size:72px}
@@ -306,6 +306,8 @@ html,body{-webkit-text-size-adjust:100%}
 #ctc:active{transform:translateY(4px);box-shadow:0 1px 0 #127068,0 3px 7px rgba(0,0,0,.3)}
 #jmp:active{transform:translateY(4px);box-shadow:0 1px 0 #5a2b99,0 3px 7px rgba(0,0,0,.3)}
 #abl:active{transform:translateY(4px);box-shadow:0 1px 0 #4b34b3,0 3px 7px rgba(0,0,0,.3)}
+
+@media (orientation:landscape){#ex{left:8px;top:calc(8px + env(safe-area-inset-top,0px))}#lsg{left:8px;top:calc(44px + env(safe-area-inset-top,0px))}#mm{left:84px;top:calc(8px + env(safe-area-inset-top,0px))}}
 </style></head><body><div id="ldg">불러오는 중…</div><script>setTimeout(function(){var d=document.getElementById("ldg");if(d&&d.style.display!=="none"&&d.textContent.indexOf("돌아가는")<0){d.innerHTML="인터넷 연결이 느리거나 끊겼어요.<br>연결을 확인하고 다시 불러와 주세요.<br><button onclick='location.reload()' style='margin-top:16px;border:0;border-radius:999px;padding:12px 22px;font:inherit;font-size:16px'>새로고침</button>";d.style.textAlign="center";d.style.flexDirection="column"}},8000)</script>
 <div id="hud"><span id="hp"></span><span id="rm"></span><span id="en"></span></div>
 <div id="rsc"><div class="rp" id="rsLeft"><small>우리</small> <b id="rsLn">0</b></div><div id="rsMid"></div><div class="rp" id="rsRight"><small>상대</small> <b id="rsRn">0</b></div></div><div id="rbn"></div>
