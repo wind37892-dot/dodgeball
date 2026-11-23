@@ -217,7 +217,7 @@ body.nr #abl,body.nr #spb{visibility:hidden}
 #how .tbs{display:flex;gap:6px;margin-bottom:8px}
 #how .tbs button{flex:1;border:0;border-radius:999px;background:rgba(255,255,255,.14);color:inherit;font:inherit;font-size:13px;padding:8px 0}
 #how .tbs button.on{background:var(--acc);color:#10243a}
-#how ul{margin:0;padding-left:18px;display:none}#how ul.on{display:block}
+#how ul{margin:0;padding-left:18px;display:none}#how li{margin:3px 0}#how li b{color:var(--acc);margin-right:2px}#how ul.on{display:block}
 @media (orientation:landscape){.card,#how{width:min(440px,70vw)}}
 #tsw{border:2px solid var(--acc);border-radius:999px;background:transparent;color:inherit;font:inherit;font-size:15px;padding:10px 20px}
 #nw{width:min(360px,92vw)}
@@ -308,6 +308,16 @@ html,body{-webkit-text-size-adjust:100%}
 #abl:active{transform:translateY(4px);box-shadow:0 1px 0 #4b34b3,0 3px 7px rgba(0,0,0,.3)}
 
 @media (orientation:landscape){#ex{left:8px;top:calc(8px + env(safe-area-inset-top,0px))}#lsg{left:8px;top:calc(44px + env(safe-area-inset-top,0px))}#mm{left:84px;top:calc(8px + env(safe-area-inset-top,0px))}}
+
+.og .opt,#ob #mdb,#ob #rnb,#ob #nsb,#ob #mpb,#ob #blb,#ob #b2b,#ob #dab{border:1.5px solid rgba(255,255,255,.32);background:rgba(255,255,255,.1);position:relative;padding-right:22px;font-weight:700}
+#ob #rtb::after,#ob #aib::after{content:none}
+#ob #rtb,#ob #aib{border:1.5px solid rgba(255,255,255,.32);font-weight:700}#ob #aib.off{border-color:var(--acc)}
+#szv{border:1.5px solid rgba(255,255,255,.32)!important;box-sizing:border-box}
+.og .opt::after,#ob #nsb::after{content:'▾';position:absolute;right:9px;top:50%;transform:translateY(-50%);font-size:12px;opacity:.75}
+#lrow{display:flex;gap:12px;align-items:flex-start;justify-content:center;width:100%}
+#lrow>.lcol{display:flex;flex-direction:column;gap:8px}
+#lrow .card{width:min(360px,46vw)}
+#rm{display:none!important}
 </style></head><body><div id="ldg">불러오는 중…</div><script>setTimeout(function(){var d=document.getElementById("ldg");if(d&&d.style.display!=="none"&&d.textContent.indexOf("돌아가는")<0){d.innerHTML="인터넷 연결이 느리거나 끊겼어요.<br>연결을 확인하고 다시 불러와 주세요.<br><button onclick='location.reload()' style='margin-top:16px;border:0;border-radius:999px;padding:12px 22px;font:inherit;font-size:16px'>새로고침</button>";d.style.textAlign="center";d.style.flexDirection="column"}},8000)</script>
 <div id="hud"><span id="hp"></span><span id="rm"></span><span id="en"></span></div>
 <div id="rsc"><div class="rp" id="rsLeft"><small>우리</small> <b id="rsLn">0</b></div><div id="rsMid"></div><div class="rp" id="rsRight"><small>상대</small> <b id="rsRn">0</b></div></div><div id="rbn"></div>
@@ -316,7 +326,7 @@ html,body{-webkit-text-size-adjust:100%}
 <canvas id="mm" width="216" height="216"></canvas><div id="ctc" class="b" role="button" tabindex="0">잡기</div><div id="jmp" class="b" role="button" tabindex="0">점프</div>
 <div id="vw" role="group" aria-label="확대 축소"><div id="zi" role="button" tabindex="0" aria-label="확대">＋</div><div id="zo" role="button" tabindex="0" aria-label="축소">－</div></div><div id="em" class="b" role="button" tabindex="0">😊</div>
 <div id="thr" class="b" role="button" tabindex="0">던지기</div><div id="pcs"></div>
-<div id="ov" class="ld"><h1>온라인 피구</h1><p></p><input id="rc" maxlength="12" placeholder="방 코드(호스트가 알려준 코드)" autocomplete="off"><div id="lb"><button id="go">혼자 하기</button><button id="hs">방 만들기</button><button id="js">친구 방 참가</button><button id="lsb">가로 모드</button><button id="cmb">커마</button><button id="mpb">맵: 기본 코트</button><button id="blb">공: 기본 공</button><button id="mdb">모드: 일반 피구</button><button id="b2b" style="display:none">공2</button><button id="rnb">라운드: 1</button></div><p id="ms"></p><div id="mi"></div><button id="lob" style="display:none">로비로 돌아가기</button><div id="nw" style="display:none;flex-direction:column;gap:10px;align-items:center"><div id="rmc"><small>방 코드</small><b id="rmv"></b></div><div id="ob" class="og" style="display:none"></div><div id="nb" style="display:flex;gap:8px"><button id="sb">게임 시작</button><button id="rcp">방 코드 복사</button></div></div></div>
+<div id="ov" class="ld"><h1>온라인 피구</h1><p></p><input id="rc" maxlength="12" placeholder="방 코드(호스트가 알려준 코드)" autocomplete="off"><div id="lb"><button id="go">혼자 하기</button><button id="hs">방 만들기</button><button id="js">친구 방 참가</button><button id="lsb">가로 모드</button><button id="cmb">꾸미기</button><button id="mpb">맵: 기본 코트</button><button id="blb">공: 기본 공</button><button id="mdb">모드: 일반 피구</button><button id="b2b" style="display:none">공2</button><button id="rnb">라운드: 1</button></div><p id="ms"></p><div id="mi"></div><button id="lob" style="display:none">로비로 돌아가기</button><div id="nw" style="display:none;flex-direction:column;gap:10px;align-items:center"><div id="rmc"><small>방 코드</small><b id="rmv"></b></div><div id="ob" class="og" style="display:none"></div><div id="nb" style="display:flex;gap:8px"><button id="sb">게임 시작</button><button id="rcp">방 코드 복사</button></div></div></div>
 <script type="importmap">{"imports":{"https://cdnjs.cloudflare.com/ajax/libs/three.js/0.187.0/three.core.js":"https://cdnjs.cloudflare.com/ajax/libs/three.js/0.187.0/three.core.min.js","three":"https://cdnjs.cloudflare.com/ajax/libs/three.js/0.187.0/three.module.min.js","three/addons/":"https://cdn.jsdelivr.net/npm/three@0.187.0/examples/jsm/"}}</script>
 <script type="module">import * as T3 from "https://cdnjs.cloudflare.com/ajax/libs/three.js/0.187.0/three.module.min.js";const T=Object.assign({},T3);T.ColorManagement.enabled=false;Object.defineProperty(T.Light.prototype,"intensity",{get(){return this._in*Math.PI},set(v){this._in=v},configurable:true});window.THREE=T;import("three/addons/loaders/GLTFLoader.js").then(m=>{T.GLTFLoader=m.GLTFLoader}).catch(()=>{});const s=document.createElement("script");s.textContent=document.getElementById("gm").textContent;document.body.appendChild(s)</script>
 <script src="https://cdn.jsdelivr.net/npm/peerjs@1.5.4/dist/peerjs.min.js"></script>
@@ -963,7 +973,10 @@ else if(k==="h"){auTone(t,.06,190,120,.06*v,"triangle");auNoise(t,.04,"bandpass"
 let FPIM=null;const fpO=new THREE.Object3D(),fpC=new THREE.Color();fpO.rotation.order="YXZ";
 function fpAdd(x,z,ry,col){if(!FPIM){FPIM=new THREE.InstancedMesh(FPG,new THREE.MeshBasicMaterial({color:0xffffff,transparent:true,opacity:.42,depthWrite:false,polygonOffset:true,polygonOffsetFactor:-4,polygonOffsetUnits:-8}),160);FPIM.userData.sf=1;FPIM.frustumCulled=false;fpO.scale.set(0,0,0);fpO.updateMatrix();for(let i=0;i<160;i++){FPIM.setMatrixAt(i,fpO.matrix);FPIM.setColorAt(i,fpC.setHex(0))}gBR.add(FPIM)}const i=fpI;fpI=(fpI+1)%160;FPS[i]={x,y:tH(x,z)+.015,z,ry,l:9,L:9};FPIM.setColorAt(i,fpC.setHex(col));FPIM.instanceColor.needsUpdate=true}
 function bSpawn(b){const L=T.filter(c=>c.m.visible&&!c.out).map(c=>c.m.position);for(let i=0;i<30;i++){const tr=TREES[Math.random()*TREES.length|0];if(!tr||Math.abs(tr[0])>BRW-3||Math.abs(tr[1])>BRW-3||L.some(q=>Math.hypot(q.x-tr[0],q.z-tr[1])<12))continue;const a=Math.random()*6.283,s=tr[2];b.x=tr[0]+Math.cos(a)*.56*s;b.z=tr[1]+Math.sin(a)*.56*s;b.y=2.7*s;b.g.position.set(b.x,b.y,b.z);b.g.rotation.set(0,Math.atan2(Math.cos(a),Math.sin(a)),0);b.s=0;b.g.visible=true;return}b.s=2;b.t=3;b.g.visible=false}
-function stK(k,v){const s=JSON.stringify(v===undefined?null:v),n=performance.now();if(net["_s"+k]!==s||n-(net["_t"+k]||0)>1500){net["_s"+k]=s;net["_t"+k]=n;return v===undefined?null:v}return"~"}
+function stK(k,v){const s=JSON.stringify(v===undefined?null:v),n=performance.now(),C=net._sk||(net._sk={}),e=C[k]||(C[k]={s:null,tc:0,ts:0});if(e.s!==s){e.s=s;e.tc=n}if(n-e.tc<400||n-e.ts>1000){e.ts=n;return v===undefined?null:v}return"~"}
+const SLK=["gn","gm","mp","bk","bn","bl","bl2","rs","em","g","s","e","wt","b","b2","bx"],SLB=["kl","rk","kf","ob","sh","zb","zo","dn","rv","sd","su"];
+function stSlim(d){const z=(o,k,kk)=>{const v=stK(kk,o[k]);if(v==="~")delete o[k];else o[k]=v};SLK.forEach(k=>{if(k in d)z(d,k,"d_"+k)});for(const k of["nm","av"])if(d[k]==="~")delete d[k];if(d.br)SLB.forEach(k=>{if(k in d.br)z(d.br,k,"b_"+k)});if(d.sp&&d.sp.ab)z(d.sp,"ab","s_ab");return d}
+function stFill(d){const L=net._lv||(net._lv={});const f=(o,ks,pre)=>{for(const k of ks){const kk=pre+k;if(!(k in o)||o[k]==="~"){if(!(kk in L))return false;o[k]=L[kk]}else L[kk]=o[k]}return true};if(!f(d,SLK.concat(["nm","av"]),"d_"))return false;if(d.br&&!f(d.br,SLB,"b_"))return false;if(d.sp&&!f(d.sp,["ab"],"s_"))return false;return true}
 let lodT=0;function chrLod(now){if(now-lodT<250)return;lodT=now;T.forEach(c=>{if(!c.m)return;if(!c._det){c._det=[];c.m.updateMatrixWorld(true);c.m.traverse(o=>{if(!o.isMesh)return;const gm=o.geometry;if(!gm.boundingSphere)gm.computeBoundingSphere();const sc=new THREE.Vector3();o.getWorldScale(sc);if(gm.boundingSphere.radius*Math.max(sc.x,sc.y,sc.z)<.13)c._det.push(o)})}const far=BRm()&&c!==P&&c.m.position.distanceTo(C.position)>18;if(far!==!!c._far){c._far=far;c._det.forEach(o=>o.layers.set(far?1:0))}})}
 function occHide(pp){const f=g1.userData.fence;if(f){const d=Math.abs(C.position.x-15.5);f.material.opacity=.6*Math.max(.12,Math.min(1,(d-1.5)/6))}const on=false,cx=C.position.x,cy=C.position.y,cz=C.position.z,ax=pp.x-cx,ay=1.1-cy,az=pp.z-cz,L2=ax*ax+ay*ay+az*az||1;T.forEach(c=>{let h=false;if(on&&c!==P&&c.m.visible){const q=c.m.position,t=((q.x-cx)*ax+(q.y+1-cy)*ay+(q.z-cz)*az)/L2;if(t>0&&t<.85){const dx=cx+ax*t-q.x,dy=cy+ay*t-(q.y+1),dz=cz+az*t-q.z;h=Math.hypot(dx,dy*.6,dz)<.75}}if(h!==!!c._oh){c._oh=h;c.m.traverse(o=>{if(o.isMesh)o.layers.set(h?1:(c._far&&c._det&&c._det.includes(o)?1:0))})}})}
 function camOcc(ax,ay,az,bx,by,bz){const L=Math.hypot(bx-ax,bz-az)+3,mx=(ax+bx)/2,mz=(az+bz)/2,ob=[],tr=[],hs=[];const ih=inHouse(ax,az);for(const o of OBS){if(o.dead)continue;if(ih&&Math.abs(o.x-ih.x)<ih.w+.6&&Math.abs(o.z-ih.z)<ih.d+.6)continue;const r=o.t?o.r:Math.max(o.w,o.d);if(Math.hypot(o.x-mx,o.z-mz)<L/2+r+1)ob.push(o)}for(const t of TREES)if(Math.hypot(t[0]-mx,t[1]-mz)<L/2+1.5*t[2])tr.push(t);for(const h of HOUSES)if(Math.hypot(h.x-mx,h.z-mz)<L/2+h.w+h.d)hs.push(h);
@@ -1395,7 +1408,7 @@ for(let k=2;k<15;k++)BL.push({st:"off",h:null,v:new THREE.Vector3(),rv:new THREE
 function selB(k){B=BL[k];
 bm=BMS[k]}
 const NB=()=>BRm()?Math.min(15,BRB.length):gmode===3?2:1,hk=c=>BL.findIndex(b=>b.st==="held"&&b.h===c);
-let brCd=0,BRB=[0,0,0,0,0],brN=20,brNb=4,brNg=1;try{const v=JSON.parse(localStorage.getItem("pgBr")||"{}");if(v.b>=1&&v.b<=5)brNb=v.b;if(v.g>=1&&v.g<=5)brNg=v.g}catch(e){}
+let brCd=0,BRB=[0,0,0,0,0],brN=20,brNb=4,brNg=1;try{const v=JSON.parse(localStorage.getItem("pgBr")||"{}");if(v.b>=1&&v.b<=10)brNb=v.b;if(v.g>=1&&v.g<=5)brNg=v.g;if(v.n>=10&&v.n<=20)brN=v.n}catch(e){}
 const brSave=()=>{try{localStorage.setItem("pgBr",JSON.stringify({n:brN,b:brNb,g:brNg}))}catch(e){}};
 const bidx=k=>{if(BRm())return BRB[k]|0;const i=k?curBall2:curBall;
 return i===3&&gmode!==3?0:i},big=b=>gmode===2||(gmode===3&&bidx(b===B2?1:0)===3)||(BRm()&&BRB[BL.indexOf(b)]===3),hbig=c=>BL.some(b=>b.st==="held"&&b.h===c&&big(b));
@@ -2265,6 +2278,7 @@ net.rdy={};
 reset();
 run=true;
 ov.style.display="none"}
+function gSt(d){if(!d)return;if(d.q){if(d.q<=(net.lq||0))return;net.lq=d.q}if(!stFill(d))return;netApply(d);const S2=net.snp||(net.snp=[]);S2.push({t:performance.now(),c:d.t.map(a=>[a[0],a[1],a[3]||0]),b:[d.b,d.b2||null].concat(d.bx||[])});if(S2.length>10)S2.shift()}
 function netApply(d){{const gm=d.gm|0;
 if(gm!==gmode){gmode=gm;
 if(d.s)N=d.s;
@@ -2303,7 +2317,7 @@ if(!o&&c.out&&c===P)yaw=0});
 if(d.bl!==undefined&&d.bl!==curBall)applyBall(d.bl);
 if(d.bl2!==undefined&&d.bl2!==curBall2)applyBall2(d.bl2);
 if(d.mp!==undefined&&d.mp!==curMap)applyMap(d.mp);
-if(d.nm==="~")d.nm=net._nm;else net._nm=d.nm;if(d.av==="~")d.av=net._av;else net._av=d.av;
+
 if(d.av)for(const i in d.av){const c=T[i];
 if(c&&c.avs!==d.av[i]){c.avs=d.av[i];
 applyAv(c.m,parseAv(d.av[i]))}}
@@ -2346,8 +2360,9 @@ d.br.kf.forEach(a=>{if(a[0]>kfSeen){kfShow(a[1],a[2],a[3]);
 kfSeen=a[0]}})}
 if(d.nm)net.nm=d.nm;
 if(d.e>0&&run)end(BRm()?d.wt===P.team:(d.e===1)===(P.team===0))}
-function glerp(dt){const k=Math.min(1,dt*14);T.forEach(c=>{if(c.gx===undefined)return;const p=c.m.position;if(c===P&&run&&!BRm()&&!c.out&&!(J.on&&!J.done)&&!(SPm()&&tsOn()&&TS.by!==P)){let[x,z]=inp();const l=Math.hypot(x,z);if(l>1){x/=l;z/=l}if(c.ef&&c.ef.rev>0){x=-x;z=-z}p.x=cl(p.x+x*SPD(c)*dt,-5.4,5.4);p.z=c.team?cl(p.z+z*SPD(c)*dt,-9.4,-1):cl(p.z+z*SPD(c)*dt,1,9.4);const e=Math.hypot(c.gx-p.x,c.gz-p.z),k2=e>2.2?1:Math.min(1,dt*(l>.1?2.2:6));p.x+=(c.gx-p.x)*k2;p.z+=(c.gz-p.z)*k2;p.y+=((c.gy||0)-p.y)*k;return}p.x+=(c.gx-p.x)*k;p.z+=(c.gz-p.z)*k;p.y+=((c.gy||0)-p.y)*k});PJ.forEach(o=>{if(o.tg){const q=o.m.position,kk=Math.min(1,dt*16);q.x+=(o.tg[0]-q.x)*kk;q.y+=(o.tg[1]-q.y)*kk;q.z+=(o.tg[2]-q.z)*kk}});
-[[B,bm,net.b],[B2,bm2,net.b2],...BL.slice(2).map((b,i)=>[b,BMS[i+2],net.bx&&net.bx[i]])].forEach(a=>{if(a[2]&&a[0].st!=="held"&&a[0].st!=="off"){const q=a[1].position;q.x+=(a[2][2]-q.x)*k;q.y=a[2][3];q.z+=(a[2][4]-q.z)*k}})}
+function glerp(dt){const k=Math.min(1,dt*14),IS=snpAt(performance.now()-110);T.forEach(c=>{if(c.gx===undefined)return;const p=c.m.position;if(c===P&&run&&!BRm()&&!c.out&&!(J.on&&!J.done)&&!(SPm()&&tsOn()&&TS.by!==P)){let[x,z]=inp();const l=Math.hypot(x,z);if(l>1){x/=l;z/=l}if(c.ef&&c.ef.rev>0){x=-x;z=-z}p.x=cl(p.x+x*SPD(c)*dt,-5.4,5.4);p.z=c.team?cl(p.z+z*SPD(c)*dt,-9.4,-1):cl(p.z+z*SPD(c)*dt,1,9.4);const e=Math.hypot(c.gx-p.x,c.gz-p.z),k2=e>2.2?1:Math.min(1,dt*(l>.1?2.2:6));p.x+=(c.gx-p.x)*k2;p.z+=(c.gz-p.z)*k2;p.y+=((c.gy||0)-p.y)*k;return}const ci=T.indexOf(c);if(IS&&IS.c[ci]&&c!==P){const v=IS.c[ci],kk=Math.min(1,dt*25);p.x+=(v[0]-p.x)*kk;p.z+=(v[1]-p.z)*kk;p.y+=(v[2]-p.y)*kk;return}p.x+=(c.gx-p.x)*k;p.z+=(c.gz-p.z)*k;p.y+=((c.gy||0)-p.y)*k});PJ.forEach(o=>{if(o.tg){const q=o.m.position,kk=Math.min(1,dt*16);q.x+=(o.tg[0]-q.x)*kk;q.y+=(o.tg[1]-q.y)*kk;q.z+=(o.tg[2]-q.z)*kk}});
+[[B,bm,net.b],[B2,bm2,net.b2],...BL.slice(2).map((b,i)=>[b,BMS[i+2],net.bx&&net.bx[i]])].forEach((a,j)=>{if(a[2]&&a[0].st!=="held"&&a[0].st!=="off"){const q=a[1].position,v=IS&&IS.b[j];if(v&&v[0]===a[2][0]&&a[0].st==="fly"){q.set(v[2],v[3],v[4]);return}q.x+=(a[2][2]-q.x)*k;q.y=a[2][3];q.z+=(a[2][4]-q.z)*k}})}
+function snpAt(rt){const L=net.snp;if(!L||L.length<2)return null;if(rt>=L[L.length-1].t)return null;let i=L.length-2;while(i>0&&L[i].t>rt)i--;const a=L[i],b=L[i+1];if(rt<a.t)return null;const u=(rt-a.t)/Math.max(1,b.t-a.t),lp=(x,y)=>x+(y-x)*u;return{c:a.c.map((v,n)=>b.c[n]?[lp(v[0],b.c[n][0]),lp(v[1],b.c[n][1]),lp(v[2],b.c[n][2])]:v),b:a.b.map((v,n)=>{const w=b.b[n];if(!v||!w||v[0]!==w[0])return w||v;return[w[0],w[1],lp(v[2],w[2]),lp(v[3],w[3]),lp(v[4],w[4])]})}}
 go.onclick=()=>{if(net.mode==="host")return startHost();
 net.mode="solo";szUp();
 SC=[0,0];
@@ -2390,7 +2405,8 @@ ov.querySelector("p").style.display="none";
 go.textContent="다시 하기"}
 const W=(el,k,v)=>{const c=el._c||(el._c={});if(c[k]!==v){c[k]=v;if(k==="t")el.textContent=v;else el.style[k]=v}};
 /* 업데이트 내용(문장은 "~ 추가/가능/불가/수정/표시" 명사형 한 가지 말투로 통일): 새 버전은 UPD 맨 앞에(새 버전이면 처음 들어올 때 자동으로 한 번 뜸) {v:"3.1",d:"날짜 시간",s:[{h:"소제목",t:["요점",...]}]} 으로 추가 */
-const UPD=[{v:"3.51",d:"2026.11.23 19:07",s:[{h:"초능력 피구",t:["외야에서도 모든 능력을 쓸 수 있음","다이서: 능력을 쓰면 던지기 버튼에 3·2·1 카운트다운이 표시됨","그림자분신: 주인이 키 잠금·속도 감속 같은 효과에 걸리면 분신 머리 위에도 아이콘이 뜸"]}]},
+const UPD=[{v:"3.52",d:"2026.11.23 22:08",s:[{h:"친구 방",t:["모바일 데이터로 방을 만들었을 때 렉이 덜 걸리도록 통신 방식 개선","방장이 보내는 데이터 양을 약 40% 줄임","친구 화면에서 다른 캐릭터와 공이 더 부드럽게 움직임"]},{h:"배틀로얄",t:["인원을 10~20명 사이에서 정할 수 있음"]},{h:"화면",t:["게임 설명(규칙·조작·모드)을 지금 게임에 맞게 다시 정리","로비와 방 만들기 화면의 설정 칸을 누르는 버튼처럼 보이게 바꿈","가로 화면 로비를 좌우 두 칸으로 배치","패스 받을 팀원 발밑 링을 하얀색으로 통일","커마 버튼 이름을 꾸미기로 변경"]}]},
+{v:"3.51",d:"2026.11.23 19:07",s:[{h:"초능력 피구",t:["외야에서도 모든 능력을 쓸 수 있음","다이서: 능력을 쓰면 던지기 버튼에 3·2·1 카운트다운이 표시됨","그림자분신: 주인이 키 잠금·속도 감속 같은 효과에 걸리면 분신 머리 위에도 아이콘이 뜸"]}]},
 {v:"3.5",d:"2026.11.22 02:15",s:[
 {h:"배틀로얄 맵",t:["맵을 숲·마을·공사장·언덕·중앙 광장 구역으로 나누고 구역마다 바닥이 다름","맵 가운데를 가로지르는 개울과 다리 3개 추가","언덕과 올라갈 수 있는 망루 추가","부술 수 있는 나무 상자와 울타리 추가","집 크기를 키우고 공사장 컨테이너 1층에 들어갈 수 있음","새·나비 추가, 나무와 덤불이 바람에 흔들림, 하늘에 구름","흙·자갈·물가를 밟으면 발자국이 남고, 바닥마다 발소리가 다름","미니맵 추가"]},
 {h:"배틀로얄 플레이",t:["달리기 추가: 조이스틱을 끝까지 밀면(PC: Shift) 빠르게 달리고, 스테미나 바가 조이스틱 위에 표시됨 (짐볼을 들면 걷는 속도 정도)","달릴 때 발밑에 흙먼지가 날리고 팔을 크게 흔들며 달림 (흙먼지 색은 바닥마다 다름)","방패 추가: 잡기 버튼이 막기로 바뀌어 누르는 동안 3번까지 공을 막음 (막는 동안은 느리고 못 던짐)","보급 상자가 하늘에서 떨어지고, 주우면 미니공 3개를 연속으로 던질 수 있음 (길게 누르면 세게 던짐)","공 개수를 10개까지 늘릴 수 있음","공이 대부분 집 안과 컨테이너 안에서 나옴","자기장이 더 천천히 줄어들고 위치가 랜덤으로 정해짐","혼자하기에서 다시 하기를 누르면 다른 위치에서 시작","나무나 벽이 카메라를 가리면 잎이 비쳐 보이거나 카메라가 가까이 붙음","AI가 벽에 비비며 멈춰 있던 문제 수정, 높은 곳에서 던지면 세지던 기능 삭제"]},
@@ -2739,7 +2755,7 @@ b.onpointerdown=e=>{e.preventDefault();
 doPass(T[i])};
 pcs.appendChild(b)})}
 pcs.style.display="flex";for(const b of pcs.children)b.classList.toggle("a",+b.dataset.i===ai);
-const q=am.m.position,cc=am.out?0xff9100:0x4dc3ff;
+const q=am.m.position,cc=0xffffff;
 aimr.visible=true;
 aimA.visible=false;
 aimr.position.set(q.x,.04,q.z);
@@ -2937,9 +2953,9 @@ lob.style.display="block"}
 function act(a,i,y,w,pt){send(net.gdc,{t:"act",d:{a,i,y,w,pt}})}
 function bcast(now){if(now-(net.bt||0)<70)return;
 net.bt=now;
-const q=bm.position,r=v=>Math.round(v*100)/100;
-const o={t:"st",d:{gn:T.map(c=>c.gone?1:0),gm:gmode,mp:curMap,bk:BRm()?BRB:0,bn:BRm()?brN:0,bc:BRm()?Math.round(brCd*10)/10:0,bl:curBall,bl2:curBall2,rs:[RN,SC[0],SC[1],RI,RW],em:T.map(c=>c.ei||0),g:net.g,s:N,nm:stK("nm",net.nicks?Object.fromEntries(Object.entries(net.nicks).filter(([i])=>T[i]&&(T[i].pl||T[i]===P))):net.nicks),av:stK("av",net.avs),j:J.on&&!J.done?[T.indexOf(J.bj),T.indexOf(J.rj)]:0,ya:Math.round((B.st==="held"&&B.h?(B.h===P?lookA():(B.h.ya||0)):0)*100)/100,hh:B.st==="held"&&B.h&&(B.h===P||B.h.pl)?1:0,n:J.on&&J.cd>0&&!(SPm()&&lot.style.display==="flex")?Math.ceil(J.cd):0,sp:SPm()?spPack():0,br:BRm()?{z:[Math.round(ZN.cx*10)/10,Math.round(ZN.cz*10)/10,Math.round(ZN.R*10)/10,zLeft()],zo:T.map(c=>Math.ceil(c.zo||0)),kf:KF,kl:T.map(c=>c.kl|0),rk:T.map(c=>c.rk|0),dn:T.map(c=>c.dn?Math.max(1,Math.ceil(c.dnT)):0),rv:T.map(c=>Math.round((c.rv||0)*10)),sd:T.map(c=>(c.sd|0)+(c.bk?4:0)+(c.skn|0)*8),su:SUP.map(u=>[u.id,Math.round(u.x*10)/10,Math.round(u.z*10)/10,Math.round(u.y*10)/10,u.st]),sp:SKP.map(k=>[Math.round(k.x*100)/100,Math.round(k.y*100)/100,Math.round(k.z*100)/100]),zb:ZN.st&&ZN.b?ZN.b.map(v=>Math.round(v*10)/10):0,ob:BRKS.map(o=>o.hp),sh:SHD.map(s=>[Math.round(s.x*100)/100,Math.round(s.z*100)/100,s.on?s.d||3:0])}:0,e:run?0:net.e||0,wt:net.wt===undefined?-1:net.wt,t:T.map(c=>[r(c.m.position.x),r(c.m.position.z),c.out,r(c.m.position.y),c.cw>0?1:0,r(c.fa||0),r(c.lya||0),r(c.lpi||0)]),b:[B.st==="held"?0:B.st==="fly"?1:2,B.h?T.indexOf(B.h):-1,r(q.x),r(q.y),r(q.z),B.kind==="t"?1:0],b2:((gmode===3||BRm())&&B2.st!=="off")?[B2.st==="held"?0:B2.st==="fly"?1:2,B2.h?T.indexOf(B2.h):-1,r(bm2.position.x),r(bm2.position.y),r(bm2.position.z),B2.kind==="t"?1:0]:0,bx:BRm()?BL.slice(2).map((b,i)=>{const m=BMS[i+2].position;return[b.st==="held"?0:b.st==="fly"?1:b.st==="loose"?2:3,b.h?T.indexOf(b.h):-1,r(m.x),r(m.y),r(m.z),b.kind==="t"?1:0]}):0}};
-net.dcs.forEach((dc,k)=>send(dc,{t:"st",d:{...o.d,k:gmode===1?KG[k>=N?1:0]:-1}}))}
+const q=bm.position,r=v=>Math.round(v*100)/100,r1=v=>Math.round(v*10)/10;
+const o={t:"st",d:{gn:T.map(c=>c.gone?1:0),gm:gmode,mp:curMap,bk:BRm()?BRB:0,bn:BRm()?brN:0,bc:BRm()?Math.round(brCd*10)/10:0,bl:curBall,bl2:curBall2,rs:[RN,SC[0],SC[1],RI,RW],em:T.map(c=>c.ei||0),g:net.g,s:N,nm:stK("nm",net.nicks?Object.fromEntries(Object.entries(net.nicks).filter(([i])=>T[i]&&(T[i].pl||T[i]===P))):net.nicks),av:stK("av",net.avs),j:J.on&&!J.done?[T.indexOf(J.bj),T.indexOf(J.rj)]:0,ya:Math.round((B.st==="held"&&B.h?(B.h===P?lookA():(B.h.ya||0)):0)*100)/100,hh:B.st==="held"&&B.h&&(B.h===P||B.h.pl)?1:0,n:J.on&&J.cd>0&&!(SPm()&&lot.style.display==="flex")?Math.ceil(J.cd):0,sp:SPm()?spPack():0,br:BRm()?{z:[Math.round(ZN.cx*10)/10,Math.round(ZN.cz*10)/10,Math.round(ZN.R*10)/10,zLeft()],zo:T.map(c=>Math.ceil(c.zo||0)),kf:KF,kl:T.map(c=>c.kl|0),rk:T.map(c=>c.rk|0),dn:T.map(c=>c.dn?Math.max(1,Math.ceil(c.dnT)):0),rv:T.map(c=>Math.round((c.rv||0)*10)),sd:T.map(c=>(c.sd|0)+(c.bk?4:0)+(c.skn|0)*8),su:SUP.map(u=>[u.id,Math.round(u.x*10)/10,Math.round(u.z*10)/10,Math.round(u.y*10)/10,u.st]),sp:SKP.map(k=>[Math.round(k.x*100)/100,Math.round(k.y*100)/100,Math.round(k.z*100)/100]),zb:ZN.st&&ZN.b?ZN.b.map(v=>Math.round(v*10)/10):0,ob:BRKS.map(o=>o.hp),sh:SHD.map(s=>[Math.round(s.x*100)/100,Math.round(s.z*100)/100,s.on?s.d||3:0])}:0,e:run?0:net.e||0,wt:net.wt===undefined?-1:net.wt,t:T.map(c=>[r(c.m.position.x),r(c.m.position.z),c.out?1:0,r1(c.m.position.y),c.cw>0?1:0,r1(c.fa||0),r1(c.lya||0),r1(c.lpi||0)]),b:B.st==="held"?[0,B.h?T.indexOf(B.h):-1,0,0,0,B.kind==="t"?1:0]:[B.st==="fly"?1:2,B.h?T.indexOf(B.h):-1,r(q.x),r(q.y),r(q.z),B.kind==="t"?1:0],b2:((gmode===3||BRm())&&B2.st!=="off")?(B2.st==="held"?[0,B2.h?T.indexOf(B2.h):-1,0,0,0,B2.kind==="t"?1:0]:[B2.st==="fly"?1:2,B2.h?T.indexOf(B2.h):-1,r(bm2.position.x),r(bm2.position.y),r(bm2.position.z),B2.kind==="t"?1:0]):0,bx:BRm()?BL.slice(2).map((b,i)=>{const m=BMS[i+2].position,st=b.st==="held"?0:b.st==="fly"?1:b.st==="loose"?2:3;return st===0||st===3?[st,b.h?T.indexOf(b.h):-1,0,0,0,b.kind==="t"?1:0]:[st,b.h?T.indexOf(b.h):-1,r(m.x),r(m.y),r(m.z),b.kind==="t"?1:0]}):0}};
+stSlim(o.d);o.d.q=(net.sq=(net.sq||0)+1);net.dcs.forEach((dc,k)=>{const sc=net.scs&&net.scs[k];send(sc&&sc.open?sc:dc,{t:"st",d:{...o.d,k:gmode===1?KG[k>=N?1:0]:-1}})})}
 function hostMsg(k,s){let o=s;
 if(typeof s==="string"){try{o=JSON.parse(s)}catch(e){return}}
 if(!o)return;
@@ -2955,7 +2971,7 @@ net.nicks[k]=n;
 mark(c,k,n);
 (net.avs=net.avs||{})[k]=parseAv(d.a).join(",");
 applyAv(c.m,parseAv(d.a));
-sendRo()}else if(o.t==="in"){c.pl=1;if(c.mk)c.mk.g.visible=true;
+sendRo()}else if(o.t==="in"){if(d.q){if(d.q<=(c._iq||0))return;c._iq=d.q}c.pl=1;if(c.mk)c.mk.g.visible=true;
 c.rsp=+d.sp?1:0;c.rx=cl(+d.x||0,-1,1);
 c.rz=cl(+d.z||0,-1,1);
 c.ya=+d.ya||0;c.pi=+d.pi||0}
@@ -2986,12 +3002,12 @@ try{document.execCommand("copy")}catch(e2){}
 t.remove()}
 rcp.textContent="복사했어요!";
 setTimeout(()=>rcp.textContent="방 코드 복사",1500)};
-setInterval(()=>{if(net.mode!=="guest"||net.slot===undefined)return;const[x,z]=inp(),r=v=>Math.round(v*100)/100;send(net.gdc,{t:"in",d:{sp:wantSp()?1:0,x:r(x),z:r(z),ya:r(lookA()),pi:r(pitch)}})},100);
+setInterval(()=>{if(net.mode!=="guest"||net.slot===undefined)return;const[x,z]=inp(),r=v=>Math.round(v*100)/100;send(net.gsc&&net.gsc.open?net.gsc:net.gdc,{t:"in",d:{q:(net.iq=(net.iq||0)+1),sp:wantSp()?1:0,x:r(x),z:r(z),ya:r(lookA()),pi:r(pitch)}})},100);
 const how=document.createElement("div");how.id="how";
 how.innerHTML="<div class='tbs'><button data-t='0' class='on'>규칙</button><button data-t='1'>조작</button><button data-t='2'>모드·설정</button></div>"+
-"<ul class='on' data-p='0'><li>상대 팀을 모두 외야로 보내면 승리!</li><li>시작은 점프볼: 공이 꼭대기일 때 점프 버튼을 눌러요. 타이밍이 좋을수록 높이 뛰어요.</li><li>공을 잡으면 던지기로 적을 맞히거나 패스로 팀원에게 넘겨요.</li><li>맞으면 상대 코트 뒤와 옆의 외야로 나가요(들고 있던 공은 그 자리에 떨어져요). 코트 밖으로 나간 공은 외야가 줍고, 외야가 없으면 내야가 가져가요.</li><li>잡기: 날아오는 공이나 패스를 타이밍 맞춰 받아낼 수 있어요(패스 가로채기). 상대 패스가 몸에 맞으면 그 사람도 아웃이에요. 점프로 뛰어넘으면 피해요. 점프볼 직후 첫 패스는 맞아도 아웃이 아니에요.</li><li>점프: 낮게 날아오는 공을 뛰어넘어 피할 수 있어요(짐볼은 못 피해요). 한 번 뛰면 1.2초 뒤에 다시 뛸 수 있어요.</li></ul>"+
-"<ul data-p='1'><li>이동: 왼쪽 화면을 누르고 밀기 (PC: WASD)</li><li>시점 회전: 오른쪽 화면 밀기 (PC: ←/→)</li><li>던지기: 빨간 조준선을 적에게 맞추고 던져요. 왼쪽 클릭을 누른 채 마우스를 움직이면 시점이 좌우·위아래로 돌아가요(던지기 충전 중에도 조준 가능). 꾹 누르면 더 세고 빠르게 날아가고, 누른 채 밀면 조준이 움직여요. 위로 조준하면 머리 위로 넘어가고, 아래로 조준하면 바닥에 먼저 떨어져요. (PC: 마우스 왼쪽 클릭)</li><li>패스: 공을 들면 아래에 팀원 원이 떠요. 파랑=내야, 주황=외야. 원을 누르면 그 사람에게, 패스 버튼은 하얀 링의 팀원에게 가요. (PC: E)</li><li>잡기 (PC: F), 점프 (PC: 스페이스)</li><li>확대/축소: 오른쪽 화면에서 두 손가락 모으기/벌리기 (PC: 마우스 휠). 끝까지 확대하면 1인칭이에요.</li><li>감정표현: 오른쪽 위 😊 버튼 (PC: 숫자 1~8)</li></ul>"+
-"<ul data-p='2'><li>팀 인원은 1:1부터 6:6까지예요. AI 버튼으로 AI를 끌 수 있어요(친구와 방을 만들었을 때만, 양 팀에 친구가 있어야 해요).</li><li>라운드: 1, 3, 5, 7판 중에 골라요. 먼저 과반을 이기면 승리예요.</li><li>왕 피구: 팀마다 한 명이 왕관을 써요(상대에게는 안 보여요). 왕이 맞으면 그 팀이 져요.</li><li>짐볼 피구: 공이 3배로 크고, 든 사람은 느려지고, 던지는 속도도 느려져요.</li><li>공 2개 피구: 공이 두 개예요. 공 버튼은 첫 번째 공, 공2 버튼은 두 번째 공이고, 이 모드에서만 짐볼을 고를 수 있어요. 점프볼에서 진 팀은 두 번째 공으로 시작해요. 한 사람이 공 두 개를 양손에 들 수 있고, 두 개를 든 채 던지면 느려요. 짐볼은 다른 공과 같이 못 들어요.</li><li>초능력 피구: 시작할 때 제비뽑기로 능력을 하나씩 받아요(AI도 받아요). 능력 버튼(PC: R)으로 쓰고, 한 판(라운드)에 한 번만 쓸 수 있어요. 시간 멈추는 자, 키 잠금, 방향키 반대, 퀵실버, 버서커(1분 버티면 사용 가능, 5초 동안 무제한으로 던지고 끝나면 아웃), 다이서(공을 들고 있을 때 쓰면 주사위를 굴려 나온 수만큼 공이 한꺼번에 날아가요), 3초 무적, 그림자분신, 속도 감속, 소인국, 외톨이(패시브: 팀에 혼자 남으면 빨라져요), 짐볼 수호자(패시브: 짐볼을 들고 시작하고 다른 공은 못 들어요. 잡기 버튼이 튕기기로 바뀌어 날아오는 공을 튕겨요).</li><li>배틀로얄: 넓은 맵에서 최대 20명이 마지막까지 살아남기를 겨뤄요. 맞으면 바로 탈락이고, 장애물 뒤에 숨어 공을 피할 수 있어요. 공은 5개예요. 자기장이 점점 줄어들어서 밖에 있으면 탈락해요. 탈락하면 내 등수와 킬 수가 나오고, 관전하기를 누르면 ◀ ▶ 버튼(PC: ←/→)으로 남은 플레이어를 바꿔 가며 그 사람 시점으로 관전해요. 솔로는 모두가 적이고 패스를 못 해요. 듀오는 두 명이 한 팀이고 팀원 발밑에 파란 원이 보여요.</li><li>방에 들어온 친구는 준비하기 전에 팀 바꾸기 버튼으로 팀을 옮길 수 있어요. 대기 화면에서 두 팀의 이름과 준비 상태(✓)를 볼 수 있어요.</li><li>공이 3초 넘게 바닥에 방치되면 화면에 노란 화살표가 떠서 공 방향을 알려 줘요.</li><li>게임 중에는 왼쪽 위 나가기 버튼을 두 번 눌러 로비로 돌아갈 수 있어요.</li></ul>";
+"<ul class='on' data-p='0'><li><b>목표</b> 상대 팀을 모두 외야로 보내면 이겨요.</li><li><b>점프볼</b> 공이 가장 높이 올라갔을 때 점프하면 더 높이 떠서 공을 따내요.</li><li><b>공격</b> 공을 잡으면 상대를 맞히거나 팀원에게 패스해요.</li><li><b>아웃</b> 공에 맞으면 상대 코트 바깥 외야로 나가요. 상대 패스에 맞아도 아웃이에요(점프볼 직후 첫 패스는 제외).</li><li><b>잡기</b> 날아오는 공이나 상대 패스를 타이밍 맞춰 잡으면 내 공이 돼요.</li><li><b>피하기</b> 낮게 오는 공은 점프로 뛰어넘을 수 있어요. 짐볼은 못 피해요.</li><li><b>코트 밖 공</b> 외야가 주워요. 외야가 없으면 상대 내야가 가져가요.</li><li><b>방치된 공</b> 3초 넘게 바닥에 있으면 노란 화살표로 위치를 알려 줘요.</li></ul>"+
+"<ul data-p='1'><li><b>이동</b> 왼쪽 화면 밀기 (PC: WASD)</li><li><b>시점</b> 오른쪽 화면 밀기 (PC: ←/→ 또는 마우스 끌기)</li><li><b>던지기</b> 빨간 조준선을 맞추고 던져요. 꾹 누르면 더 세게, 누른 채 밀면 조준이 움직여요. (PC: 왼쪽 클릭)</li><li><b>패스</b> 공을 들면 바라보는 쪽에 있는 팀원 발밑에 하얀 링이 떠요. 패스 버튼을 누르면 그 팀원에게 공을 줘요. (PC: E)</li><li><b>잡기·점프·능력</b> PC: F · 스페이스 · R</li><li><b>확대·축소</b> 두 손가락 모으기/벌리기 (PC: 휠). 끝까지 확대하면 1인칭</li><li><b>감정표현</b> 오른쪽 위 😊 (PC: 1~8)</li><li><b>나가기</b> 왼쪽 위 나가기를 두 번 눌러요.</li><li><b>설정</b> 음악·볼륨·효과음·그림자를 바꿀 수 있어요.</li></ul>"+
+"<ul data-p='2'><li><b>인원·라운드</b> 1:1~6:6, 1·3·5·7판 중 먼저 과반을 이기면 승리. 친구 방에서는 AI를 끌 수 있어요(양 팀에 친구가 있을 때).</li><li><b>왕 피구</b> 팀마다 한 명이 왕관을 써요(상대에겐 안 보여요). 왕이 맞으면 그 팀이 져요.</li><li><b>짐볼 피구</b> 공이 3배로 크고, 든 사람과 공 모두 느려요.</li><li><b>공 2개 피구</b> 공이 두 개예요. 한 사람이 두 개를 들 수 있지만 같이 던지면 느려요. 점프볼에서 진 팀이 두 번째 공으로 시작해요. 짐볼도 추가할 수 있어요. 짐볼은 일반 공과 같이 못 들어요.</li><li><b>초능력 피구</b> 제비뽑기로 능력을 하나 받아 라운드마다 한 번 써요. 능력은 이 모드를 고르면 나오는 '능력 설명 보기'에서 확인해요.</li><li><b>배틀로얄</b> 최대 20명이 넓은 맵에서 마지막까지 살아남기를 겨뤄요. 맞거나 자기장 밖에 있으면 탈락이에요.</li><li><b>└ 공</b> 일반 공 1~10개, 짐볼 1~5개를 고를 수 있고 대부분 집이나 컨테이너 안에서 나와요.</li><li><b>└ 아이템</b> 방패를 주우면 잡기 버튼이 막기로 바뀌어 3번까지 막아요. 하늘에서 떨어지는 보급 상자를 주우면 미니공 3개를 던질 수 있어요.</li><li><b>└ 달리기</b> 조이스틱을 끝까지 밀면 달려요 (PC: Shift).</li><li><b>└ 솔로·듀오</b> 솔로는 모두가 적이에요. 듀오는 맞으면 기절하고, 팀원이 3초 붙어 있으면 부활해요(20초 안에 못 살리면 탈락).</li><li><b>└ 관전</b> 탈락하면 등수와 킬 수가 나오고, ◀ ▶(PC: ←/→)로 남은 사람을 바꿔 보며 관전해요.</li><li><b>친구 방</b> 준비하기 전에 팀 바꾸기 버튼으로 팀을 옮길 수 있어요.</li></ul>";
 const sz=document.createElement("div");sz.id="sz";
 sz.innerHTML='팀 인원 <button id="szm" aria-label="인원 줄이기">−</button> <input id="szv" inputmode="numeric" maxlength="2" value="3" autocomplete="off"> <button id="szp" aria-label="인원 늘리기">+</button> 명씩 <button id="aib">AI 켜짐</button><div id="bcz" style="display:none;flex-basis:100%;flex-wrap:wrap;gap:8px 10px;align-items:center;font-size:15px;margin-top:4px"><div style="display:flex;align-items:center;gap:10px;flex-basis:100%;justify-content:flex-start"><span style="min-width:58px;text-align:left">일반 공</span><button id="bnm">−</button><b id="bnv">4</b><button id="bnp">+</button></div><div style="display:flex;align-items:center;gap:10px;flex-basis:100%;justify-content:flex-start"><span style="min-width:58px;text-align:left">짐볼</span><button id="bgm">−</button><b id="bgv">1</b><button id="bgp">+</button></div></div>';sz.style.flexWrap="wrap";
 const bcz=sz.querySelector("#bcz"),bnv=sz.querySelector("#bnv"),bgv=sz.querySelector("#bgv");
@@ -3016,9 +3032,9 @@ const tm=document.createElement("div");
 tm.id="tm";
 tm.innerHTML='팀 <button id="tm0" class="on">방장 팀</button><button id="tm1">상대 팀</button>';
 net.want=0;
-const chg=v=>{if(BRm())return;const o=N;N=Math.max(1,Math.min(6,N+v));szv.textContent=N;if(N!==o&&!run)reset()};
+const chg=v=>{if(BRm()){if(run)return;const st=gmode===5?2:1,o=brN;brN=Math.max(10,Math.min(20,brN+v*st));if(gmode===5&&brN%2)brN++;brSave();szUp();if(brN!==o)reset();return}const o=N;N=Math.max(1,Math.min(6,N+v));szv.textContent=N;if(N!==o&&!run)reset()};
 function szUp(){aib.style.display=net.mode==="solo"?"none":"";const br=BRm(),tn=[...sz.childNodes].filter(n=>n.nodeType===3);
-brN=20;szv.textContent=br?brN:N;szv.readOnly=br;szm.style.display=szp.style.display=br?"none":"";bcz.style.display=br?"flex":"none";bnv.textContent=brNb;bgv.textContent=brNg;
+if(br&&gmode===5&&brN%2)brN=Math.min(20,brN+1);szv.textContent=br?brN:N;szv.readOnly=false;szm.style.display=szp.style.display="";bcz.style.display=br?"flex":"none";bnv.textContent=brNb;bgv.textContent=brNg;
 if(tn[0])tn[0].textContent=br?"인원 ":"팀 인원 ";
 const m=tn.find(n=>/명씩/.test(n.textContent)||n._ms);
 if(m){m._ms=1;
@@ -3027,7 +3043,7 @@ Object.defineProperty(szv,"textContent",{get(){return this.value},set(v){if(docu
 aib.style.display=net.mode==="solo"?"none":"";
 let szT=0;const szMsg=t=>{let m=document.getElementById("szt");if(!m){m=document.createElement("div");m.id="szt";m.style.cssText="position:fixed;left:50%;top:18%;transform:translateX(-50%);z-index:99999;background:rgba(10,20,35,.92);color:#fff;padding:10px 18px;border-radius:12px;font-size:15px;font-weight:700;pointer-events:none;transition:opacity .2s";document.body.append(m)}m.textContent=t;m.style.opacity=1;clearTimeout(szT);szT=setTimeout(()=>m.style.opacity=0,1800)};
 const szApply=()=>{const v=parseInt(szv.value,10);szv.blur();if(isNaN(v)||run){szUp();return}
-if(BRm()){szUp();return;const lo=gmode===5?4:2;if(gmode===5&&v%2){szMsg("짝수만 입력가능합니다.");szUp();return}if(v<lo||v>20){szMsg(lo+"~20명까지 입력할 수 있어요.");szUp();return}const o=brN;brN=v;brSave();szUp();if(brN!==o)reset();return}
+if(BRm()){szUp();return;const lo=10;if(gmode===5&&v%2){szMsg("짝수만 입력가능합니다.");szUp();return}if(v<lo||v>20){szMsg(lo+"~20명까지 입력할 수 있어요.");szUp();return}const o=brN;brN=v;brSave();szUp();if(brN!==o)reset();return}
 if(v<1||v>6)szMsg("1~6명까지 입력할 수 있어요.");const o=N;N=Math.max(1,Math.min(6,v));szv.textContent=N;if(N!==o)reset()};
 szv.addEventListener("input",()=>{szv.value=szv.value.replace(/\D/g,"")});szv.addEventListener("change",szApply);szv.addEventListener("keydown",e=>{if(e.key==="Enter"){e.preventDefault();szv.blur()}});szv.addEventListener("focus",()=>setTimeout(()=>{try{szv.select()}catch(e){}},0));
 szm.onclick=()=>chg(-1);szp.onclick=()=>chg(1);
@@ -3095,7 +3111,7 @@ if(net.avs&&net.avs[g.k])na[v]=net.avs[g.k]});
 N=nN;net.slots=nsl;net.dcs=ndc;net.rdy=nr;net.nicks=nn;net.avs=na;szv.textContent=N;nsb.textContent="인원: "+N+":"+N;reset();
 gs.forEach(g=>{const v=mp[g.k];if(g.dc){if(g.dc._skn)g.dc._skn(v);if(v!==g.k)send(g.dc,{t:"assign",d:{slot:v}})}});upd()}
 const nsb=document.createElement("button"),rtb=document.createElement("button");nsb.id="nsb";rtb.id="rtb";nsb.textContent="인원: 3:3";rtb.textContent="랜덤 팀";
-nsb.onclick=()=>{if(BRm())return;roomMap(N%6+1,0)};rtb.onclick=()=>{if(!Object.keys(net.slots).length){ms.textContent="친구가 들어와야 팀을 섞을 수 있어요.";return}roomMap(N,1);ms.textContent="팀을 무작위로 섞었어요!"};
+nsb.onclick=()=>{if(BRm()){if(run)return;const st=gmode===5?2:1;brN=brN+st>20?10:brN+st;brSave();szUp();reset();if(typeof upd==="function")upd();return}roomMap(N%6+1,0)};rtb.onclick=()=>{if(!Object.keys(net.slots).length){ms.textContent="친구가 들어와야 팀을 섞을 수 있어요.";return}roomMap(N,1);ms.textContent="팀을 무작위로 섞었어요!"};
 const allRdy=()=>Object.values(net.slots).every(k=>net.rdy&&net.rdy[k]);
 const upd=()=>{rmv.textContent=net.code||"";
 setTimeout(sendRo,0);
@@ -3103,7 +3119,7 @@ const ks=Object.values(net.slots),n=ks.length,m=ks.filter(k=>net.rdy&&net.rdy[k]
 rm.textContent="방 "+net.code+" · 친구 "+n;
 ms.textContent=n?"준비 "+m+"/"+n+(m<n?" · 모두 준비해야 시작해요":""):"방 코드 "+net.code+" 를 친구에게 알려 주세요";
 sb.style.opacity=allRdy()?1:.5};
-function hostWatch(pr){pr.on("connection",conn=>{let k=0;
+function hostWatch(pr){pr.on("connection",conn=>{if(conn.metadata&&conn.metadata.st){const sk=conn.metadata.slot|0;conn.on("open",()=>{if(net.dcs[sk])(net.scs=net.scs||[])[sk]=conn;else try{conn.close()}catch(e){}});conn.on("data",m=>{if(net.dcs[sk])hostMsg(sk,m)});conn.on("close",()=>{if(net.scs&&net.scs[sk]===conn)net.scs[sk]=null});return}let k=0;
 conn._sk=v=>{k=v};
 const tw=(conn.metadata&&conn.metadata.team)?1:0,rj=N+(N>>1),ord=BRm()?Array.from({length:BRT()-1},(_,i)=>i+1):tw?Array.from({length:N},(_,i)=>N+i).sort((a,b)=>(a===rj)-(b===rj)):Array.from({length:N-1},(_,i)=>i+1);
 for(const i of ord)if(!net.slots["s"+i]){k=i;
@@ -3113,8 +3129,8 @@ for(const i of o2)if(!net.slots["s"+i]){k=i;
 break}}
 if(!k){conn.on("open",()=>{conn.send({t:"full"});setTimeout(()=>conn.close(),400)});return}
 net.slots["s"+k]=k;setTimeout(()=>{if(!conn.open){delete net.slots["s"+k];try{conn.close()}catch(e){}}},15000);
-conn.on("open",()=>{net.dcs[k]=conn;
-if(T[k]){T[k].pl=1;
+conn.on("open",()=>{net.dcs[k]=conn;if(net.scs)net.scs[k]=null;
+if(T[k]){T[k]._iq=0;T[k].pl=1;
 T[k].seen=performance.now();
 if(T[k].gone){const c=T[k];
 c.gone=0;
@@ -3207,13 +3223,13 @@ pr.on("open",()=>{const conn=pr.connect("pgdodge-"+code,{serialization:"json",re
 conn.on("data",o=>{if(o.t==="assign"){try{localStorage.removeItem("pgRc")}catch(e){}
 window.name="";
 net.slot=o.d.slot;
-P=T[net.slot];
+P=T[net.slot];net.lq=0;net.snp=[];try{const sc=pr.connect("pgdodge-"+code,{serialization:"json",reliable:false,metadata:{st:1,slot:o.d.slot}});net.gsc=sc;sc.on("data",m=>{if(m&&m.t==="st"&&net.slot!==undefined)gSt(m.d)})}catch(e){}
 net.rd=0;
 rd.textContent="준비하기";
 net.gdc.send({t:"nick",d:{n:(nk.value.trim().slice(0,6)||(net.defN=net.defN||"친구"+net.slot)),a:myAv.join(",")}});
 nw.style.display="none";
 rd.style.display="inline-block";
-ms.textContent="연결됐어요! 준비하기를 눌러 주세요."}else if(o.t==="full"){ms.textContent="방이 가득 찼어요."}else if(o.t==="tfull"){ms.textContent="그 팀은 자리가 없어요."}else if(o.t==="ro"){renderRo(o.d)}else if(o.t==="st"&&net.slot!==undefined)netApply(o.d)});
+ms.textContent="연결됐어요! 준비하기를 눌러 주세요."}else if(o.t==="full"){ms.textContent="방이 가득 찼어요."}else if(o.t==="tfull"){ms.textContent="그 팀은 자리가 없어요."}else if(o.t==="ro"){renderRo(o.d)}else if(o.t==="st"&&net.slot!==undefined)gSt(o.d)});
 conn.on("close",()=>{run=false;ov.style.display="flex";ms.textContent="방장과 연결이 끊겼어요. 새로고침해 주세요.";lob.style.display="block"});
 setTimeout(()=>{if(net.slot===undefined&&!conn.open){ms.textContent="방을 찾지 못했어요. 코드를 확인해 주세요.";rtShow()}},9000)});
 pr.on("error",e=>{ms.textContent=e.type==="peer-unavailable"?"그 방 코드를 찾지 못했어요.":"연결 오류("+e.type+")";if(net.slot===undefined)rtShow()})};
@@ -3691,6 +3707,7 @@ rcb.addEventListener("keydown",e=>{if(e.key==="Enter")jsb.click()});rcb.setAttri
 [mdb,rnb,mpb,blb,b2b,dab].forEach(b=>b.classList.add("opt"));og.append(mdb,rnb,mpb,blb,b2b,dab);c2.append(sz,og);lobbyCard=c2;setInterval(()=>{if(net.mode==="solo"&&ov.style.display!=="none"&&!ov.classList.contains("dd"))abGuide(gmode,1)},400);
 cmb.classList.add("opt");rw.append(nk,cmb);c3.append(rw);
 tl.append(tub,hb,lsb,upb);
+{let lrow=null;const lay=()=>{const ae=document.activeElement;if(ae&&/^(INPUT|TEXTAREA)$/.test(ae.tagName))return;const land=innerWidth>innerHeight&&innerWidth>=640;if(land&&!lrow){lrow=el("div",null,"lrow");const ca=el("div","lcol");c1.before(lrow);ca.append(c1,c3);lrow.append(ca,c2)}else if(!land&&lrow){lrow.before(c1,c2,c3);lrow.remove();lrow=null}};lay();addEventListener("resize",lay);addEventListener("focusout",()=>setTimeout(lay,350))}
 ov.insertBefore(how,ms);ov.addEventListener("scroll",()=>{if(ov.scrollLeft)ov.scrollLeft=0});nw.after(lob);rc.addEventListener("input",()=>{ov.querySelector("p").textContent=""});
 how.addEventListener("click",e=>{const b=e.target.closest("[data-t]");
 if(!b)return;
