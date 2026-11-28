@@ -196,7 +196,7 @@ body.nr #abl,body.nr #spb{visibility:hidden}
 #rsc .rp{padding:3px 12px;border-radius:14px;background:rgba(8,21,34,.72);color:#fff;font-size:15px;line-height:1.3;white-space:nowrap}
 #rsc .rp small{font-size:12px;opacity:.85}#rsc .rp b{font-size:20px}
 #rsLeft small{color:#4dc3ff}#rsRight small{color:#ff9aa8}
-#rsMid{align-self:center;font-size:13px;font-weight:700;color:var(--acc);-webkit-text-stroke:3px #0b1a2a;paint-order:stroke fill;text-shadow:0 2px 8px rgba(0,0,0,.8)}
+#rsMid{position:absolute;left:50%;transform:translateX(-50%);top:10px;white-space:nowrap;font-size:13px;font-weight:700;color:var(--acc);-webkit-text-stroke:3px #0b1a2a;paint-order:stroke fill;text-shadow:0 2px 8px rgba(0,0,0,.8)}
 #rbn,#rbn b,#rbn small{font-family:"Jua","BM JUA","Arial Rounded MT Bold","Apple SD Gothic Neo","Noto Sans KR",sans-serif!important;font-weight:400}#rbn b{display:block;letter-spacing:2px;font-size:60px;line-height:1.1;-webkit-text-stroke:5px #0b1a2a;paint-order:stroke fill}#rbn b.w{color:#5dff9a}#rbn b.l{color:#ff6b7a}#rbn small{display:block;margin-top:4px;font-size:20px;color:#fff;font-weight:700;-webkit-text-stroke:4px #0b1a2a;paint-order:stroke fill}
 #rbn{position:fixed;left:0;right:0;top:30%;text-align:center;font-size:38px;font-weight:800;color:var(--acc);-webkit-text-stroke:5px #0b1a2a;paint-order:stroke fill;text-shadow:0 4px 20px rgba(0,0,0,.6);display:none;pointer-events:none}
 @media (orientation:landscape){#rbn{top:20%}#rbn b{font-size:46px}}
@@ -313,7 +313,7 @@ html,body{-webkit-text-size-adjust:100%}
 #jmp:active{transform:translateY(4px);box-shadow:0 1px 0 #5a2b99,0 3px 7px rgba(0,0,0,.3)}
 #abl:active{transform:translateY(4px);box-shadow:0 1px 0 #4b34b3,0 3px 7px rgba(0,0,0,.3)}
 
-@media (orientation:landscape){#ex{left:8px;top:calc(8px + env(safe-area-inset-top,0px))}#lsg{left:8px;top:calc(44px + env(safe-area-inset-top,0px))}#mm{left:84px;top:calc(8px + env(safe-area-inset-top,0px))}}
+@media (orientation:landscape){#ex{left:8px;top:calc(8px + env(safe-area-inset-top,0px))}#rsLeft{margin-left:80px}#lsg{left:8px;top:calc(44px + env(safe-area-inset-top,0px))}#mm{left:84px;top:calc(8px + env(safe-area-inset-top,0px))}}
 
 .og .opt,#ob #mdb,#ob #rnb,#ob #nsb,#ob #mpb,#ob #skb,#ob #blb,#ob #b2b,#ob #dab{border:1.5px solid rgba(255,255,255,.32);background:rgba(255,255,255,.1);position:relative;padding-right:22px;font-weight:700}
 #ob #rtb::after,#ob #aib::after{content:none}
@@ -2473,7 +2473,7 @@ RW=w0?0:1;
 run=false;
 setTimeout(nextRound,2600)}
 function nextRound(){if(RW<0)return;RI++;RW=-1;net.e=0;if(net.mode==="host"){net.g++;net.rdy={}}net.jc=(net.jc||0)+1;wxKeep=1;reset();wxKeep=0;run=true;ov.style.display="none"}
-function mvpShow(){let el=document.getElementById("mvp");if(!el){el=document.createElement("div");el.id="mvp";ov.querySelector("h1").after(el)}T.forEach(c=>{if(c._mvs){c.m.remove(c._mvs);c._mvs=null}});if(BRm()||TUT){el.style.display="none";return}let bi=-1,bv=0;KOS.forEach((v,i)=>{if(T[i]&&(v||0)>bv){bv=v;bi=i}});if(bi<0){el.style.display="none";return}const c=T[bi],nm=c.pl||c===P?nmOf(bi):"AI";el.innerHTML="🏅 MVP <b>"+nm+"</b> · 아웃 "+bv+"명";el.style.display="block";const sp=new THREE.Sprite(new THREE.SpriteMaterial({map:spTex("🏅"),depthTest:false,transparent:true}));sp.scale.set(.75,.75,1);sp.position.y=2.95;sp.renderOrder=30;c.m.add(sp);c._mvs=sp}
+function mvpShow(){let el=document.getElementById("mvp");if(!el){el=document.createElement("div");el.id="mvp";ov.querySelector("h1").after(el)}T.forEach(c=>{if(c._mvs){c.m.remove(c._mvs);c._mvs=null}});if(BRm()||TUT){el.style.display="none";return}let bi=-1,bv=0;KOS.forEach((v,i)=>{if(T[i]&&(v||0)>bv){bv=v;bi=i}});if(bi<0){el.style.display="none";return}const c=T[bi],nm=c.pl||c===P?nmOf(bi):"AI";el.innerHTML="🏅 MVP <b>"+nm+"</b> · 아웃 "+bv+"명"+(RI>1?" <small>("+RI+"판 합계)</small>":"");el.style.display="block";const sp=new THREE.Sprite(new THREE.SpriteMaterial({map:spTex("🏅"),depthTest:false,transparent:true}));sp.scale.set(.75,.75,1);sp.position.y=2.95;sp.renderOrder=30;c.m.add(sp);c._mvs=sp}
 function end(win){sfxEnd(win);ov.classList.remove("dd");
 emp.style.display="none";
 run=false;
@@ -2961,7 +2961,7 @@ J.until=performance.now()+1800;
 give(ic)}else if(ht){const m=B.tgt.m.position;
 B.v.set(m.x-q.x,0,m.z-q.z).normalize().multiplyScalar(6);
 if(ht===P)fl=.25;
-if(B.thr){const ti=T.indexOf(B.thr);if(ti>=0)KOS[ti]=(KOS[ti]||0)+1}hitFx(ht,q,BL.indexOf(B));drop();
+if(B.pc){const ti=T.indexOf(B.pc);if(ti>=0)KOS[ti]=(KOS[ti]||0)+1}hitFx(ht,q,BL.indexOf(B));drop();
 out(ht)}else{const m=B.tgt.m.position,dx=m.x-q.x,dz=m.z-q.z,d=Math.hypot(dx,dz);
 if(d<.6||B.t>3)give(B.tgt);else{q.x+=dx/d*12*dt;
 q.z+=dz/d*12*dt}}}
